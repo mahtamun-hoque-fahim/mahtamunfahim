@@ -64,7 +64,7 @@ app/
 ├── layout.tsx                   fonts, metadata, ambient glow, Person JSON-LD
 ├── template.tsx                 route enter fade (opacity on main/footer only, skipped on /admin)
 ├── globals.css                  tokens (light theme, site and admin), reveal and motion utilities
-├── not-found.tsx, icon.svg, robots.ts, sitemap.ts
+├── not-found.tsx, icon.svg + apple-icon.png (the "m." mark), robots.ts, sitemap.ts
 components/
 ├── Navbar.tsx, Footer.tsx, Logo.tsx, AuthorCard.tsx, CopyCodeInit.tsx
 ├── ContactForm.tsx              client; calls submitContactMessage action

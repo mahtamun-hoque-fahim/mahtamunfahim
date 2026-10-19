@@ -195,7 +195,7 @@ app/
 ├── layout.tsx              — root layout: fonts, metadata, ambient glow, JSON-LD
 ├── template.tsx            — route enter fade (skipped on /admin)
 ├── globals.css             — tokens, reveal/motion utilities
-├── not-found.tsx, icon.svg, sitemap.ts, robots.ts
+├── not-found.tsx, icon.svg + apple-icon.png (the "m." mark), sitemap.ts, robots.ts
 ├── admin/                  — Better Auth-protected dashboard
 │   ├── layout.tsx, actions.ts (all server actions), AdminSidebar.tsx
 │   ├── login/, forgot-password/, reset-password/

@@ -96,6 +96,19 @@ The Tailwind color extensions (`accent`, `surface`, etc.) in `tailwind.config.ts
 
 ---
 
+### Icon (the "m." mark)
+
+A lowercase "m" with a blue `#2563FF` dot at its foot (Fahim's mark, from 2026-10-19). Files:
+
+| File | Use |
+|------|-----|
+| `app/icon.svg` | Favicon. The "m" is `#0B0F19` on light browser themes and white on dark ones (`prefers-color-scheme` inside the SVG); the dot stays blue. viewBox cropped to `8 8 360 360`. |
+| `app/apple-icon.png` | iOS home screen, 180px: white "m" on `#0B0F19`. Next serves both as `<link>` tags automatically. |
+| `public/images/mark-white.svg` | The original artwork (white "m", transparent), for dark backgrounds. |
+| `public/images/icon-512.png` | 512px square on `#0B0F19`, for anything that needs a raster icon (profiles, manifests, emails). |
+
+The navbar keeps the "mah tamun." wordmark (`components/Logo.tsx`); the mark is the short form.
+
 ## 3. Typography
 
 ### Font Stack

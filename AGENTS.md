@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-19 (icon): the "m." mark as favicon and app icon
+- Agent: Claude Edge
+- Request (Fahim, `Frame 18.svg`: a white "m" with a blue dot): use it for the favicon and other purposes.
+- Done: `app/icon.svg` replaced (the old three-shape mark is gone): dark "m" on light browser themes, white on dark, blue dot always; new `app/apple-icon.png` (180px, white on `#0B0F19`); `public/images/mark-white.svg` (the original) and `public/images/icon-512.png` kept for other uses. PNGs rendered with `sharp`. DESIGN_GUIDE "Icon", README and PLANNER file trees.
+- Kept: the navbar wordmark (`Logo.tsx`). "Other purposes" read as files ready to use, not wired anywhere else yet (no web manifest or Organization logo exists in the code).
+- Verified: `/icon.svg` and `/apple-icon.png` return 200 on the dev server and the homepage head links both. NOT seen: the favicon in a real browser tab, light and dark.
+
 ### 2026-10-19 (blog covers repo): covers come from `mahtamunfahim-blog-image`
 - Agent: Claude Edge
 - Request (Fahim): blog image thumbnails should be fetched from `mahtamunfahim-blog-image` from now on.
