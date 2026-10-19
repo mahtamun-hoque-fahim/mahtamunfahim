@@ -5,7 +5,7 @@ export const revalidate = 60
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { Check } from 'lucide-react'
+import { ArrowRight, Check } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { getBlogPosts, type BlogPost } from '@/lib/db/queries'
 import BlurWords from '@/components/BlurWords'
@@ -76,12 +76,12 @@ const offers = [
 ]
 
 // The three offer cards: blue, black, white (in that order). White text on
-// #2563FF is about 4.9:1; on the black card body text is #A3ACBD and the link
-// #60A5FA, as in the dark bands.
+// #2563FF is about 4.9:1; on the black card body text is #A3ACBD, as in the
+// dark bands. Each button contrasts with its own card.
 const offerThemes = [
-  { card: 'bg-[#2563FF] border-[#2563FF]', title: 'text-white', text: 'text-white', link: 'text-white font-semibold' },
-  { card: 'bg-[#0B0F19] border-[#0B0F19]', title: 'text-white', text: 'text-[#A3ACBD]', link: 'text-[#60A5FA]' },
-  { card: 'bg-white border-[#E5E7EB]', title: 'text-[#0B0F19]', text: 'text-[#374151]', link: 'text-[#2563FF]' },
+  { card: 'bg-[#2563FF] border-[#2563FF]', title: 'text-white', text: 'text-white', button: 'bg-white text-[#2563FF] hover:bg-[#EFF4FF]' },
+  { card: 'bg-[#0B0F19] border-[#0B0F19]', title: 'text-white', text: 'text-[#A3ACBD]', button: 'bg-[#2563FF] text-white hover:bg-[#1D4ED8]' },
+  { card: 'bg-white border-[#E5E7EB]', title: 'text-[#0B0F19]', text: 'text-[#374151]', button: 'bg-[#0B0F19] text-white hover:bg-[#1F2937]' },
 ]
 
 const faqs = [
@@ -327,7 +327,8 @@ export default async function HomePage() {
         {/* Ways to work together: no prices until Fahim sets them */}
         <section className="max-w-6xl mx-auto px-6 py-16 snap-start scroll-mt-24">
           <BlurWords as="h2" text="Pick what fits where your business is today." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19] mb-14 max-w-3xl leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
-          <Reveal blurSelf={false} className="grid grid-cols-1 md:grid-cols-3 gap-6 blur-stagger" style={{ fontFamily: 'var(--font-jakarta)' }}>
+          {/* .offer-stack: piled up out of view, dealt into the row once scrolled to */}
+          <Reveal blurSelf={false} className="grid grid-cols-1 md:grid-cols-3 gap-6 offer-stack" style={{ fontFamily: 'var(--font-jakarta)' }}>
             {offers.map((o, i) => {
               const t = offerThemes[i % offerThemes.length]
               return (
@@ -335,7 +336,9 @@ export default async function HomePage() {
                   <h3 className={cn('text-2xl mb-3', t.title)} style={{ fontFamily: 'var(--font-clash)' }}>{o.title}</h3>
                   <p className={cn('text-base leading-relaxed mb-6', t.text)}>{o.text}</p>
                   <p className={cn('text-sm mt-auto mb-6', t.title)}>{o.fit}</p>
-                  <Link href="/contact" className={cn('text-sm underline-offset-4 hover:underline', t.link)}>Start with a free audit →</Link>
+                  <Link href="/contact" className={cn('inline-flex self-start items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.97]', t.button)}>
+                    Start with a free audit <ArrowRight className="w-4 h-4" />
+                  </Link>
                 </div>
               )
             })}

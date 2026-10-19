@@ -479,6 +479,28 @@ body {
   animation: pop-in 360ms var(--ease-out) calc(950ms + var(--i, 0) * 220ms) backwards;
 }
 
+/* Offer cards (homepage, Ways to work together): out of view (md and up,
+   where they sit in a row) the three cards lie piled on the middle one,
+   each at its own tilt; once in view (`data-revealed` from Reveal) they
+   slide out into the tidy row, one after another. Transform only; phones
+   keep the plain stacked column. Reduced motion: the global guard. */
+.offer-stack > * {
+  transition: transform 850ms var(--ease-out) calc(250ms + var(--offer-i, 0) * 120ms);
+}
+.offer-stack > :nth-child(2) { --offer-i: 1; }
+.offer-stack > :nth-child(3) { --offer-i: 2; }
+@media (scripting: enabled) and (min-width: 768px) {
+  .offer-stack:not([data-revealed='true']) > :nth-child(1) {
+    transform: translateX(calc(100% + 1.5rem)) translateY(0.5rem) rotate(-5deg);
+  }
+  .offer-stack:not([data-revealed='true']) > :nth-child(2) {
+    transform: rotate(2deg);
+  }
+  .offer-stack:not([data-revealed='true']) > :nth-child(3) {
+    transform: translateX(calc(-100% - 1.5rem)) translateY(1rem) rotate(6deg);
+  }
+}
+
 /* Guided map road: it fades in at the top and out at the bottom instead of
    starting and stopping abruptly. */
 .road-fade {
