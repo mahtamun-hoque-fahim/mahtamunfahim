@@ -2,13 +2,16 @@
 
 import { useEffect, useRef } from 'react'
 
-// The guided map's winding road (app/page.tsx) with a blue glow that follows
-// the mouse along it: the glow sits on the point of the road nearest the
-// cursor and is painted only on the road stroke, so it never leaves the road.
-// The SVG is stretched (preserveAspectRatio="none"), so the gradient is
-// scaled back into a circle on screen. `road-fade` fades it at both ends.
+// The guided map's winding road (app/page.tsx) with a blue glow that marks
+// the current step: whichever step row is nearest the middle of the screen.
+// When that changes, the glow travels slowly ALONG the road (not in a straight
+// line) to the new step's pin and settles there. It is painted only on the
+// road stroke. The SVG is stretched (preserveAspectRatio="none"), so the
+// gradient is scaled back into a circle on screen; `road-fade` fades it at
+// both ends of the road.
 const GLOW_RADIUS = 140 // px on screen
 const SAMPLES = 400
+const EASE = 0.035 // share of the remaining distance covered per frame: slow, visible travel
 
 export default function RoadGlow({ d, height }: { d: string; height: number }) {
   const svgRef = useRef<SVGSVGElement>(null)
@@ -21,59 +24,59 @@ export default function RoadGlow({ d, height }: { d: string; height: number }) {
     const path = pathRef.current
     const grad = gradRef.current
     const glow = glowRef.current
-    const area = svg?.parentElement
-    if (!svg || !path || !grad || !glow || !area) return
+    const rows = svg?.parentElement ? Array.from(svg.parentElement.querySelectorAll(':scope > li')) : []
+    if (!svg || !path || !grad || !glow || !rows.length) return
 
+    // the length along the road of each step's pin, at (50, 50 + 100i)
     const len = path.getTotalLength()
-    const pts = Array.from({ length: SAMPLES + 1 }, (_, i) => path.getPointAtLength((len * i) / SAMPLES))
+    const samples = Array.from({ length: SAMPLES + 1 }, (_, i) => ({ l: (len * i) / SAMPLES, p: path.getPointAtLength((len * i) / SAMPLES) }))
+    const pins = rows.map((_, i) =>
+      samples.reduce((a, b) => (Math.hypot(b.p.x - 50, b.p.y - (50 + 100 * i)) < Math.hypot(a.p.x - 50, a.p.y - (50 + 100 * i)) ? b : a)).l
+    )
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    let target = { x: pts[0].x, y: pts[0].y }
-    let pos = { ...target }
+    let target = pins[0]
+    let at = target
     let frame = 0
 
     const draw = () => {
       const { width, height: h } = svg.getBoundingClientRect()
+      if (!width || !h) return
       const sx = width / 100
-      const sy = h / height
+      const { x, y } = path.getPointAtLength(at)
       grad.setAttribute('r', String(GLOW_RADIUS / sx))
-      grad.setAttribute('gradientTransform', `translate(${pos.x} ${pos.y}) scale(1 ${sx / sy})`)
+      grad.setAttribute('gradientTransform', `translate(${x} ${y}) scale(1 ${sx / (h / height)})`)
     }
 
     const tick = () => {
-      pos.x += (target.x - pos.x) * 0.18
-      pos.y += (target.y - pos.y) * 0.18
+      at += (target - at) * EASE
+      if (Math.abs(target - at) < 0.05) at = target
       draw()
-      frame = Math.abs(target.x - pos.x) + Math.abs(target.y - pos.y) > 0.01 ? requestAnimationFrame(tick) : 0
+      frame = at === target ? 0 : requestAnimationFrame(tick)
     }
 
-    const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return
-      const r = svg.getBoundingClientRect()
-      const sx = r.width / 100
-      const sy = r.height / height
-      let best = pts[0]
-      let bestD = Infinity
-      for (const p of pts) {
-        const dist = ((p.x * sx + r.left - e.clientX) ** 2) + ((p.y * sy + r.top - e.clientY) ** 2)
-        if (dist < bestD) { bestD = dist; best = p }
-      }
-      target = { x: best.x, y: best.y }
-      if (glow.style.opacity !== '1') {
-        // first move in: start on the road under the cursor, not at the old spot
-        pos = { ...target }
-        draw()
-        glow.style.opacity = '1'
-      }
-      if (still) { pos = { ...target }; draw() }
+    const update = () => {
+      const mid = window.innerHeight / 2
+      const boxes = rows.map((r) => r.getBoundingClientRect())
+      const inView = boxes[0].top < window.innerHeight && boxes[boxes.length - 1].bottom > 0
+      glow.style.opacity = inView ? '1' : '0'
+      if (!inView) return
+      let current = 0
+      boxes.forEach((b, i) => {
+        if (Math.abs(b.top + b.height / 2 - mid) < Math.abs(boxes[current].top + boxes[current].height / 2 - mid)) current = i
+      })
+      if (pins[current] === target) return
+      target = pins[current]
+      if (still) { at = target; draw() }
       else if (!frame) frame = requestAnimationFrame(tick)
     }
-    const onLeave = () => { glow.style.opacity = '0' }
 
-    area.addEventListener('pointermove', onMove)
-    area.addEventListener('pointerleave', onLeave)
+    draw()
+    update()
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', draw)
     return () => {
-      area.removeEventListener('pointermove', onMove)
-      area.removeEventListener('pointerleave', onLeave)
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', draw)
       cancelAnimationFrame(frame)
     }
   }, [height])
