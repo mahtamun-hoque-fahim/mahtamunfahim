@@ -1,0 +1,162 @@
+import type { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import AuthorCard from '@/components/AuthorCard'
+import Link from 'next/link'
+import { getBlogPostBySlug, getCachedSiteSettings, type BlogPost } from '@/lib/db/queries'
+import { formatDate } from '@/lib/utils'
+import { getCoverUrl } from '@/lib/blog-image'
+import { renderMarkdown } from '@/lib/markdown'
+import CopyCodeInit from '@/components/CopyCodeInit'
+
+export const revalidate = 60
+
+async function getPost(slug: string): Promise<BlogPost | null> {
+  return getBlogPostBySlug(slug)
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}): Promise<Metadata> {
+  const { slug } = await params
+  const post = await getPost(slug)
+  if (!post) return { title: 'Post not found' }
+  return {
+    title: post.title,
+    description: post.excerpt,
+    authors: [{ name: 'Mahtamun Hoque Fahim', url: 'https://mahtamunhoquefahim.vercel.app' }],
+    alternates: {
+      canonical: `https://mahtamunhoquefahim.vercel.app/blog/${slug}`,
+    },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      images: [{ url: getCoverUrl(post.slug, post.coverImage), width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: post.coverImage ? 'summary_large_image' : 'summary',
+      title: post.title,
+      description: post.excerpt,
+      images: [getCoverUrl(post.slug, post.coverImage)],
+    },
+  }
+}
+
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params
+  const post = await getPost(slug)
+  if (!post) notFound()
+
+  const settings = await getCachedSiteSettings()
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Article',
+            headline: post.title,
+            description: post.excerpt,
+            image: getCoverUrl(post.slug, post.coverImage),
+            datePublished: post.createdAt,
+            dateModified: post.updatedAt,
+            author: {
+              '@type': 'Person',
+              name: 'Mahtamun Hoque Fahim',
+              url: 'https://mahtamunhoquefahim.vercel.app',
+              jobTitle: settings.jobTitle,
+              ...(settings.avatarUrl ? { image: settings.avatarUrl } : {}),
+            },
+          }),
+        }}
+      />
+      <Navbar />
+      <main>
+        <section className="max-w-3xl mx-auto px-6 py-24 pt-32">
+          <Link
+            href="/blog"
+            className="inline-block text-[#5B6475] text-sm mb-12 hover:text-[#2563FF] transition-colors"
+            style={{ fontFamily: 'var(--font-jakarta)' }}
+          >
+            ← Back to blog
+          </Link>
+
+          <div className="mb-8">
+            <h1
+              className="text-4xl md:text-5xl font-bold text-[#0B0F19] mb-6 leading-tight"
+              style={{ fontFamily: 'var(--font-clash)' }}
+            >
+              {post.title}
+            </h1>
+
+            <div
+              className="flex items-center gap-4 text-sm text-[#5B6475]"
+              style={{ fontFamily: 'var(--font-jakarta)' }}
+            >
+              <span>{formatDate(post.createdAt)}</span>
+              <span>·</span>
+              <span>{post.readingTime} min read</span>
+            </div>
+          </div>
+
+          {true && (
+            <div
+              className="mb-12 rounded-lg overflow-hidden border border-[#E5E7EB] bg-[#F7F8FA]"
+              style={{ aspectRatio: '1200 / 630' }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={getCoverUrl(post.slug, post.coverImage)}
+                alt={post.title}
+                width={1200}
+                height={630}
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
+            </div>
+          )}
+
+          <article
+            className="prose-dark"
+            dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }}
+          />
+          <CopyCodeInit />
+
+          {post.tags && post.tags.length > 0 && (
+            <div className="mt-16 pt-8 border-t border-[#E5E7EB] flex flex-wrap items-center gap-2">
+              <span
+                className="text-xs text-[#5B6475] mr-1"
+                style={{ fontFamily: 'var(--font-jetbrains)' }}
+              >
+                Tagged
+              </span>
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="text-xs px-2 py-1 border border-[#E5E7EB] text-[#5B6475] rounded
+                             whitespace-nowrap flex-shrink-0
+                             hover:text-[#2563FF] hover:border-[#2563FF] transition-colors duration-150"
+                  style={{ fontFamily: 'var(--font-jetbrains)' }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <AuthorCard jobTitle={settings.jobTitle} avatarUrl={settings.avatarUrl} />
+        </section>
+      </main>
+      <Footer />
+    </>
+  )
+}

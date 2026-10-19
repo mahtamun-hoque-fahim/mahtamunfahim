@@ -1,0 +1,507 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent: #2563FF;
+  --accent-dim: #1D4ED8; /* legacy name: the hover blue (--accent-hover) */
+  --accent-hover: #1D4ED8;
+  --accent-soft: #EFF4FF;
+  --bg: #FFFFFF;
+  --surface: #F7F8FA;
+  --border: #E5E7EB; /* = --line */
+  --line: #E5E7EB;
+  --line-strong: #D1D5DB;
+  --text: #0B0F19;
+  --text-body: #374151; /* long-form paragraphs (blog) */
+  --muted: #5B6475;
+  /* Legacy font names kept as aliases so inline `fontFamily` styles keep
+     working: --font-clash is the headline font (Plus Jakarta Sans), and
+     --font-jakarta / --font-jetbrains are both Inter (JetBrains Mono is gone;
+     labels are uppercase Inter). Bold is never faked (font-synthesis-weight
+     on html): a weight a font does not ship falls back to a real one. */
+  --font-clash: var(--font-plus-jakarta), system-ui, sans-serif;
+  --font-jakarta: var(--font-inter), system-ui, sans-serif;
+  --font-jetbrains: var(--font-inter), system-ui, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Motion tokens (see DESIGN_GUIDE.md section 8) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);     /* entrances, press feedback */
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* on-screen movement */
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-synthesis-weight: none;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-jakarta);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: #FFFFFF;
+}
+
+/* Cursor accent */
+.accent-cursor {
+  cursor: none;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .mask-fade-right {
+    -webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
+    mask-image: linear-gradient(to right, black 70%, transparent 100%);
+  }
+
+  .border-glow {
+    box-shadow: 0 0 0 1px var(--accent), 0 0 20px rgba(37, 99, 255, 0.1);
+  }
+}
+
+/* Markdown blog content styles */
+.prose-dark {
+  color: var(--text);
+  font-family: var(--font-jakarta);
+  line-height: 1.8;
+  font-size: 1.05rem;
+}
+
+.prose-dark h1,
+.prose-dark h2,
+.prose-dark h3,
+.prose-dark h4 {
+  font-family: var(--font-clash);
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.prose-dark h1 { font-size: 2rem; }
+.prose-dark h2 { font-size: 1.5rem; }
+.prose-dark h3 { font-size: 1.25rem; }
+
+.prose-dark p {
+  margin-bottom: 1.25rem;
+  color: var(--text-body);
+}
+
+.prose-dark a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose-dark code,
+.prose-dark .hl-inline {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.15em 0.45em;
+  font-family: var(--font-code);
+  font-size: 0.82em;
+  color: var(--accent);
+  font-style: normal;
+  font-weight: normal;
+}
+
+.prose-dark pre,
+.prose-dark .hl-pre {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.25rem 1.25rem 1.25rem 1.25rem;
+  margin: 1.5rem 0;
+  overflow-x: hidden;
+}
+
+.prose-dark pre code,
+.prose-dark .hl-pre .hl-code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-body);
+  font-family: var(--font-code);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  font-style: normal;
+  font-weight: normal;
+  display: block;
+}
+
+/* Copy button */
+.prose-dark .hl-copy-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--muted);
+  font-family: var(--font-jetbrains);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  line-height: 1.4;
+}
+
+.prose-dark .hl-copy-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.prose-dark .hl-copy-btn--copied {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+/* Language label badge */
+.prose-dark .hl-lang-label {
+  display: block;
+  font-family: var(--font-jetbrains);
+  font-size: 0.65rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+}
+
+/* ── Syntax highlight tokens ── */
+.hl-keyword  { color: #cf222e; }
+.hl-string   { color: #0a3069; }
+.hl-number   { color: #0550ae; }
+.hl-comment  { color: #6e7781; font-style: italic; }
+.hl-function { color: #8250df; }
+.hl-variable { color: #953800; }
+.hl-tag      { color: #116329; }
+.hl-tag-name { color: #116329; }
+.hl-attr     { color: #0550ae; }
+.hl-property { color: #0550ae; }
+.hl-selector { color: #6639ba; }
+
+.prose-dark blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.prose-dark ul,
+.prose-dark ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+  color: var(--text-body);
+}
+
+.prose-dark li {
+  margin-bottom: 0.5rem;
+}
+
+.prose-dark img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.prose-dark hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+.prose-dark strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.prose-dark table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.prose-dark th {
+  background: var(--surface);
+  color: var(--accent);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--line);
+  white-space: nowrap;
+  font-family: var(--font-jetbrains);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.prose-dark td {
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--line);
+  color: var(--text-body);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.prose-dark tr:nth-child(even) td {
+  background: var(--surface);
+}
+
+.prose-dark tr:hover td {
+  background: var(--surface);
+}
+
+/* Reduced motion: no movement, no blur, no looping. State changes stay
+   instant so nothing depends on an animation finishing. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}
+
+/* ── Blur reveal ──────────────────────────────────────────────────────
+   Fade + blur + a small rise. Used per word (BlurWords) and per block
+   (Reveal).
+
+   The keyframes only define `from`. The end state is whatever the element
+   normally looks like (the implicit `to` frame), and `backwards` fill only
+   holds the hidden `from` frame during the delay. So once a reveal ends,
+   the animation lets go completely: no leftover blur layer, stacking
+   context or forced `opacity: 1`, and elements with their own opacity
+   (dimmed cards) or hover styles keep working.
+
+   The hidden state is dropped the moment `data-revealed` is set, and it
+   only applies when scripting is enabled, so without JS the content simply
+   shows. Reduced motion is handled by the global guard above (animations
+   collapse to 0.01ms). */
+@keyframes blur-reveal {
+  from {
+    opacity: 0;
+    filter: blur(var(--blur-from, 6px));
+    transform: translateY(var(--reveal-y, 8px));
+  }
+}
+
+.blur-word {
+  display: inline-block;
+}
+
+@media (scripting: enabled) {
+  .blur-reveal:not([data-revealed='true']),
+  .blur-stagger:not([data-revealed='true']) > *,
+  .blur-words:not(.blur-words-load):not([data-revealed='true']) .blur-word {
+    opacity: 0;
+    filter: blur(var(--blur-from, 6px));
+    transform: translateY(var(--reveal-y, 8px));
+  }
+}
+
+.blur-reveal[data-revealed='true'] {
+  animation: blur-reveal var(--reveal-duration, 900ms) var(--ease-out)
+    var(--reveal-delay, 0ms) backwards;
+}
+
+.blur-words[data-revealed='true'] .blur-word {
+  animation: blur-reveal var(--word-duration, 800ms) var(--ease-out)
+    calc(var(--delay, 0ms) + var(--i, 0) * var(--stagger, 70ms)) backwards;
+}
+
+/* Above the fold: plays on first paint, no JS needed. `backwards` fill
+   keeps the words hidden during their delay without a hidden base state. */
+.blur-words-load .blur-word {
+  animation: blur-reveal var(--word-duration, 800ms) var(--ease-out)
+    calc(var(--delay, 0ms) + var(--i, 0) * var(--stagger, 70ms)) backwards;
+}
+
+.blur-load {
+  animation: blur-reveal var(--reveal-duration, 900ms) var(--ease-out)
+    var(--reveal-delay, 0ms) backwards;
+}
+
+/* Independent cards in a list: each child reveals in turn once the
+   container is in view. Not for gap-px grids, where the grid colour
+   would show through the hidden cells; reveal those as one block. */
+.blur-stagger[data-revealed='true'] > * {
+  animation: blur-reveal var(--reveal-duration, 900ms) var(--ease-out)
+    var(--reveal-delay, 0ms) backwards;
+}
+/* 110ms steps, capped at 660ms so long lists do not drag */
+.blur-stagger > :nth-child(2) { --reveal-delay: 110ms; }
+.blur-stagger > :nth-child(3) { --reveal-delay: 220ms; }
+.blur-stagger > :nth-child(4) { --reveal-delay: 330ms; }
+.blur-stagger > :nth-child(5) { --reveal-delay: 440ms; }
+.blur-stagger > :nth-child(6) { --reveal-delay: 550ms; }
+.blur-stagger > :nth-child(n + 7) { --reveal-delay: 660ms; }
+
+/* Keyboard focus: one visible, consistent ring for every interactive
+   element. :focus-visible means mouse clicks do not show it. Inputs
+   draw their own ring (see ContactForm), so they are not listed here. */
+:where(a, button, [role='button'], summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Focus list (components/FocusCards.tsx): only the child in the middle band
+   of the screen is sharp; the rest fade and blur. Opacity and filter only. */
+.focus-cards > * {
+  transition: opacity 500ms var(--ease-out), filter 500ms var(--ease-out);
+}
+@media (scripting: enabled) {
+  .focus-cards > :not([data-active='true']) {
+    opacity: 0.15;
+    filter: blur(4px);
+  }
+}
+
+/* Slide-up panel (a `Reveal` with blurSelf={false} and `.slide-up`): rises
+   into place like a sheet the first time it enters the view. `from`-only
+   keyframes with `backwards` fill, so nothing is pinned afterwards. */
+@keyframes slide-up {
+  from {
+    transform: translateY(18vh);
+  }
+}
+@media (scripting: enabled) {
+  .slide-up:not([data-revealed='true']) {
+    transform: translateY(18vh);
+  }
+}
+.slide-up[data-revealed='true'] {
+  animation: slide-up 900ms var(--ease-out) backwards;
+}
+
+/* Before / after cards (homepage): out of view the After card lies on top of
+   the Before card (md and up, where they sit side by side); once in view
+   (`data-revealed` from Reveal) they spread apart, then each After line pops
+   a tick in turn. Transform and opacity only; reduced motion is handled by
+   the global guard (everything lands in its final place at once). */
+.ba-before,
+.ba-after {
+  transition: transform 750ms var(--ease-out) 200ms;
+}
+@media (scripting: enabled) and (min-width: 768px) {
+  .ba-cards:not([data-revealed='true']) .ba-before {
+    transform: translateX(10%) rotate(-1deg);
+  }
+  .ba-cards:not([data-revealed='true']) .ba-after {
+    transform: translateX(calc(-100% - 2rem + 10%)) translateY(0.75rem) rotate(1deg);
+  }
+}
+@media (scripting: enabled) {
+  .ba-cards:not([data-revealed='true']) .ba-tick {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+.ba-cards[data-revealed='true'] .ba-tick {
+  animation: pop-in 360ms var(--ease-out) calc(950ms + var(--i, 0) * 220ms) backwards;
+}
+
+/* Guided map road: it fades in at the top and out at the bottom instead of
+   starting and stopping abruptly. */
+.road-fade {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, black 12%, black 88%, transparent);
+}
+
+/* Snap zone (set by components/SnapScroll.tsx while the homepage is mounted): every section
+   is a stop (`snap-start`, light ones with `scroll-mt-24` to clear the navbar)
+   and each focus card is one (`snap-center`). */
+html.snap-zone {
+  scroll-snap-type: y mandatory;
+}
+
+/* Route enter: short opacity fade, replayed by app/template.tsx on every
+   navigation. It targets <main> and <footer> only, never the wrapper:
+   the navbar is a sibling of <main> and uses backdrop-filter, and an
+   ancestor with an opacity animation becomes a "backdrop root" that cuts
+   that blur off. `from`-only keyframes plus `backwards` fill also release
+   the animation when it ends instead of pinning `opacity: 1`. */
+@keyframes route-enter {
+  from { opacity: 0; }
+}
+.route-enter > main,
+.route-enter > footer {
+  animation: route-enter 180ms var(--ease-out) backwards;
+}
+
+/* Arrival gate (set by app/template.tsx): when a page mounts while still
+   scrolled down, hold the timer-based hero entrance until the smooth
+   scroll-to-top arrives. A paused animation with `backwards` fill stays on
+   its hidden `from` frame. */
+.route-enter[data-await-top] .blur-load,
+.route-enter[data-await-top] .blur-words-load .blur-word {
+  animation-play-state: paused;
+}
+
+/* Contact form success: the circle pops in, then the check draws itself.
+   Both end in their normal resting state, so reduced motion (animations
+   collapsed to 0.01ms) lands on the finished check with no extra rules. */
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes check-draw {
+  to { stroke-dashoffset: 0; }
+}
+.pop-in {
+  animation: pop-in 420ms var(--ease-out) both;
+}
+.check-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: check-draw 420ms var(--ease-out) 220ms forwards;
+}

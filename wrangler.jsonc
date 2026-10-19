@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mahtamunfahim",
+  // OpenNext (@opennextjs/cloudflare) builds a Worker, so this uses the
+  // WORKERS config format: `main` points at the generated worker entry and
+  // `assets` binds the static output dir. Deploy via `npm run cf:deploy`
+  // (wrangler deploy) or a git-connected Workers Build running `npm run cf:build`.
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
