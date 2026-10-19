@@ -50,6 +50,7 @@ npm run dev
 ## Security / Gotchas
 
 - **Migration snapshot chain drift**: `drizzle/0001_credentials_tables.sql` exists with no matching `drizzle/meta/0001_snapshot.json`. This means `drizzle-kit generate` diffs against `0000_snapshot.json`, not the true post-0001 state — any future `generate` run will re-propose objects that already exist in prod (this happened with `0002`, which had to be hand-trimmed down to just the actually-new `site_settings` table; `0002_snapshot.json` was kept as generated since it's a correct full-schema snapshot, which repairs the chain going forward). If you ever regenerate `0001` properly, re-verify `0002` still applies cleanly.
+- **`npx drizzle-kit migrate` can fail silently.** On this machine it exited 1 with no error message and applied nothing (its spinner hides the error). If it does, apply the same files with drizzle-orm's `drizzle-orm/neon-http/migrator` from a short node script: it writes the same `drizzle.__drizzle_migrations` journal and prints the failing query. It is not transactional, so a failure leaves earlier migrations' tables behind.
 - **Reads fail soft, not loud.** The data-access functions in `lib/db/queries.ts` catch database errors and return built-in defaults (site settings, About text) or empty lists (projects, skills). A missing or dropped column therefore shows up as missing content on the live site, with no error page. After any schema change, look at the live pages, not just the build status.
 - **Coupled layout values.** The hero container (`app/page.tsx`) is full height and centres the text; the portrait is anchored to it with `bottom-0`, so it stands on the marquee strip wherever the text sits. Its height is `min(100vh - 8rem, 40rem)`; if the h1 grows past `clamp(2.75rem, 5.5vw, 5rem)`, check it still clears the portrait at 1440 and 1920.
 - **Misleading names kept on purpose.** `--font-clash` is the headline font alias (Plus Jakarta Sans now; once Clash Display, then Syne, then Instrument Serif); `--font-jakarta` and `--font-jetbrains` are both Inter now; `.prose-dark` is the blog prose style (light now); `--border` and `--accent-dim` are legacy names of `--line` and `--accent-hover`.
@@ -59,6 +60,14 @@ npm run dev
 - Build verification (`npx tsc --noEmit` + `npm run build`) requires network access to `fonts.googleapis.com` (next/font/google) and to Neon (`DATABASE_URL`) for any DB-touching build step — both are unavailable in sandboxed dev environments without egress; run the full build locally or let Vercel's build do it.
 
 ## Session Log
+
+### 2026-10-19 (new database migrated): all 19 migrations on the new Neon database, 0008 made replayable
+- Agent: Claude Edge
+- Request (Fahim): he put the new database's connection strings in `.env` and `.env.local`; run `npx drizzle-kit migrate` on it.
+- Checked first: the new host (`ep-bold-union`, us-east-2) differs from personal-website's (`ep-floral-resonance`, ap-southeast-1), and it had no tables.
+- Problem: `drizzle-kit migrate` exited 1 with no message (see Gotchas). Run through drizzle-orm's neon-http migrator, it failed at `0008`: `ALTER TABLE "projects" DROP COLUMN "status_badges"` on a column that no migration ever creates (it was added by hand in the old production database; `0002` was trimmed on the assumption it existed). So the migration chain could not be replayed on an empty database.
+- Fix: `0008` is now `DROP COLUMN IF EXISTS`. Changing an applied file is harmless: drizzle decides what to run by the journal timestamps, not by file hashes. The partial tables from the failed run (only mine, the database was empty before) were dropped, then all 19 migrations applied in one run: `about_content`, `account`, `blog_posts`, `contact_messages`, `footer_links`, `session`, `site_settings`, `testimonials`, `user`, `verification`.
+- Verified: `/`, `/about`, `/blog`, `/contact` 200 on the dev server with no new database errors in its log. NOT done: an admin account (`npm run admin:create`, email must be in `ADMIN_EMAILS`); the database has no content yet.
 
 ### 2026-10-20 (new repo): this site moved out of personal-website into `mahtamunfahim`
 - Agent: Claude Edge

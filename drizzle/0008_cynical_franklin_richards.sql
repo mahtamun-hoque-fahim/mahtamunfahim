@@ -1,1 +1,1 @@
-ALTER TABLE "projects" DROP COLUMN "status_badges";
+ALTER TABLE "projects" DROP COLUMN IF EXISTS "status_badges";
