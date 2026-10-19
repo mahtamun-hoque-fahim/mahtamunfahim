@@ -73,6 +73,10 @@ The light page is broken by full-bleed dark bands where attention matters most (
 
 Markup: `<section className="bg-[#0B0F19]">` with the usual `max-w-6xl mx-auto px-6` container inside, so the colour runs edge to edge. Primary buttons stay solid blue; never use `#6B7280` or `#5B6475` text on the dark band (below 4.5:1).
 
+### Offer cards (Ways to work together)
+
+The three offer cards on the homepage are blue, black and white, in that order (`offerThemes` in `app/page.tsx`, cycled if more offers are added). Blue: `#2563FF` card, white title, text and semibold link (4.9:1). Black: `#0B0F19` card, white title and fit line, `#A3ACBD` text, `#60A5FA` link (the dark-band colours above). White: white card with a `#E5E7EB` border, `#0B0F19` title, `#374151` text, `#2563FF` link.
+
 ### Convention: Hardcoded Hex Over Mapped Tokens
 
 This codebase consistently uses hardcoded hex literals (`bg-[#2563FF]`) for one-off color usage rather than the mapped Tailwind tokens (`bg-accent`). Both work — Tailwind's JIT scans for the literal class string in source and generates valid CSS either way — this is purely an established convention for this project, not a technical limitation.

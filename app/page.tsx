@@ -75,6 +75,15 @@ const offers = [
   { title: 'Design only', text: 'A brand identity or a website design your own developer can build.', fit: 'For teams that already have a developer.' },
 ]
 
+// The three offer cards: blue, black, white (in that order). White text on
+// #2563FF is about 4.9:1; on the black card body text is #A3ACBD and the link
+// #60A5FA, as in the dark bands.
+const offerThemes = [
+  { card: 'bg-[#2563FF] border-[#2563FF]', title: 'text-white', text: 'text-white', link: 'text-white font-semibold' },
+  { card: 'bg-[#0B0F19] border-[#0B0F19]', title: 'text-white', text: 'text-[#A3ACBD]', link: 'text-[#60A5FA]' },
+  { card: 'bg-white border-[#E5E7EB]', title: 'text-[#0B0F19]', text: 'text-[#374151]', link: 'text-[#2563FF]' },
+]
+
 const faqs = [
   { q: 'How much does a website cost?', a: 'It depends on what your site needs to do. After the free audit you get a fixed price in writing before any work starts, so there are no surprises.' },
   { q: 'How long does it take?', a: 'It depends on the size of the project. You get a timeline together with the plan, before you agree to anything.' },
@@ -319,14 +328,17 @@ export default async function HomePage() {
         <section className="max-w-6xl mx-auto px-6 py-16 snap-start scroll-mt-24">
           <BlurWords as="h2" text="Pick what fits where your business is today." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19] mb-14 max-w-3xl leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
           <Reveal blurSelf={false} className="grid grid-cols-1 md:grid-cols-3 gap-6 blur-stagger" style={{ fontFamily: 'var(--font-jakarta)' }}>
-            {offers.map((o) => (
-              <div key={o.title} className="rounded-2xl border border-[#E5E7EB] p-8 flex flex-col">
-                <h3 className="text-2xl text-[#0B0F19] mb-3" style={{ fontFamily: 'var(--font-clash)' }}>{o.title}</h3>
-                <p className="text-[#374151] text-base leading-relaxed mb-6">{o.text}</p>
-                <p className="text-[#0B0F19] text-sm mt-auto mb-6">{o.fit}</p>
-                <Link href="/contact" className="text-[#2563FF] text-sm hover:underline">Start with a free audit →</Link>
-              </div>
-            ))}
+            {offers.map((o, i) => {
+              const t = offerThemes[i % offerThemes.length]
+              return (
+                <div key={o.title} className={cn('rounded-2xl border p-8 flex flex-col', t.card)}>
+                  <h3 className={cn('text-2xl mb-3', t.title)} style={{ fontFamily: 'var(--font-clash)' }}>{o.title}</h3>
+                  <p className={cn('text-base leading-relaxed mb-6', t.text)}>{o.text}</p>
+                  <p className={cn('text-sm mt-auto mb-6', t.title)}>{o.fit}</p>
+                  <Link href="/contact" className={cn('text-sm underline-offset-4 hover:underline', t.link)}>Start with a free audit →</Link>
+                </div>
+              )
+            })}
           </Reveal>
         </section>
 

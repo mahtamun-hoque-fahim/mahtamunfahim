@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-19 (offer cards): Ways to work together cards are blue, black and white
+- Agent: Claude Edge
+- Request (Fahim, screenshot of "Pick what fits where your business is today."): cards are to be blue, black and white themed.
+- Read as one theme per card, in his order: One-time project blue (`#2563FF`, white text), Website care plan black (`#0B0F19`, white title, `#A3ACBD` text, `#60A5FA` link), Design only white (as before). `offerThemes` in `app/page.tsx`; DESIGN_GUIDE "Offer cards".
+- Verified: `npx tsc --noEmit` clean; the blue and black cards render in the browser pane. NOT seen: all three side by side at full desktop width.
+
 ### 2026-10-19 (admin states, road glow): five states for admin controls, cursor glow on the guided map road
 - Agent: Claude Edge
 - Requests (Fahim, screenshot of the testimonial tile-size buttons): (1) admin panel: these should be clickable, where are the five states for each input and button; (2) homepage roadmap: a blue glow that continuously follows the cursor, strictly on the road path, fading at the edges.
