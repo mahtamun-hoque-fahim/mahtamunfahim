@@ -349,7 +349,9 @@ function cleanTestimonial(input: Partial<NewTestimonial>): Partial<NewTestimonia
   if (input.business !== undefined) out.business = text(input.business, 80)
   if (input.quote !== undefined) out.quote = text(input.quote, 600)
   if (input.websiteUrl !== undefined) {
-    const url = text(input.websiteUrl, 300)
+    let url = text(input.websiteUrl, 300)
+    // "tradefigure.com" is how people type it; production hides thrown messages, so fix it instead of rejecting
+    if (url && !/^[a-z][a-z0-9+.-]*:/i.test(url)) url = `https://${url}`
     if (url && !/^https?:\/\//i.test(url)) throw new Error('Website must start with http:// or https://')
     out.websiteUrl = url || null
   }

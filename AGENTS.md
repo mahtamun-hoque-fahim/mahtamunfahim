@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-19 (testimonial website without https): saving no longer fails on a bare domain
+- Agent: Claude Edge
+- Report (Fahim, screenshot of Admin > Testimonials on production): saving a testimonial with the website `tradefigure.com` showed Next's generic "An error occurred in the Server Components render" message.
+- Cause: `cleanTestimonial` in `app/admin/actions.ts` threw "Website must start with http:// or https://", and production builds replace thrown server-action messages with that generic text.
+- Fix: a website with no scheme gets `https://` added; anything with another scheme (`javascript:` and the like) is still rejected. Other thrown validation messages (name and quote required, unknown size, upload errors) are still masked the same way in production.
+- Verified: `npx tsc --noEmit` clean. NOT verified on the deployed site.
+
 ### 2026-10-19 (new database migrated): all 19 migrations on the new Neon database, 0008 made replayable
 - Agent: Claude Edge
 - Request (Fahim): he put the new database's connection strings in `.env` and `.env.local`; run `npx drizzle-kit migrate` on it.
