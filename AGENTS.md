@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-19 (blog covers repo): covers come from `mahtamunfahim-blog-image`
+- Agent: Claude Edge
+- Request (Fahim): blog image thumbnails should be fetched from `mahtamunfahim-blog-image` from now on.
+- Done: `lib/blog-image.ts` base URL is `https://raw.githubusercontent.com/mahtamun-hoque-fahim/mahtamunfahim-blog-image/main/covers`, and the hint in the post editor names the new repo. Same convention as before: `covers/{slug}.{ext}` on branch `main`; a full URL stored in the cover field still passes through unchanged.
+- NOT verified: at the time of this change the GitHub API returned 404 for that repo (not created yet, or private). raw.githubusercontent.com only serves public repos, so covers stay broken until the repo is public with a `covers/` folder on `main`.
+
 ### 2026-10-19 (offer cards): Ways to work together cards are blue, black and white
 - Agent: Claude Edge
 - Request (Fahim, screenshot of "Pick what fits where your business is today."): cards are to be blue, black and white themed.

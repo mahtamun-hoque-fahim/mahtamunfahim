@@ -150,7 +150,7 @@ export default function PostEditor({ post }: Props) {
             style={{ fontFamily: 'var(--font-jakarta)' }}
           >
             Extension only — e.g. “png”, “jpg”, “webp”. Leave blank to default to .png.
-            File must be named [slug].[ext] and placed in the blog-image repo under /covers/.
+            File must be named [slug].[ext] and placed in the mahtamunfahim-blog-image repo under /covers/.
           </p>
         </div>
       </div>

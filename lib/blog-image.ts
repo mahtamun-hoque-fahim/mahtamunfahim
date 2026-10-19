@@ -1,11 +1,11 @@
 const BLOG_IMAGE_BASE =
-  'https://raw.githubusercontent.com/mahtamun-hoque-fahim/blog-image/main/covers'
+  'https://raw.githubusercontent.com/mahtamun-hoque-fahim/mahtamunfahim-blog-image/main/covers'
 
 /**
  * Derives the cover image URL for a blog post.
  *
  * Convention:
- *   - Image lives at: blog-image repo → /covers/{slug}.{ext}
+ *   - Image lives at: mahtamunfahim-blog-image repo → /covers/{slug}.{ext}
  *   - `coverImageField` stores just the extension (e.g. "png", "jpg", "webp")
  *   - If null/empty, defaults to ".png"
  *   - If a full URL is stored (legacy/custom), it passes through unchanged.
