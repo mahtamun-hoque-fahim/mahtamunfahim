@@ -394,6 +394,35 @@ body {
   outline-offset: 3px;
 }
 
+/* Admin controls: one set of states for every button and field in the
+   dashboard (default and hover live on each element's own classes).
+   Higher specificity than Tailwind utilities on purpose. */
+[data-admin] :is(button, [role='button'], select, input, textarea, label:has(input[type='checkbox'])) {
+  transition-property: color, background-color, border-color, box-shadow, opacity, transform;
+  transition-duration: 150ms;
+  transition-timing-function: var(--ease-out);
+}
+[data-admin] :is(button, [role='button'], select, input[type='checkbox'], input[type='radio'], input[type='file'], label:has(input[type='checkbox'])) {
+  cursor: pointer;
+}
+[data-admin] :is(input:not([type='checkbox'], [type='radio']), select, textarea):not(:focus, :disabled):hover {
+  border-color: #d1d5db;
+}
+[data-admin] :is(input:not([type='checkbox'], [type='radio']), select, textarea):focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 255, 0.15);
+}
+[data-admin] input[type='checkbox'] {
+  accent-color: var(--accent);
+}
+[data-admin] :is(button, [role='button']):not(:disabled):active {
+  transform: scale(0.97);
+}
+[data-admin] :is(button, [role='button'], select, input, textarea):disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
 /* Focus list (components/FocusCards.tsx): only the child in the middle band
    of the screen is sharp; the rest fade and blur. Opacity and filter only. */
 .focus-cards > * {

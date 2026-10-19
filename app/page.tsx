@@ -14,6 +14,7 @@ import HeroPortrait from '@/components/HeroPortrait'
 import Reveal from '@/components/Reveal'
 import FocusCards from '@/components/FocusCards'
 import SnapScroll from '@/components/SnapScroll'
+import RoadGlow from '@/components/RoadGlow'
 import { getTestimonials, getCachedSiteSettings } from '@/lib/db/queries'
 import { cn } from '@/lib/utils'
 
@@ -291,10 +292,7 @@ export default async function HomePage() {
           <ol className="relative mt-16" style={{ fontFamily: 'var(--font-jakarta)' }}>
             {/* the path: a straight dashed line on phones, a winding road from md up */}
             <span aria-hidden="true" className="md:hidden absolute top-0 bottom-0 left-5 border-l-2 border-dashed border-[#D1D5DB]" />
-            <svg aria-hidden="true" className="hidden md:block absolute inset-0 w-full h-full road-fade" viewBox={`0 0 100 ${steps.length * 100}`} preserveAspectRatio="none">
-              <path d={roadPath} fill="none" stroke="#E5E7EB" strokeWidth="34" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-              <path d={roadPath} fill="none" stroke="#FFFFFF" strokeWidth="2" strokeDasharray="12 14" vectorEffect="non-scaling-stroke" />
-            </svg>
+            <RoadGlow d={roadPath} height={steps.length * 100} />
             {steps.map((s, i) => (
               <li key={s.title} className="relative flex items-center min-h-[70vh] py-10 pl-16 md:pl-0">
                 {/* the pin on the path */}

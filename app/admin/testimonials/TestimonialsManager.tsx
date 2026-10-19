@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { ChevronDown, ChevronUp, ImagePlus, Loader2, Pencil, Plus, Trash2, X } from 'lucide-react'
 import type { NewTestimonial, Testimonial } from '@/lib/db/queries'
 import { MAX_AVATAR_BYTES } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 import {
   createTestimonialAction,
   deleteTestimonialAction,
@@ -140,8 +141,8 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
             <span className={labelCls}>Tile size in the grid</span>
             <div className="flex flex-wrap gap-2">
               {SIZES.map((s) => (
-                <button key={s.value} type="button" onClick={() => setDraft({ ...draft, size: s.value })}
-                  className={draft.size === s.value ? `${btnSecondary} border-[#2563FF] text-[#2563FF]` : btnSecondary}>
+                <button key={s.value} type="button" aria-pressed={draft.size === s.value} onClick={() => setDraft({ ...draft, size: s.value })}
+                  className={cn(btnSecondary, draft.size === s.value && 'border-[#2563FF] bg-[#EFF4FF] text-[#2563FF] hover:border-[#2563FF] hover:text-[#2563FF]')}>
                   {s.label} <span className="text-[#6B7280]">({s.hint})</span>
                 </button>
               ))}
@@ -194,7 +195,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
             <div className="flex flex-col gap-1 shrink-0">
               <button type="button" className={btnSecondary} onClick={() => togglePublished(t)} disabled={pending}>{t.published ? 'Hide' : 'Publish'}</button>
               <button type="button" aria-label="Edit" className={btnSecondary} onClick={() => openEdit(t)}><Pencil className="w-4 h-4" /></button>
-              <button type="button" aria-label="Delete" className={`${btnSecondary} hover:text-red-600`} onClick={() => remove(t)} disabled={pending}><Trash2 className="w-4 h-4" /></button>
+              <button type="button" aria-label="Delete" className={cn(btnSecondary, 'hover:text-red-600')} onClick={() => remove(t)} disabled={pending}><Trash2 className="w-4 h-4" /></button>
             </div>
           </li>
         ))}

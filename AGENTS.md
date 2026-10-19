@@ -61,6 +61,14 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-19 (admin states, road glow): five states for admin controls, cursor glow on the guided map road
+- Agent: Claude Edge
+- Requests (Fahim, screenshot of the testimonial tile-size buttons): (1) admin panel: these should be clickable, where are the five states for each input and button; (2) homepage roadmap: a blue glow that continuously follows the cursor, strictly on the road path, fading at the edges.
+- (1) Tile-size buttons: the selected class was concatenated onto `btnSecondary`, so its `border-[#2563FF]` / `text-[#2563FF]` competed with the base colours and lost; nothing looked selected. Now merged with `cn()`, with an `#EFF4FF` fill and `aria-pressed`; same fix for the delete button's red hover. Admin-wide: `globals.css` gives every `[data-admin]` button and field the same states (hover border on fields, focus ring, pressed scale, disabled opacity and cursor, pointer cursor, blue checkboxes). Read as the five states default, hover, focus, active, disabled. DESIGN_GUIDE "Buttons".
+- (2) `components/RoadGlow.tsx` now renders the road SVG with a third stroke painted by a radial gradient at the road point nearest the mouse (400 samples of the path), eased with rAF, scaled back into a circle despite the stretched viewBox; fades out when the mouse leaves. Read "fade away at the edges" as a soft glow edge plus the existing top/bottom road fade. DESIGN_GUIDE "Guided map".
+- Verified: `npx tsc --noEmit` clean; in the browser pane at 1366x768 a synthetic mouse move put the glow on the road beside pin 02 (screenshot). NOT verified: the admin states signed in, a real mouse.
+- Noticed, not changed: `components/ContactForm.tsx` focus shadow `focus:shadow-[0_0_0_3px_rgba(37, 99, 255,0.12)]` has spaces from the accent replace, so Tailwind drops it and the contact fields have no focus ring.
+
 ### 2026-10-19 (testimonial website without https): saving no longer fails on a bare domain
 - Agent: Claude Edge
 - Report (Fahim, screenshot of Admin > Testimonials on production): saving a testimonial with the website `tradefigure.com` showed Next's generic "An error occurred in the Server Components render" message.
