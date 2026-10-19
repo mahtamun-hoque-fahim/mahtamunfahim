@@ -30,7 +30,7 @@ export default async function AdminAboutPage() {
           className="text-sm text-[#5B6475] mt-2"
           style={{ fontFamily: 'var(--font-jakarta)' }}
         >
-          Text for the homepage teaser block and the public About page. Cached for an hour on
+          Text and images for the public About page. Cached for an hour on
           the public site; saving here refreshes it immediately.
         </p>
       </div>

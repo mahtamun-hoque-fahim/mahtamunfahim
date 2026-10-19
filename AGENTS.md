@@ -61,6 +61,15 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-19 (About teaser removed): the obsolete homepage teaser fields are gone from Admin > About
+- Agent: Claude Edge
+- Request (Fahim, screenshot of Admin > About): find which fields are obsolete, then remove them.
+- Obsolete: the whole "Homepage teaser" section (heading, two paragraphs, link label, the code card's role and four lists). The homepage stopped rendering that block on `discovered-funnel`; only the admin form, its save action and the defaults still touched it. Everything else on the page feeds `/about` (the tall image only with the "Tall image" layout).
+- Removed: the section in `AboutForm.tsx`, the nine fields and the now-unused `cleanList` in `saveAboutContentAction`, their defaults in `lib/db/queries.ts`, the nine columns in `lib/db/schema.ts`. Stale wording fixed: "Headline, green line" is "Headline, blue line"; the page description no longer mentions the teaser. PLANNER updated.
+- DATABASE (not applied by me, destructive): `drizzle/0019_remove_about_home_teaser.sql` (generated, nine `ALTER TABLE "about_content" DROP COLUMN ...` statements). ORDER: run it only AFTER this code is live on Vercel; the deployed code before it still reads and writes these columns. The new code works with or without them. Nothing of value is lost (they held the old engineer copy).
+- Also seen: saving Admin > About on production showed the generic Server Components error because the Header fields were empty, and production hides the "can't be empty" message (same masking as the testimonial website).
+- Verified: `npx tsc --noEmit` clean; drizzle-kit generated only the nine drops. NOT verified: the admin page signed in.
+
 ### 2026-10-19 (icon): the "m." mark as favicon and app icon
 - Agent: Claude Edge
 - Request (Fahim, `Frame 18.svg`: a white "m" with a blue dot): use it for the favicon and other purposes.

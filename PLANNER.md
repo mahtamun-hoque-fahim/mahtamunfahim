@@ -122,7 +122,7 @@ scripts/
 - `skills`: REMOVED from the code on `discovered-funnel` (migration 0015 drops it; run only after that code is live). Was the homepage "What I do" items.
 - `footer_links`: id, label, url, group_label, external, sort_order, timestamps (index on sort_order)
 - `site_settings`: integer id (always `1`, single row), title, description, job_title, **avatar_url** (nullable), keywords text[], og_title, og_description, **marquee_speed** (px/s for both marquee strips, default 60), updated_at — feeds `generateMetadata()` in `app/layout.tsx`, the root layout's Person JSON-LD, and the blog post JSON-LD author block. Read through `getCachedSiteSettings()` (`unstable_cache`, 1h revalidate, tag `site-settings`); written via admin `/admin/settings`.
-- `about_content`: integer id (always `1`, single row), headline_top, headline_accent, intro, story_heading, story_paragraphs text[], **extra_heading, extra_paragraphs text[], extra_image_url, story_image_url, layout (`'beside'` | `'text'` | `'tall'`, default `'beside'`), tall_image_url** (the extra block above the story, the page layout switch, and the three Cloudinary images), homepage teaser columns, cta_heading, cta_text, cta_primary_label, cta_secondary_label, updated_at — feeds `/about` and the homepage teaser. Read through `getCachedAboutContent()` (tag `about-content`); written via admin `/admin/about`.
+- `about_content`: integer id (always `1`, single row), headline_top, headline_accent, intro, story_heading, story_paragraphs text[], **extra_heading, extra_paragraphs text[], extra_image_url, story_image_url, layout (`'beside'` | `'text'` | `'tall'`, default `'beside'`), tall_image_url** (the extra block above the story, the page layout switch, and the three Cloudinary images), cta_heading, cta_text, cta_primary_label, cta_secondary_label, updated_at — feeds `/about` (the 9 homepage teaser columns are dropped by migration 0019). Read through `getCachedAboutContent()` (tag `about-content`); written via admin `/admin/about`.
 - Credentials: REMOVED from the code on `discovered-funnel` (the `/credentials` page, Admin > Credentials and the five `credential_*` tables; migration 0016 drops the tables, run only after that code is live).
 
 All Drizzle reads return camelCase fields; column mapping (snake_case in DB) handled by `casing: 'snake_case'` in the Drizzle client config.
@@ -146,6 +146,7 @@ All Drizzle reads return camelCase fields; column mapping (snake_case in DB) han
 | 0016  | DROP the five `credential_*` tables | `drizzle-kit generate` (destructive: run only after the code without Credentials is live) |
 | 0017  | `testimonials` table                  | `drizzle-kit generate` (additive: run BEFORE merging) |
 | 0018  | DROP `projects`                       | `drizzle-kit generate` (destructive: run only after the code without Projects is live) |
+| 0019  | DROP the 9 `about_content` homepage teaser columns | `drizzle-kit generate` (destructive: run only after the code without the teaser is live) |
 | 0008  | `projects.status_badges` dropped      | `drizzle-kit generate` |
 | 0009  | `about_content` table                 | `drizzle-kit generate` (clean diff, only the new table) |
 | 0010  | `about_content` homepage teaser columns (9) | `drizzle-kit generate` (clean diff) |
@@ -203,7 +204,7 @@ This writes directly through Better Auth (bypassing the UI), but still passes th
 
 **About content (`/admin/about`)**
 
-- Single-row form over the `about_content` table: homepage teaser (heading, two paragraphs, link label, and the code-card role plus four comma-separated lists), About page header (two headline lines, intro), story (heading plus paragraphs, one textarea with blank lines between paragraphs), call to action (heading, text, two button labels). Button links, the card's keys and the About eyebrow stay fixed in code
+- Single-row form over the `about_content` table: About page header (two headline lines, intro), story (heading plus paragraphs, one textarea with blank lines between paragraphs), call to action (heading, text, two button labels). Button links stay fixed in code
 - `page.tsx` does the auth check and fetch; client `AboutForm.tsx` owns form state and calls `saveAboutContentAction`, which re-checks auth itself, validates and length-caps every field, and writes only known columns
 - Save revalidates the `about-content` cache tag, `/` and `/about`; the public pages otherwise refresh on a 1h `unstable_cache` window
 - `getAboutContent()` falls back to hardcoded defaults if the table is missing or the DB is unreachable, so `/` and `/about` render before migrations `0009` and `0010` are applied
@@ -335,7 +336,7 @@ Not re-verified since the June build: that the Worker still fits the size limits
 | Status badges + beta modal    | removed | live/beta/deprecated/funding pills and the BetaModal were built, then removed (migration 0008) |
 | Collaborators                 | ✅     | jsonb column, name + optional URL          |
 | Dashboard-driven metadata     | [x]    | `site_settings` table + `/admin/settings`, wired into `generateMetadata()` and JSON-LD |
-| Dashboard-driven About content | [x]   | `about_content` table + `/admin/about`, read by `app/about/page.tsx` and the homepage teaser through a cached query |
+| Dashboard-driven About content | [x]   | `about_content` table + `/admin/about`, read by `app/about/page.tsx` through a cached query |
 | Avatar upload (Cloudinary)    | [x]    | Signed upload via Web Crypto (no Node SDK), fixed public_id, wired into AuthorCard + Person JSON-LD |
 | Blog AuthorCard + JSON-LD     | [x]    | `AuthorCard.tsx` on post pages, Article schema with nested author added |
 | Skills, footer links, credentials dashboards | [x] | Tables `skills`, `footer_links`, `credential_*` and their `/admin` managers |
