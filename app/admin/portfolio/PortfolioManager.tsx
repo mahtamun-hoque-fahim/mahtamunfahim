@@ -191,7 +191,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
             <div className="grid sm:grid-cols-2 gap-6 pt-2 border-t border-[#E5E7EB]">
               <div>
                 <span className={labelCls}>Cover photo</span>
-                <div className="aspect-[16/10] rounded-lg overflow-hidden bg-white border border-[#E5E7EB] flex items-center justify-center">
+                <div className="aspect-[16/9] rounded-lg overflow-hidden bg-white border border-[#E5E7EB] flex items-center justify-center">
                   {current.coverUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={current.coverUrl} alt="" className="w-full h-full object-cover object-top" />
@@ -206,7 +206,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
                   </label>
                   {current.coverUrl && <button type="button" className="text-[#6B7280] hover:text-red-600" onClick={() => removeImage(current)}>Remove</button>}
                 </div>
-                <p className={hintCls}>The grid thumbnail and the top of the page. 16:10, e.g. 1600 x 1000, 4 MB max. Saved as soon as it uploads.</p>
+                <p className={hintCls}>16:9 ratio, e.g. 1920 × 1080 px (at least 1600 × 900). Shown at 16:9 at the top of the page; the grid tile shows a strip cut from the top, so keep the key part in the top half. 4 MB max. Saved as soon as it uploads.</p>
               </div>
               <div>
                 <span className={labelCls}>Images on the page ({current.images.length})</span>
@@ -227,7 +227,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
                     <input type="file" accept="image/*" multiple className="sr-only" onChange={(e) => upload(current, 'gallery', e.target.files)} />
                   </label>
                 </div>
-                <p className={hintCls}>Shown full width below the details, in this order. Any size, 4 MB max each, up to 20.</p>
+                <p className={hintCls}>Any ratio: each is shown whole, full width (about 1100 px) below the details, in this order. At least 1600 px wide for sharp screens. 4 MB max each, up to 20.</p>
               </div>
             </div>
           ) : (

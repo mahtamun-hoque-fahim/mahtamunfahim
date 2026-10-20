@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (image ratios): every admin image field says which ratio to upload
+- Agent: Claude Edge
+- Request (Fahim): include ratios in the admin panel for every image field.
+- Fields and hints, matched to how each image displays: Settings avatar 1:1 (small circle); blog cover 1.91:1, 1200 × 630 (a file in the blog-image repo, hint in the post editor); testimonial screenshot 16:10 (tiles show a strip from the top); portfolio cover 16:9 (the page shows it at 16:9, the hint said 16:10 before, and the admin preview box is now 16:9 too); portfolio gallery any ratio, at least 1600 px wide (shown whole). About's three images already had theirs (1:1, 1:1, 3:4).
+- Verified: `npx tsc --noEmit` clean. Text-only change; not looked at signed in.
+
 ### 2026-10-20 (testimonials page and popup): testimonials get their own page, each opens a popup
 - Agent: Claude Edge
 - Request (Fahim): testimonials and portfolio stay separate, both get a dedicated page; portfolio projects have their own pages (done before), testimonials open a popup with more details; everything editable from the dashboard.

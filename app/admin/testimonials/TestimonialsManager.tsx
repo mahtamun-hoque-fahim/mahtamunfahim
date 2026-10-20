@@ -184,7 +184,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
                 </label>
                 {t.thumbnailUrl && <button type="button" className="text-[#6B7280] hover:text-red-600" onClick={() => removeImage(t)}>Remove</button>}
               </div>
-              <p className="mt-1 text-xs text-[#6B7280]">16:10, e.g. 1600 x 1000, 4 MB max</p>
+              <p className="mt-1 text-xs text-[#6B7280]">16:10 ratio, e.g. 1600 × 1000 px (at least 1200 × 750). Tiles show a strip cut from the top (wider on wide tiles), the popup a little more: keep the key part in the top half. 4 MB max.</p>
             </div>
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-[#0B0F19]">{t.name}{t.business && <span className="font-normal text-[#5B6475]"> · {t.business}</span>}</p>

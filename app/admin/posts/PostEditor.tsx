@@ -151,6 +151,7 @@ export default function PostEditor({ post }: Props) {
           >
             Extension only — e.g. “png”, “jpg”, “webp”. Leave blank to default to .png.
             File must be named [slug].[ext] and placed in the mahtamunfahim-blog-image repo under /covers/.
+            Ratio 1.91:1, 1200 × 630 px (the social share size); shown at that ratio, cropped to fill.
           </p>
         </div>
       </div>

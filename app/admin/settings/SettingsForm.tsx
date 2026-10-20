@@ -178,7 +178,7 @@ export default function SettingsForm({ settings }: Props) {
             <span className="text-red-600">{avatarError}</span>
           </Hint>
         )}
-        <Hint>Shown on the AuthorCard on blog posts and in the Person JSON-LD block. JPG/PNG/WebP, under 4MB.</Hint>
+        <Hint>Square, 1:1 ratio (for example 800 × 800 px, at least 400 × 400). Shown as a small circle, cropped to fill, on the AuthorCard on blog posts and in the Person JSON-LD block. JPG/PNG/WebP, under 4MB.</Hint>
       </Field>
 
       <Field label="Title *">
