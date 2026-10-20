@@ -457,7 +457,9 @@ Homepage, in the proof part of the funnel: "What clients say." over a three-colu
 
 Crop preview in the dashboard (`app/admin/CropPreview.tsx`): under each uploaded testimonial screenshot and portfolio cover, small frames show what visitors see: the desktop tile for the chosen size (352 × 224 normal and tall, 728 × 224 wide, at 1440px), the phone tile (342 × 192 at 390px), and the popup (672 × 320) or the project page (16:9). Each frame has the real box's ratio and crops the same way (`object-cover` at the focus point). It follows the size buttons before saving.
 
-Focus point: beside the frames the whole image is shown; clicking it sets the point that stays visible (a blue dot), saved at once as an `object-position` (`testimonials.thumbnail_focus`, `portfolio_items.cover_focus`, `'x% y%'`, default `'50% 50%'`, the centre). "Back to centre" resets it, and uploading a new image resets it too. The tiles, the testimonial popup and the project page cover all use it. These numbers are coupled to the grids: if a tile's height, the grid gap or the container width changes, update `CropPreview`.
+Focus point: beside the frames the whole image is shown; clicking it sets the point that stays visible (a blue dot), saved at once as an `object-position` (`testimonials.thumbnail_focus`, `portfolio_items.cover_focus`, `'x% y%'`, default `'50% 50%'`, the centre). "Back to centre" resets it, and uploading a new image resets it too. The tiles, the testimonial popup and the project page cover all use it.
+
+Show on the card: a switch above the preview ("Show the screenshot on the card" / "Show the cover on the card", `testimonials.show_thumbnail`, `portfolio_items.show_cover`, default on, saved at once). Off: the tile has no image (text only), and the image is shown whole and uncropped where the card leads, the testimonial popup (`w-full h-auto`, the dialog scrolls) or the project page; the focus point is ignored. These numbers are coupled to the grids: if a tile's height, the grid gap or the container width changes, update `CropPreview`.
 
 ### Other motion
 

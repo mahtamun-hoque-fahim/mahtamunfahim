@@ -40,7 +40,7 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
             className={cn('group relative rounded-3xl overflow-hidden bg-[#F7F8FA]', t.size === 'wide' && 'md:col-span-2', t.size === 'tall' && 'md:row-span-2')}
           >
             <figure className="flex flex-col h-full">
-              {t.thumbnailUrl && (
+              {t.thumbnailUrl && t.showThumbnail && (
                 <div className="overflow-hidden h-48 md:h-56 shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={t.thumbnailUrl} alt={t.business ? `The ${t.business} website` : ''} loading="lazy" style={{ objectPosition: t.thumbnailFocus }} className="w-full h-full object-cover transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
@@ -82,7 +82,9 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
             </button>
             {open.thumbnailUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={open.thumbnailUrl} alt={open.business ? `The ${open.business} website` : ''} style={{ objectPosition: open.thumbnailFocus }} className="w-full h-64 md:h-80 object-cover" />
+              <img src={open.thumbnailUrl} alt={open.business ? `The ${open.business} website` : ''} {...(open.showThumbnail
+                ? { style: { objectPosition: open.thumbnailFocus }, className: 'w-full h-64 md:h-80 object-cover' }
+                : { className: 'w-full h-auto' })} /* hidden on the card: shown whole here */ />
             )}
             <div className="p-8 md:p-10">
               <blockquote className="text-2xl leading-snug text-[#0B0F19]" style={{ fontFamily: 'var(--font-clash)' }}>“{open.quote}”</blockquote>

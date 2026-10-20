@@ -105,9 +105,9 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
   }
 
   // shown at once, saved right away (like the uploads)
-  const setFocus = (t: Testimonial, thumbnailFocus: string) => {
-    setItems((list) => list.map((x) => (x.id === t.id ? { ...x, thumbnailFocus } : x)))
-    run(async () => { await updateTestimonialAction(t.id, { thumbnailFocus }) })
+  const setImage = (t: Testimonial, patch: Pick<Partial<Testimonial>, 'thumbnailFocus' | 'showThumbnail'>) => {
+    setItems((list) => list.map((x) => (x.id === t.id ? { ...x, ...patch } : x)))
+    run(async () => { await updateTestimonialAction(t.id, patch) })
   }
 
   const removeImage = (t: Testimonial, slot: 'thumbnail' | 'avatar' = 'thumbnail') => run(async () => {
@@ -237,8 +237,16 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
             </div>
             {t.thumbnailUrl && (
               <div className="mt-4 pt-3 border-t border-[#E5E7EB]">
-                {/* follows the tile size being edited, before it is saved */}
-                <CropPreview src={t.thumbnailUrl} size={editing === t.id ? draft.size : t.size} focus={t.thumbnailFocus} onFocus={(f) => setFocus(t, f)} extra={[{ label: 'Popup', w: 672, h: 320 }]} />
+                <label className="flex items-center gap-2 text-sm text-[#0B0F19] mb-3">
+                  <input type="checkbox" checked={t.showThumbnail} onChange={(e) => setImage(t, { showThumbnail: e.target.checked })} />
+                  Show the screenshot on the card
+                </label>
+                {t.showThumbnail ? (
+                  // follows the tile size being edited, before it is saved
+                  <CropPreview src={t.thumbnailUrl} size={editing === t.id ? draft.size : t.size} focus={t.thumbnailFocus} onFocus={(f) => setImage(t, { thumbnailFocus: f })} extra={[{ label: 'Popup', w: 672, h: 320 }]} />
+                ) : (
+                  <p className="text-xs text-[#6B7280]">The card has no image; the popup shows the whole screenshot, uncropped.</p>
+                )}
               </div>
             )}
           </li>

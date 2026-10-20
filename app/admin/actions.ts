@@ -350,6 +350,7 @@ function cleanTestimonial(input: Partial<NewTestimonial>): Partial<NewTestimonia
     if (!focus) throw new Error('Unknown focus point.')
     out.thumbnailFocus = focus
   }
+  if (input.showThumbnail !== undefined) out.showThumbnail = Boolean(input.showThumbnail)
   if (input.published !== undefined) out.published = Boolean(input.published)
   if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
   return out
@@ -459,6 +460,7 @@ function cleanPortfolio(input: Partial<NewPortfolioItem>): Partial<NewPortfolioI
     if (!focus) return 'Unknown focus point.'
     out.coverFocus = focus
   }
+  if (input.showCover !== undefined) out.showCover = Boolean(input.showCover)
   if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
   return out
 }

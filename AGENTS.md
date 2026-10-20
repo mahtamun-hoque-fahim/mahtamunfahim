@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (thumbnail switch): each card's thumbnail can be hidden, shown whole when opened
+- Agent: Claude Edge
+- Request (Fahim): turn off the thumbnail on individual cards; clicking still opens the popup with the thumbnail, shown naturally; cards with the thumbnail on keep the crop preview and focus logic. Testimonials and portfolio both.
+- Done: `testimonials.show_thumbnail`, `portfolio_items.show_cover` (boolean, default true; migration `0025_show_thumbnail.sql`, additive, APPLIED by me after a backup, before this code deploys). Dashboard: a checkbox above the preview, saved at once; off hides the focus picker and frames and says where the image still shows. Public: off = no image on the tile; the testimonial popup / project page show it whole (`w-full h-auto`) instead of the focused crop. DESIGN_GUIDE "Testimonials bento grid", PLANNER schema.
+- Verified: `npx tsc --noEmit` clean; with one testimonial switched off in the database (switched back on after): its tile on `/testimonials` had no image, the other two kept theirs, and its popup showed the 1200 x 1200 screenshot whole at 672 x 672 (the dialog scrolls). NOT verified: the portfolio side in a browser (no portfolio items exist yet), the checkbox inside the signed-in admin.
+
 ### 2026-10-21 (thumbnail focus): thumbnails centred by default, focus point set in the dashboard
 - Agent: Claude Edge
 - Request (Fahim): by default a thumbnail focuses on its centre, and he can change the focus area whenever he wants.

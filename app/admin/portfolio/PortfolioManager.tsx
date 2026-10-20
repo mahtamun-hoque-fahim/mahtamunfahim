@@ -125,10 +125,10 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
   }
 
   // shown at once, saved right away (like the uploads)
-  const setFocus = (p: PortfolioItem, coverFocus: string) => {
-    replace({ ...p, coverFocus })
+  const setImage = (p: PortfolioItem, patch: Pick<Partial<PortfolioItem>, 'coverFocus' | 'showCover'>) => {
+    replace({ ...p, ...patch })
     run(async () => {
-      const res = await updatePortfolioItemAction(p.id, { coverFocus })
+      const res = await updatePortfolioItemAction(p.id, patch)
       if (res.error) return res.error
     })
   }
@@ -202,7 +202,21 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
               <div>
                 <span className={labelCls}>Cover photo</span>
                 {current.coverUrl ? (
-                  <CropPreview src={current.coverUrl} size={draft.size} focus={current.coverFocus} onFocus={(f) => setFocus(current, f)} extra={[{ label: 'Project page', w: 16, h: 9 }]} />
+                  <>
+                    <label className="flex items-center gap-2 text-sm text-[#0B0F19] mb-3">
+                      <input type="checkbox" checked={current.showCover} onChange={(e) => setImage(current, { showCover: e.target.checked })} />
+                      Show the cover on the card
+                    </label>
+                    {current.showCover ? (
+                      <CropPreview src={current.coverUrl} size={draft.size} focus={current.coverFocus} onFocus={(f) => setImage(current, { coverFocus: f })} extra={[{ label: 'Project page', w: 16, h: 9 }]} />
+                    ) : (
+                      <>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={current.coverUrl} alt="" className="w-56 h-auto rounded-md border border-[#E5E7EB]" />
+                        <p className="mt-1 text-xs text-[#6B7280]">The card has no image; the project page shows the whole cover, uncropped.</p>
+                      </>
+                    )}
+                  </>
                 ) : (
                   <div className="aspect-[16/9] rounded-lg bg-white border border-[#E5E7EB] flex items-center justify-center">
                     <span className="text-xs text-[#6B7280]">No cover yet</span>

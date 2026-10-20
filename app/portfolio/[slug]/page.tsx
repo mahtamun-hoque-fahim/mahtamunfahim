@@ -65,7 +65,9 @@ export default async function PortfolioItemPage({ params }: { params: Promise<{ 
         {item.coverUrl && (
           <div className="max-w-6xl mx-auto px-6 mt-12">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={item.coverUrl} alt="" loading="eager" style={{ objectPosition: item.coverFocus }} className="w-full aspect-[16/9] object-cover rounded-3xl bg-[#F7F8FA]" />
+            <img src={item.coverUrl} alt="" loading="eager" {...(item.showCover
+              ? { style: { objectPosition: item.coverFocus }, className: 'w-full aspect-[16/9] object-cover rounded-3xl bg-[#F7F8FA]' }
+              : { className: 'w-full h-auto rounded-3xl bg-[#F7F8FA]' })} /* hidden on the card: shown whole here */ />
           </div>
         )}
 
