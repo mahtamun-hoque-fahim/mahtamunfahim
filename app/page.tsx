@@ -258,10 +258,10 @@ export default async function HomePage() {
         {/* Same pattern as "Which of these sounds like your website?", mirrored:
             the trust cards scroll and focus on the left, the text is pinned in
             the middle of the screen on the right (from md up). Dark band 3. */}
-        {/* phones: no card stops, the section is one snap area taller than the screen, so it scrolls freely */}
-        <section data-nav-dark className="bg-[#0B0F19] max-md:snap-start">
+        <section data-nav-dark className="bg-[#0B0F19]">
         <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-[7fr_5fr] gap-10 md:gap-16">
-          <div className="md:order-2 md:sticky md:top-0 md:self-start md:h-screen md:flex md:flex-col md:justify-center">
+          {/* phones: the first stop is this block (the start of the section, below the navbar), then each card */}
+          <div className="max-md:snap-start max-md:scroll-mt-24 md:order-2 md:sticky md:top-0 md:self-start md:h-screen md:flex md:flex-col md:justify-center">
             <BlurWords as="h2" text="Get a free audit." className="text-3xl sm:text-4xl md:text-5xl text-white mb-6 leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
             <Reveal as="p" delay={120} className="text-[#A3ACBD] text-base leading-relaxed mb-6" style={{ fontFamily: 'var(--font-jakarta)' }}>
               In 30 minutes I look at your website the way your customers do, and tell you what is costing you enquiries and what to fix first.
@@ -279,7 +279,7 @@ export default async function HomePage() {
           <FocusCards className="focus-md-only md:order-1 flex flex-col gap-6 md:gap-[18vh] md:py-[50vh]">
             {trustPoints.map((t) => (
               // outer div: the focus fade and snap stop; inner div: the hover lift
-              <div key={t.title} className="snap-center max-md:snap-align-none">
+              <div key={t.title} className="snap-center max-md:snap-start max-md:scroll-mt-24">
               <div className="card-lift card-lift-dark rounded-2xl bg-[#111827] p-8 md:p-10" style={{ fontFamily: 'var(--font-jakarta)' }}>
                 <h3 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-clash)' }}>
                   {/* the accent word in the dark-band blue (#2563FF is too dark to read on #111827) */}

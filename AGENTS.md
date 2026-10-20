@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (How I work on phones, follow-up): first stop is the start of the section
+- Agent: Claude Edge
+- Report (Fahim, after the previous push): it still snaps to where the cards start; it should snap to the beginning of the section.
+- Found: the live site only got `74a85e3` a few minutes after the push, so he likely saw the old build; but that version made the whole section one snap area taller than the screen, where a swipe may stop anywhere, so it could not promise to land at the start either.
+- Fix (phones only): the stops are the pitch block (the start of the section) and then each card, all `max-md:snap-start max-md:scroll-mt-24`, landing just under the navbar; the section is no longer a snap area. The cards keep `snap-center` for desktop (`SnapScroll` finds stops by that class).
+- Verified: at 390 x 844, scrolling to 250px before the section settles with the pitch block at 96px (first card visible below it at 497px); from inside the pitch it moves on to card 1 at 96px, and from between cards 1 and 2 to card 2 at 96px. At 1440 the pitch block has no snap and stays sticky, the cards are centre stops. NOT verified: real touch scrolling on a phone.
+
 ### 2026-10-21 (How I work on phones): plain scroll instead of card snapping
 - Agent: Claude Edge
 - Report (Fahim, phone screenshot of the dark How I work band): it snaps on the first trust card, leaving the audit pitch cut off under the navbar and the next card faded far below; use simple one-by-one scrolling if there is no better option.
