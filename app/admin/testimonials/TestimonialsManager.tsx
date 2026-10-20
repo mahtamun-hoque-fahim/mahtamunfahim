@@ -104,6 +104,12 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
     })
   }
 
+  // shown at once, saved right away (like the uploads)
+  const setFocus = (t: Testimonial, thumbnailFocus: string) => {
+    setItems((list) => list.map((x) => (x.id === t.id ? { ...x, thumbnailFocus } : x)))
+    run(async () => { await updateTestimonialAction(t.id, { thumbnailFocus }) })
+  }
+
   const removeImage = (t: Testimonial, slot: 'thumbnail' | 'avatar' = 'thumbnail') => run(async () => {
     const res = await removeTestimonialImageAction(t.id, slot)
     if (res.error) return setError(res.error)
@@ -179,7 +185,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
               <div className="aspect-[16/10] rounded-lg overflow-hidden bg-[#F7F8FA] flex items-center justify-center">
                 {t.thumbnailUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={t.thumbnailUrl} alt="" className="w-full h-full object-cover object-top" />
+                  <img src={t.thumbnailUrl} alt="" className="w-full h-full object-cover" style={{ objectPosition: t.thumbnailFocus }} />
                 ) : (
                   <span className="text-xs text-[#6B7280] px-2 text-center">No screenshot</span>
                 )}
@@ -191,7 +197,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
                 </label>
                 {t.thumbnailUrl && <button type="button" className="text-[#6B7280] hover:text-red-600" onClick={() => removeImage(t)}>Remove</button>}
               </div>
-              <p className="mt-1 text-xs text-[#6B7280]">16:10 ratio, e.g. 1600 × 1000 px (at least 1200 × 750). Tiles show a strip cut from the top (wider on wide tiles), the popup a little more: keep the key part in the top half. 4 MB max.</p>
+              <p className="mt-1 text-xs text-[#6B7280]">16:10 ratio, e.g. 1600 × 1000 px (at least 1200 × 750). Tiles and the popup show a strip of it, centred unless you click another focus point below. 4 MB max.</p>
             </div>
             <div className="flex-1 min-w-0">
               {/* Avatar: drop an image on the circle, or click it to pick one */}
@@ -232,7 +238,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
             {t.thumbnailUrl && (
               <div className="mt-4 pt-3 border-t border-[#E5E7EB]">
                 {/* follows the tile size being edited, before it is saved */}
-                <CropPreview src={t.thumbnailUrl} size={editing === t.id ? draft.size : t.size} extra={[{ label: 'Popup', w: 672, h: 320 }]} />
+                <CropPreview src={t.thumbnailUrl} size={editing === t.id ? draft.size : t.size} focus={t.thumbnailFocus} onFocus={(f) => setFocus(t, f)} extra={[{ label: 'Popup', w: 672, h: 320 }]} />
               </div>
             )}
           </li>

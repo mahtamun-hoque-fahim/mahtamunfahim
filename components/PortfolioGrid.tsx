@@ -22,7 +22,7 @@ export default function PortfolioGrid({ items, titleAs: Title = 'h2' }: { items:
             {p.coverUrl && (
               <div className="overflow-hidden h-48 md:h-56 shrink-0">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.coverUrl} alt="" loading="lazy" className="w-full h-full object-cover object-top transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
+                <img src={p.coverUrl} alt="" loading="lazy" style={{ objectPosition: p.coverFocus }} className="w-full h-full object-cover transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
               </div>
             )}
             <div className="p-8 flex flex-col gap-3 flex-1">

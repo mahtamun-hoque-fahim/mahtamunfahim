@@ -143,6 +143,8 @@ export const testimonials = pgTable(
     websiteUrl: text('website_url'),
     // Screenshot of the client's website, shown edge to edge in the tile
     thumbnailUrl: text('thumbnail_url'),
+    // CSS object-position of the screenshot in its tile and popup ('x% y%'), set in the dashboard
+    thumbnailFocus: text('thumbnail_focus').notNull().default('50% 50%'),
     // The client's photo, a round avatar beside their name (initials while empty)
     avatarUrl: text('avatar_url'),
     size: text('size').notNull().default('normal'), // 'normal' | 'wide' | 'tall'
@@ -170,6 +172,8 @@ export const portfolioItems = pgTable(
     websiteUrl: text('website_url'),
     // Cover photo: the grid thumbnail and the top of the item's page
     coverUrl: text('cover_url'),
+    // CSS object-position of the cover in the tile and on the page ('x% y%'), set in the dashboard
+    coverFocus: text('cover_focus').notNull().default('50% 50%'),
     images: text('images').array().notNull().default(sql`'{}'::text[]`), // gallery on the item's page
     size: text('size').notNull().default('normal'), // 'normal' | 'wide' | 'tall'
     published: boolean('published').notNull().default(false),

@@ -316,6 +316,12 @@ export async function saveBlogPostAction(payload: Partial<NewBlogPost>, postId?:
 
 const TESTIMONIAL_SIZES = ['normal', 'wide', 'tall'] as const
 
+/** A thumbnail focus point as a CSS object-position, 'x% y%' with whole numbers 0 to 100; null when invalid. */
+function cleanFocus(v: unknown): string | null {
+  const m = /^(\d{1,3})% (\d{1,3})%$/.exec(String(v ?? ''))
+  return m && Number(m[1]) <= 100 && Number(m[2]) <= 100 ? `${Number(m[1])}% ${Number(m[2])}%` : null
+}
+
 async function requireAuth() {
   if (!(await isAuthenticated())) throw new Error('Not authenticated.')
 }
@@ -338,6 +344,11 @@ function cleanTestimonial(input: Partial<NewTestimonial>): Partial<NewTestimonia
   if (input.size !== undefined) {
     if (!TESTIMONIAL_SIZES.includes(input.size as (typeof TESTIMONIAL_SIZES)[number])) throw new Error('Unknown tile size.')
     out.size = input.size
+  }
+  if (input.thumbnailFocus !== undefined) {
+    const focus = cleanFocus(input.thumbnailFocus)
+    if (!focus) throw new Error('Unknown focus point.')
+    out.thumbnailFocus = focus
   }
   if (input.published !== undefined) out.published = Boolean(input.published)
   if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
@@ -389,7 +400,8 @@ export async function uploadTestimonialImageAction(id: string, formData: FormDat
   if (!(file instanceof File)) return { error: 'No file provided.' }
   try {
     const url = await uploadTestimonialImageToCloudinary(file, id, slot === 'avatar' ? 'avatar' : 'thumbnail')
-    const item = await updateTestimonial(id, { [testimonialImageField(slot)]: url })
+    // a new screenshot starts centred again
+    const item = await updateTestimonial(id, slot === 'avatar' ? { avatarUrl: url } : { thumbnailUrl: url, thumbnailFocus: '50% 50%' })
     if (!item) return { error: 'That testimonial no longer exists.' }
     revalidateTestimonials()
     return { item }
@@ -442,6 +454,11 @@ function cleanPortfolio(input: Partial<NewPortfolioItem>): Partial<NewPortfolioI
   }
   if (input.published !== undefined) out.published = Boolean(input.published)
   if (input.featured !== undefined) out.featured = Boolean(input.featured)
+  if (input.coverFocus !== undefined) {
+    const focus = cleanFocus(input.coverFocus)
+    if (!focus) return 'Unknown focus point.'
+    out.coverFocus = focus
+  }
   if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
   return out
 }
@@ -510,7 +527,7 @@ export async function uploadPortfolioImageAction(id: string, slot: 'cover' | 'ga
   try {
     const publicId = slot === 'cover' ? `portfolio-${id}-cover` : `portfolio-${id}-${Date.now()}`
     const url = await uploadPortfolioImageToCloudinary(file, publicId)
-    const item = await updatePortfolioItem(id, slot === 'cover' ? { coverUrl: url } : { images: [...current.images, url] })
+    const item = await updatePortfolioItem(id, slot === 'cover' ? { coverUrl: url, coverFocus: '50% 50%' } : { images: [...current.images, url] })
     if (!item) return { error: 'That portfolio item no longer exists.' }
     revalidatePortfolio()
     return { item }

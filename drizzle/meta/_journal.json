@@ -169,6 +169,13 @@
       "when": 1792489118209,
       "tag": "0023_testimonial_avatar",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792519357612,
+      "tag": "0024_thumbnail_focus",
+      "breakpoints": true
     }
   ]
 }

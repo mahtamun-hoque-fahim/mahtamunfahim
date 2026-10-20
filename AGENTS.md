@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (thumbnail focus): thumbnails centred by default, focus point set in the dashboard
+- Agent: Claude Edge
+- Request (Fahim): by default a thumbnail focuses on its centre, and he can change the focus area whenever he wants.
+- Done: `testimonials.thumbnail_focus` and `portfolio_items.cover_focus` (`'x% y%'`, default `'50% 50%'`; migration `0024_thumbnail_focus.sql`, additive, APPLIED by me after a backup, before this code deploys). Public tiles, the testimonial popup and the project page cover use it as `object-position` (was `object-top`, so every existing thumbnail is now centred). Dashboard: `CropPreview` shows the whole image beside the crop frames; a click sets the focus (blue dot, saved at once), "Back to centre" resets it, a new upload resets it. Validated server-side (`cleanFocus` in `app/admin/actions.ts`: whole numbers 0 to 100 only, since the value goes into a style). DESIGN_GUIDE "Testimonials bento grid", PLANNER schema.
+- Verified: `npx tsc --noEmit` clean; `/testimonials` renders `object-position: 50% 50%` on all three tiles; on a temporary page (deleted) a synthetic click at 50%, 75% moved the dot and every frame to `50% 75%`, and "Back to centre" reset it; `cleanFocus` checked against valid, out-of-range and injected values. NOT verified: saving inside the signed-in admin; picking a focus by keyboard (click only).
+
 ### 2026-10-21 (crop preview): the dashboard shows which part of a thumbnail is visible
 - Agent: Claude Edge
 - Request (Fahim): after uploading a portfolio or testimonial thumbnail, see a preview, by tile type, of which part of it will be visible.

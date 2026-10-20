@@ -124,6 +124,15 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
     })
   }
 
+  // shown at once, saved right away (like the uploads)
+  const setFocus = (p: PortfolioItem, coverFocus: string) => {
+    replace({ ...p, coverFocus })
+    run(async () => {
+      const res = await updatePortfolioItemAction(p.id, { coverFocus })
+      if (res.error) return res.error
+    })
+  }
+
   const removeImage = (p: PortfolioItem, url?: string) => run(async () => {
     const res = await removePortfolioImageAction(p.id, url)
     if (res.error) return res.error
@@ -192,14 +201,13 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
             <div className="grid sm:grid-cols-2 gap-6 pt-2 border-t border-[#E5E7EB]">
               <div>
                 <span className={labelCls}>Cover photo</span>
-                <div className="aspect-[16/9] rounded-lg overflow-hidden bg-white border border-[#E5E7EB] flex items-center justify-center">
-                  {current.coverUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={current.coverUrl} alt="" className="w-full h-full object-cover object-top" />
-                  ) : (
+                {current.coverUrl ? (
+                  <CropPreview src={current.coverUrl} size={draft.size} focus={current.coverFocus} onFocus={(f) => setFocus(current, f)} extra={[{ label: 'Project page', w: 16, h: 9 }]} />
+                ) : (
+                  <div className="aspect-[16/9] rounded-lg bg-white border border-[#E5E7EB] flex items-center justify-center">
                     <span className="text-xs text-[#6B7280]">No cover yet</span>
-                  )}
-                </div>
+                  </div>
+                )}
                 <div className="mt-2 flex gap-3 text-sm">
                   <label className="inline-flex items-center gap-1 text-[#2563FF] cursor-pointer">
                     <ImagePlus className="w-4 h-4" /> {current.coverUrl ? 'Replace' : 'Upload'}
@@ -207,12 +215,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
                   </label>
                   {current.coverUrl && <button type="button" className="text-[#6B7280] hover:text-red-600" onClick={() => removeImage(current)}>Remove</button>}
                 </div>
-                {current.coverUrl && (
-                  <div className="mt-3">
-                    <CropPreview src={current.coverUrl} size={draft.size} extra={[{ label: 'Project page', w: 16, h: 9 }]} />
-                  </div>
-                )}
-                <p className={hintCls}>16:9 ratio, e.g. 1920 × 1080 px (at least 1600 × 900). Shown at 16:9 at the top of the page; the grid tile shows a strip cut from the top, so keep the key part in the top half. 4 MB max. Saved as soon as it uploads.</p>
+                <p className={hintCls}>16:9 ratio, e.g. 1920 × 1080 px (at least 1600 × 900). Shown at 16:9 at the top of the page and as a wide strip on the grid tile, centred unless you click another focus point on it. 4 MB max. Saved as soon as it uploads.</p>
               </div>
               <div>
                 <span className={labelCls}>Images on the page ({current.images.length})</span>
@@ -255,7 +258,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
             <div className="w-36 shrink-0 aspect-[16/10] rounded-lg overflow-hidden bg-[#F7F8FA] flex items-center justify-center">
               {p.coverUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={p.coverUrl} alt="" className="w-full h-full object-cover object-top" />
+                <img src={p.coverUrl} alt="" className="w-full h-full object-cover" style={{ objectPosition: p.coverFocus }} />
               ) : (
                 <span className="text-xs text-[#6B7280] px-2 text-center">No cover</span>
               )}

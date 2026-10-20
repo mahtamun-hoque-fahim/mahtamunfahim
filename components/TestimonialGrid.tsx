@@ -43,7 +43,7 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
               {t.thumbnailUrl && (
                 <div className="overflow-hidden h-48 md:h-56 shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={t.thumbnailUrl} alt={t.business ? `The ${t.business} website` : ''} loading="lazy" className="w-full h-full object-cover object-top transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
+                  <img src={t.thumbnailUrl} alt={t.business ? `The ${t.business} website` : ''} loading="lazy" style={{ objectPosition: t.thumbnailFocus }} className="w-full h-full object-cover transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
                 </div>
               )}
               <div className="p-8 flex flex-col gap-6 flex-1">
@@ -82,7 +82,7 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
             </button>
             {open.thumbnailUrl && (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={open.thumbnailUrl} alt={open.business ? `The ${open.business} website` : ''} className="w-full h-64 md:h-80 object-cover object-top" />
+              <img src={open.thumbnailUrl} alt={open.business ? `The ${open.business} website` : ''} style={{ objectPosition: open.thumbnailFocus }} className="w-full h-64 md:h-80 object-cover" />
             )}
             <div className="p-8 md:p-10">
               <blockquote className="text-2xl leading-snug text-[#0B0F19]" style={{ fontFamily: 'var(--font-clash)' }}>“{open.quote}”</blockquote>
