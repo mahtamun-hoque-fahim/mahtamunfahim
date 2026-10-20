@@ -298,7 +298,10 @@ export default async function HomePage() {
             one (SnapScroll would then let the wheel scroll it freely). */}
         <section className="max-w-6xl mx-auto px-6 py-16">
           <div className="snap-start scroll-mt-24 text-center">
-            <BlurWords as="h2" text="Four steps to launch." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19] max-w-3xl mx-auto leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19] max-w-3xl mx-auto leading-tight" style={{ fontFamily: 'var(--font-clash)' }}>
+              <BlurWords text="Four steps" className="block" />
+              <BlurWords text="to more sales." accent="more sales" accentItalic={false} delay={140} className="block" />
+            </h2>
           </div>
           <ol className="relative mt-16" style={{ fontFamily: 'var(--font-jakarta)' }}>
             {/* the path: a straight dashed line on phones, a winding road from md up */}

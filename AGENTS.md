@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (steps heading): "Four steps / to more sales."
+- Agent: Claude Edge
+- Request (Fahim, screenshot of "Four steps to launch."): line break after "Four steps", and "more (blue color) sales".
+- Read as: line 1 "Four steps", line 2 "to more sales." with "more sales" in `#2563FF`, upright (only the colour was asked). `BlurWords` `accent` now takes several space-separated words, and `accentItalic={false}` keeps them upright (default stays italic, as in the hero and the problem heading).
+- Verified: `npx tsc --noEmit` clean; the rendered homepage has "more" and "sales." in upright blue `em`s on the second line.
+
 ### 2026-10-20 (trust cards): one blue word per title
 - Agent: Claude Edge
 - Request (Fahim, screenshot of the dark How I work cards): blue up the words own, Clear, directly, Support in the card titles.
