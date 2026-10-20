@@ -8,6 +8,17 @@ import type { Testimonial } from '@/lib/db/queries'
 
 const host = (url: string) => url.replace(/^https?:\/\//, '').replace(/\/$/, '')
 const byline = (t: Testimonial) => [t.role, t.business].filter(Boolean).join(', ')
+const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]!.toUpperCase()).join('')
+
+/** The client's round avatar; their initials on the accent tint while no photo is uploaded. */
+function Avatar({ t, size }: { t: Testimonial; size: string }) {
+  return t.avatarUrl ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={t.avatarUrl} alt="" loading="lazy" className={cn(size, 'shrink-0 rounded-full object-cover')} />
+  ) : (
+    <span aria-hidden="true" className={cn(size, 'shrink-0 rounded-full bg-[#EFF4FF] text-[#2563FF] font-semibold flex items-center justify-center')}>{initials(t.name)}</span>
+  )
+}
 
 /* Testimonials bento grid (homepage and /testimonials): wide spans two columns,
    tall two rows, every screenshot one height. Each tile opens a popup (a native
@@ -37,10 +48,13 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
               )}
               <div className="p-8 flex flex-col gap-6 flex-1">
                 <blockquote className="text-lg leading-relaxed text-[#0B0F19]">“{t.quote}”</blockquote>
-                <figcaption className="text-sm text-[#5B6475] mt-auto">
-                  <span className="font-semibold text-[#0B0F19]">{t.name}</span>
-                  {byline(t) && <>, {byline(t)}</>}
-                  <span aria-hidden="true" className="block mt-1 text-[#2563FF] group-hover:underline">Read the story →</span>
+                <figcaption className="text-sm text-[#5B6475] mt-auto flex items-center gap-3">
+                  <Avatar t={t} size="w-11 h-11 text-sm" />
+                  <span>
+                    <span className="font-semibold text-[#0B0F19]">{t.name}</span>
+                    {byline(t) && <>, {byline(t)}</>}
+                    <span aria-hidden="true" className="block mt-0.5 text-[#2563FF] group-hover:underline">Read the story →</span>
+                  </span>
                 </figcaption>
               </div>
             </figure>
@@ -72,9 +86,12 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
             )}
             <div className="p-8 md:p-10">
               <blockquote className="text-2xl leading-snug text-[#0B0F19]" style={{ fontFamily: 'var(--font-clash)' }}>“{open.quote}”</blockquote>
-              <p className="mt-4 text-sm text-[#5B6475]">
-                <span className="font-semibold text-[#0B0F19]">{open.name}</span>
-                {byline(open) && <>, {byline(open)}</>}
+              <p className="mt-6 text-sm text-[#5B6475] flex items-center gap-3">
+                <Avatar t={open} size="w-14 h-14 text-base" />
+                <span>
+                  <span className="font-semibold text-[#0B0F19]">{open.name}</span>
+                  {byline(open) && <>, {byline(open)}</>}
+                </span>
               </p>
               {open.details && (
                 <div className="mt-8 space-y-4 text-base leading-relaxed text-[#374151]">

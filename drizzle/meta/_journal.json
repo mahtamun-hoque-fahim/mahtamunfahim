@@ -162,6 +162,13 @@
       "when": 1792487096373,
       "tag": "0022_testimonial_details",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1792489118209,
+      "tag": "0023_testimonial_avatar",
+      "breakpoints": true
     }
   ]
 }

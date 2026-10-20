@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (testimonial avatars): a round avatar for every testimonial
+- Agent: Claude Edge
+- Request (Fahim, screenshot of /testimonials): every testimonial gets a round avatar, the image dropped in from the dashboard.
+- Read "dropped" as uploaded (drag-and-drop or picked); the website screenshot stays. `testimonials.avatar_url` (migration `0023_testimonial_avatar.sql`, additive, APPLIED by me after a backup). Admin > Testimonials: each row has a dashed circle you drop a photo on or click (Cloudinary `mahtamunfahim/testimonials/testimonial-<id>-avatar`, 1:1 hint), and Remove avatar. Tiles show a 44px round avatar beside the name, the popup 56px; without a photo, the initials in blue on `#EFF4FF`. The testimonial image actions now take a slot (`thumbnail` | `avatar`) and return `{ error }` instead of throwing, so upload errors show in production.
+- Verified: `npx tsc --noEmit` clean; on /testimonials the three tiles show 44px round initials (AB, H, M) and the popup a 56px one. NOT verified: an actual avatar upload or drop (needs the signed-in admin).
+
 ### 2026-10-20 (About CTA): blue, raised
 - Agent: Claude Edge
 - Request (Fahim, screenshot of the About page "Not sure where to start?" box): secondary CTA section in the blue theme, with a shadow and an elevated feel.

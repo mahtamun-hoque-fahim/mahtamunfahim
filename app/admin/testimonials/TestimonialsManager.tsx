@@ -22,6 +22,8 @@ const btnPrimary =
 const btnSecondary =
   'inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[#E5E7EB] text-sm text-[#5B6475] hover:text-[#0B0F19] hover:border-[#D1D5DB] transition-colors'
 
+const initials = (name: string) => name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]!.toUpperCase()).join('')
+
 const SIZES: Array<{ value: string; label: string; hint: string }> = [
   { value: 'normal', label: 'Normal', hint: 'one tile' },
   { value: 'wide', label: 'Wide', hint: 'two tiles across' },
@@ -88,20 +90,23 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
     if (updated) setItems(items.map((x) => (x.id === t.id ? updated : x)))
   })
 
-  const upload = (t: Testimonial, file: File | undefined) => {
+  const upload = (t: Testimonial, file: File | undefined, slot: 'thumbnail' | 'avatar' = 'thumbnail') => {
     if (!file) return
+    if (!file.type.startsWith('image/')) return setError('That file is not an image.')
     if (file.size > MAX_AVATAR_BYTES) return setError('Image must be under 4MB.')
     const fd = new FormData()
     fd.set('file', file)
     run(async () => {
-      const updated = await uploadTestimonialImageAction(t.id, fd)
-      if (updated) setItems(items.map((x) => (x.id === t.id ? updated : x)))
+      const res = await uploadTestimonialImageAction(t.id, fd, slot)
+      if (res.error) return setError(res.error)
+      setItems((list) => list.map((x) => (x.id === t.id ? res.item! : x)))
     })
   }
 
-  const removeImage = (t: Testimonial) => run(async () => {
-    const updated = await removeTestimonialImageAction(t.id)
-    if (updated) setItems(items.map((x) => (x.id === t.id ? updated : x)))
+  const removeImage = (t: Testimonial, slot: 'thumbnail' | 'avatar' = 'thumbnail') => run(async () => {
+    const res = await removeTestimonialImageAction(t.id, slot)
+    if (res.error) return setError(res.error)
+    setItems((list) => list.map((x) => (x.id === t.id ? res.item! : x)))
   })
 
   return (
@@ -187,6 +192,27 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
               <p className="mt-1 text-xs text-[#6B7280]">16:10 ratio, e.g. 1600 × 1000 px (at least 1200 × 750). Tiles show a strip cut from the top (wider on wide tiles), the popup a little more: keep the key part in the top half. 4 MB max.</p>
             </div>
             <div className="flex-1 min-w-0">
+              {/* Avatar: drop an image on the circle, or click it to pick one */}
+              <div className="flex items-center gap-3 mb-3">
+                <label
+                  title="Drop an image here, or click to pick one"
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => { e.preventDefault(); upload(t, e.dataTransfer.files?.[0], 'avatar') }}
+                  className="relative w-14 h-14 shrink-0 rounded-full overflow-hidden bg-[#EFF4FF] border border-dashed border-[#D1D5DB] hover:border-[#2563FF] flex items-center justify-center cursor-pointer transition-colors"
+                >
+                  {t.avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={t.avatarUrl} alt="" className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-sm font-semibold text-[#2563FF]">{initials(t.name)}</span>
+                  )}
+                  <input type="file" accept="image/*" className="sr-only" aria-label={`Avatar for ${t.name}`} onChange={(e) => upload(t, e.target.files?.[0], 'avatar')} />
+                </label>
+                <div className="text-xs text-[#6B7280]">
+                  <p>Avatar: drop a photo on the circle or click it. Square, 1:1 (e.g. 400 × 400 px), shown round; 4 MB max.</p>
+                  {t.avatarUrl && <button type="button" className="mt-1 hover:text-red-600" onClick={() => removeImage(t, 'avatar')}>Remove avatar</button>}
+                </div>
+              </div>
               <p className="font-semibold text-[#0B0F19]">{t.name}{t.business && <span className="font-normal text-[#5B6475]"> · {t.business}</span>}</p>
               <p className="text-sm text-[#374151] line-clamp-3 mt-1">“{t.quote}”</p>
               <p className="text-xs text-[#6B7280] mt-2">{SIZES.find((s) => s.value === t.size)?.label ?? t.size} tile · {t.published ? 'Published' : 'Hidden'}</p>

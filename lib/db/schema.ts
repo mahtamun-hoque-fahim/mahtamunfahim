@@ -143,6 +143,8 @@ export const testimonials = pgTable(
     websiteUrl: text('website_url'),
     // Screenshot of the client's website, shown edge to edge in the tile
     thumbnailUrl: text('thumbnail_url'),
+    // The client's photo, a round avatar beside their name (initials while empty)
+    avatarUrl: text('avatar_url'),
     size: text('size').notNull().default('normal'), // 'normal' | 'wide' | 'tall'
     published: boolean('published').notNull().default(true),
     sortOrder: integer('sort_order').notNull().default(0),

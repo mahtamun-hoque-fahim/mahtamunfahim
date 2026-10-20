@@ -379,21 +379,31 @@ export async function reorderTestimonialsAction(orders: Array<{ id: string; orde
   revalidateTestimonials()
 }
 
-export async function uploadTestimonialImageAction(id: string, formData: FormData) {
-  await requireAuth()
+type TestimonialImageSlot = 'thumbnail' | 'avatar'
+const testimonialImageField = (slot: TestimonialImageSlot) => (slot === 'avatar' ? 'avatarUrl' : 'thumbnailUrl')
+
+// Return { error } instead of throwing, so production shows the message (thrown ones are masked).
+export async function uploadTestimonialImageAction(id: string, formData: FormData, slot: TestimonialImageSlot = 'thumbnail') {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
   const file = formData.get('file')
-  if (!(file instanceof File)) throw new Error('No file provided.')
-  const url = await uploadTestimonialImageToCloudinary(file, id)
-  const updated = await updateTestimonial(id, { thumbnailUrl: url })
-  revalidateTestimonials()
-  return updated
+  if (!(file instanceof File)) return { error: 'No file provided.' }
+  try {
+    const url = await uploadTestimonialImageToCloudinary(file, id, slot === 'avatar' ? 'avatar' : 'thumbnail')
+    const item = await updateTestimonial(id, { [testimonialImageField(slot)]: url })
+    if (!item) return { error: 'That testimonial no longer exists.' }
+    revalidateTestimonials()
+    return { item }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Upload failed.' }
+  }
 }
 
-export async function removeTestimonialImageAction(id: string) {
-  await requireAuth()
-  const updated = await updateTestimonial(id, { thumbnailUrl: null })
+export async function removeTestimonialImageAction(id: string, slot: TestimonialImageSlot = 'thumbnail') {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  const item = await updateTestimonial(id, { [testimonialImageField(slot)]: null })
+  if (!item) return { error: 'That testimonial no longer exists.' }
   revalidateTestimonials()
-  return updated
+  return { item }
 }
 
 // ──────────────────────────────────────────────────────────

@@ -100,9 +100,9 @@ export function uploadAboutImageToCloudinary(file: File, slot: AboutImageSlot): 
   return uploadImageToCloudinary(file, 'mahtamunfahim/about', `about-${slot}`)
 }
 
-/** Testimonial thumbnail (a screenshot of the client's website), one fixed public_id per testimonial. */
-export function uploadTestimonialImageToCloudinary(file: File, testimonialId: string): Promise<string> {
-  return uploadImageToCloudinary(file, 'mahtamunfahim/testimonials', `testimonial-${testimonialId}`)
+/** Testimonial images, one fixed public_id per testimonial and slot: the website screenshot or the client's avatar. */
+export function uploadTestimonialImageToCloudinary(file: File, testimonialId: string, slot: 'thumbnail' | 'avatar' = 'thumbnail'): Promise<string> {
+  return uploadImageToCloudinary(file, 'mahtamunfahim/testimonials', slot === 'avatar' ? `testimonial-${testimonialId}-avatar` : `testimonial-${testimonialId}`)
 }
 
 /** Portfolio images: the cover keeps one public_id per item; each gallery image gets its own. */
