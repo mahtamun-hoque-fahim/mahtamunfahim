@@ -158,8 +158,9 @@ export default async function HomePage() {
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-16 grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-10 md:gap-16">
           {/* Pinned block is one screen tall with the title centred on the
               middle of the screen, the same line the cards snap to. */}
-          {/* phones: pinned just above the middle of the screen on a white band; each card's 10rem
-              scroll margin centres the title and the card together, and the cards scroll beneath */}
+          {/* phones: pinned just above the middle of the screen on a white band; each card snaps its
+              top to 50dvh-2rem, just under the title whatever the card's height (both offsets use
+              50dvh, so the gap holds on any screen), and the cards scroll beneath */}
           <div className="sticky top-[calc(50dvh-9.5rem)] z-10 self-start -mx-6 px-6 py-2 bg-white md:top-0 md:z-auto md:mx-0 md:px-0 md:py-0 md:bg-transparent md:h-screen md:flex md:flex-col md:justify-center">
             <BlurWords as="h2" text="You can't expect sales if…" accent="sales" className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0B0F19] leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
           </div>
@@ -169,7 +170,7 @@ export default async function HomePage() {
               card is centred, so the two always sit on the same level. */}
           <FocusCards className="flex flex-col gap-[18vh] md:py-[50vh]">
             {problems.map((p) => (
-              <div key={p.title} className="snap-center scroll-mt-40 md:scroll-mt-0 rounded-2xl border border-[#E5E7EB] p-8 md:p-10">
+              <div key={p.title} className="snap-start md:snap-center scroll-mt-[calc(50dvh-2rem)] md:scroll-mt-0 rounded-2xl border border-[#E5E7EB] p-8 md:p-10">
                 <h3 className="text-2xl md:text-3xl text-[#0B0F19] mb-3" style={{ fontFamily: 'var(--font-clash)' }}>{p.title}</h3>
                 <p className="text-[#374151] leading-relaxed" style={{ fontFamily: 'var(--font-jakarta)' }}>{p.text}</p>
               </div>

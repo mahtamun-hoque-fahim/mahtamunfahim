@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (problem heading on phones, overlap again): cards snap by their top under the title
+- Agent: Claude Edge
+- Report (Fahim, phone screenshot and screen recording of the live site): in "You can't expect sales if…" the pinned title still covers the first card's title.
+- Cause: the cards snapped by their centre, so where a card sat depended on its own height (and the screen height); the earlier `scroll-mt-40` fix only held for the measured card heights. The live site also did not have that fix yet (`8572cbd` not pushed).
+- Fix: on phones the cards are `snap-start` with `scroll-mt-[calc(50dvh-2rem)]`; the title is at `50dvh-9.5rem`, so both offsets use `50dvh` and the gap is fixed (about 29px under a two-line title) on any phone. Desktop unchanged (`md:snap-center md:scroll-mt-0`). DESIGN_GUIDE "Focus list".
+- Verified: at 390 x 844 and 360 x 640 every card lands 29px under the title band; after scrolling 120px off a card the snap settled 29px under it. NOT verified: a real phone with the address bar moving. Ignored: the `/hyperframes-keyframes` skill in the request (it is for video compositions, not this site).
+
 ### 2026-10-20 (problem heading on phones, overlap): the pinned title no longer covers the card
 - Agent: Claude Edge
 - Report (Fahim, screen recording on a real phone, relayed by the planning session): in "You can't expect sales if…" the pinned title sat on top of the first card's title.
