@@ -479,6 +479,37 @@ body {
   animation: pop-in 360ms var(--ease-out) calc(950ms + var(--i, 0) * 220ms) backwards;
 }
 
+/* Cards that rest on the page and rise off it on hover: a soft two-layer
+   shadow at rest; on hover the card lifts 6px and the shadow grows, spreads
+   and softens, as a card picked up off a table; pressing settles it halfway.
+   Transform and box-shadow only. Put it on an inner element when the card
+   itself already animates transform (.offer-stack, .focus-cards). The hover
+   lift is only for real pointers, so touch taps do not leave a card raised. */
+.card-lift {
+  --lift-rest: 0 1px 2px rgba(11, 15, 25, 0.06), 0 10px 24px -12px rgba(11, 15, 25, 0.2);
+  --lift-hover: 0 2px 4px rgba(11, 15, 25, 0.06), 0 28px 48px -18px rgba(11, 15, 25, 0.34);
+  box-shadow: var(--lift-rest);
+  transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out);
+}
+.card-lift-blue {
+  --lift-rest: 0 1px 2px rgba(37, 99, 255, 0.2), 0 12px 28px -12px rgba(37, 99, 255, 0.45);
+  --lift-hover: 0 2px 4px rgba(37, 99, 255, 0.2), 0 30px 52px -18px rgba(37, 99, 255, 0.6);
+}
+.card-lift-dark {
+  --lift-rest: 0 1px 2px rgba(0, 0, 0, 0.4), 0 12px 28px -12px rgba(0, 0, 0, 0.6);
+  --lift-hover: 0 2px 4px rgba(0, 0, 0, 0.4), 0 32px 56px -18px rgba(0, 0, 0, 0.8);
+}
+@media (hover: hover) {
+  .card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--lift-hover);
+  }
+  .card-lift:active {
+    transform: translateY(-3px);
+    transition-duration: 120ms;
+  }
+}
+
 /* Offer cards (homepage, Ways to work together): out of view (md and up,
    where they sit in a row) the three cards lie piled on the middle one,
    each at its own tilt; once in view (`data-revealed` from Reveal) they

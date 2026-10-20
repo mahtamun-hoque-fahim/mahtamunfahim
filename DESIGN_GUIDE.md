@@ -73,6 +73,10 @@ The light page is broken by full-bleed dark bands where attention matters most (
 
 Markup: `<section className="bg-[#0B0F19]">` with the usual `max-w-6xl mx-auto px-6` container inside, so the colour runs edge to edge. Primary buttons stay solid blue; never use `#6B7280` or `#5B6475` text on the dark band (below 4.5:1).
 
+### Card lift (shadow and hover)
+
+`.card-lift` in `globals.css`: a soft two-layer shadow at rest; on hover (real pointers only, `@media (hover: hover)`) the card rises 6px and its shadow grows and spreads, and pressing settles it to 3px. 300ms, transform and box-shadow only. Variants set the shadow colour: default ink for light pages, `.card-lift-blue` (a blue-tinted shadow) for the blue offer card, `.card-lift-dark` (black) on dark bands. Used on the offer cards and the How I work trust cards, both with bold titles. Both lists already animate transform on the card element (`.offer-stack`, `.focus-cards`), so the lift sits on an inner wrapper.
+
 ### Offer cards (Ways to work together)
 
 The three offer cards on the homepage are blue, black and white, in that order (`offerThemes` in `app/page.tsx`, cycled if more offers are added). Blue: `#2563FF` card, white title, text and semibold link (4.9:1). Black: `#0B0F19` card, white title and fit line, `#A3ACBD` text, `#60A5FA` link (the dark-band colours above). White: white card with a `#E5E7EB` border, `#0B0F19` title, `#374151` text. Each card ends in a pill button "Start with a free audit" (with an arrow) to `/contact` that contrasts with its card: white with blue text on the blue card, blue on the black card, black on the white card. Motion (`.offer-stack` in `globals.css`, from `md` up): out of view the three cards lie piled on the middle one, tilted -5deg, 2deg and 6deg; once the row scrolls into view (`Reveal` sets `data-revealed`) they slide out into the tidy row, 850ms each, 120ms apart, after a 250ms pause. Transform only; phones keep the plain column.

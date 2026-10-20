@@ -81,7 +81,7 @@ const offers = [
 // #2563FF is about 4.9:1; on the black card body text is #A3ACBD, as in the
 // dark bands. Each button contrasts with its own card.
 const offerThemes = [
-  { card: 'bg-[#2563FF] border-[#2563FF]', title: 'text-white', text: 'text-white', button: 'bg-white text-[#2563FF] hover:bg-[#EFF4FF]' },
+  { card: 'bg-[#2563FF] border-[#2563FF] card-lift-blue', title: 'text-white', text: 'text-white', button: 'bg-white text-[#2563FF] hover:bg-[#EFF4FF]' },
   { card: 'bg-[#0B0F19] border-[#0B0F19]', title: 'text-white', text: 'text-[#A3ACBD]', button: 'bg-[#2563FF] text-white hover:bg-[#1D4ED8]' },
   { card: 'bg-white border-[#E5E7EB]', title: 'text-[#0B0F19]', text: 'text-[#374151]', button: 'bg-[#0B0F19] text-white hover:bg-[#1F2937]' },
 ]
@@ -275,14 +275,17 @@ export default async function HomePage() {
           </div>
           <FocusCards className="md:order-1 flex flex-col gap-[18vh] md:py-[50vh]">
             {trustPoints.map((t) => (
-              <div key={t.title} className="snap-center rounded-2xl bg-[#111827] p-8 md:p-10" style={{ fontFamily: 'var(--font-jakarta)' }}>
-                <h3 className="text-2xl md:text-3xl text-white mb-3" style={{ fontFamily: 'var(--font-clash)' }}>
+              // outer div: the focus fade and snap stop; inner div: the hover lift
+              <div key={t.title} className="snap-center">
+              <div className="card-lift card-lift-dark rounded-2xl bg-[#111827] p-8 md:p-10" style={{ fontFamily: 'var(--font-jakarta)' }}>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-clash)' }}>
                   {/* the accent word in the dark-band blue (#2563FF is too dark to read on #111827) */}
                   {t.title.split(' ').map((w, i) => (
                     <span key={i}>{i > 0 && ' '}{w === t.accent ? <span className="text-[#60A5FA]">{w}</span> : w}</span>
                   ))}
                 </h3>
                 <p className="text-[#A3ACBD] leading-relaxed">{t.text}</p>
+              </div>
               </div>
             ))}
           </FocusCards>
@@ -337,13 +340,16 @@ export default async function HomePage() {
             {offers.map((o, i) => {
               const t = offerThemes[i % offerThemes.length]
               return (
-                <div key={o.title} className={cn('rounded-2xl border p-8 flex flex-col', t.card)}>
-                  <h3 className={cn('text-2xl mb-3', t.title)} style={{ fontFamily: 'var(--font-clash)' }}>{o.title}</h3>
+                // outer div: the .offer-stack pile transform; inner div: the hover lift
+                <div key={o.title}>
+                <div className={cn('card-lift h-full rounded-2xl border p-8 flex flex-col', t.card)}>
+                  <h3 className={cn('text-2xl font-bold mb-3', t.title)} style={{ fontFamily: 'var(--font-clash)' }}>{o.title}</h3>
                   <p className={cn('text-base leading-relaxed mb-6', t.text)}>{o.text}</p>
                   <p className={cn('text-sm mt-auto mb-6', t.title)}>{o.fit}</p>
                   <Link href="/contact" className={cn('inline-flex self-start items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.97]', t.button)}>
                     Start with a free audit <ArrowRight className="w-4 h-4" />
                   </Link>
+                </div>
                 </div>
               )
             })}

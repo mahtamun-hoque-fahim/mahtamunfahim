@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (card lift): shadows and a hover lift on the offer and trust cards, bold titles
+- Agent: Claude Edge
+- Request (Fahim, screenshots of the offer cards and the dark How I work cards): shadow on the cards, realistic behaviour on hover; card titles bold.
+- Done: `.card-lift` (+ `-blue`, `-dark` shadow variants) in `globals.css`: rest shadow, hover rises 6px with a bigger, softer shadow, press settles to 3px; hover only on real pointers. Applied to the three offer cards and the four trust cards through an inner wrapper (the outer element keeps the pile and focus animations, which also use transform). Titles `font-bold`. DESIGN_GUIDE "Card lift".
+- Verified: `npx tsc --noEmit` clean; at 1366 the offer titles compute to 700, the blue card has the blue shadow, and hovering the middle card gives it `translateY(-6px)` while the others stay put. NOT seen by eye: the trust cards hovering on the dark band.
+
 ### 2026-10-20 (steps heading): "Four steps / to more sales."
 - Agent: Claude Edge
 - Request (Fahim, screenshot of "Four steps to launch."): line break after "Four steps", and "more (blue color) sales".
