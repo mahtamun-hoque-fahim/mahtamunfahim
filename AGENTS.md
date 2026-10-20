@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (problem heading on phones): pinned while the cards scroll
+- Agent: Claude Edge
+- Request (Fahim, phone screenshot of "You can't expect sales if…"): on phones the title stays fixed and the cards scroll.
+- Done: the heading block is `sticky top-20` on a full-width white band (`z-10`, `py-4`) below `md`; from `md` up the `md:` classes put back the old one-screen centred sticky column. DESIGN_GUIDE "Focus list".
+- Verified: at 375 x 812 the heading box stays at 80 to 150px from the top with the third and fifth cards centred under it; screenshot shows the last card beneath the pinned title. NOT re-checked: desktop (only `md:` resets on classes that were already there).
+
 ### 2026-10-20 (acknowledge heading): line break after "Looks nice,"
 - Agent: Claude Edge
 - Request (Fahim, screenshot of the dark "Looks nice, but does it bring customers?" panel): line break after "Looks nice,".
