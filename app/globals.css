@@ -428,6 +428,10 @@ body {
 .focus-cards > * {
   transition: opacity 500ms var(--ease-out), filter 500ms var(--ease-out);
 }
+/* .focus-md-only: no fading on phones (the How I work cards are a plain stack there) */
+@media (scripting: enabled) and (max-width: 767px) {
+  .focus-cards.focus-md-only > :not([data-active='true']) { opacity: 1; filter: none; }
+}
 @media (scripting: enabled) {
   .focus-cards > :not([data-active='true']) {
     opacity: 0.15;

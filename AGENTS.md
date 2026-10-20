@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (How I work on phones): plain scroll instead of card snapping
+- Agent: Claude Edge
+- Report (Fahim, phone screenshot of the dark How I work band): it snaps on the first trust card, leaving the audit pitch cut off under the navbar and the next card faded far below; use simple one-by-one scrolling if there is no better option.
+- Why no better option: the pitch block (heading, two paragraphs, button) is taller than a pinned title can be on a phone, so the problem-section pattern (title pinned, cards snapping under it) does not fit.
+- Done (phones only, `md` and up unchanged): the cards are a plain stack (`gap-6`, no fade via `.focus-md-only`, `max-md:snap-align-none`), and the section is `max-md:snap-start`, one snap area taller than the screen, so it scrolls freely inside while the page keeps its other stops. The cards keep the `snap-center` class because `SnapScroll` finds desktop stops by class. DESIGN_GUIDE "Focus list".
+- Verified: `npx tsc --noEmit` clean; on a narrow pane the cards compute to snap-align none, opacity 1, 24px apart, and scroll positions 300 and 700px into the section stay put (no snapping away); at 1440 the cards are still centre stops 162px (18vh) apart with the fade. NOT verified: a real phone's touch scrolling.
+
 ### 2026-10-21 (audit request): audit buttons land on the form with "Audit request" picked
 - Agent: Claude Edge
 - Request (Fahim): from any audit CTA, land directly on the contact form and show with an animation that the subject is "Audit request"; only that field accent-themed. Asked whether that subject existed: it did not (Freelance project, Full-time opportunity, Collaboration, Just saying hi, Other).
