@@ -430,7 +430,7 @@ Inside the slide-up panel (title and subtitle centred): two tall cards in a cent
 
 ### Testimonials bento grid
 
-Homepage, in the proof part of the funnel: "What clients say." over a three-column bento grid (one column on phones) of rounded `#F7F8FA` tiles from Admin > Testimonials. Each tile opens with a screenshot of the client's website running to the tile's edges (`aspect-[16/10]`, `object-cover object-top`; a tall tile lets it grow to fill), then the quote in the full ink at 18px and the client's name, role, business and website link. Tile size comes from the dashboard: `wide` spans two columns, `tall` two rows. Each tile reveals on scroll. The whole section is not rendered while no testimonial is published: never fill it with invented quotes.
+Homepage, in the proof part of the funnel: "What clients say." over a three-column bento grid (one column on phones) of rounded `#F7F8FA` tiles from Admin > Testimonials. Each tile opens with a screenshot of the client's website running to the tile's edges (one fixed height for every tile size, `h-48` / `md:h-56`, `object-cover object-top`, so the thumbnails in a row end on the same line whether a tile is normal, wide or tall), then the quote in the full ink at 18px and the client's name, role, business and website link. Tile size comes from the dashboard: `wide` spans two columns, `tall` two rows. Each tile reveals on scroll. The whole section is not rendered while no testimonial is published: never fill it with invented quotes.
 
 ### Other motion
 

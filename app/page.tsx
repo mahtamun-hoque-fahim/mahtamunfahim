@@ -231,8 +231,9 @@ export default async function HomePage() {
                     t.size === 'tall' && 'md:row-span-2'
                   )}
                 >
+                  {/* one height for every tile size, so thumbnails in a row end on the same line */}
                   {t.thumbnailUrl && (
-                    <div className={cn('overflow-hidden', t.size === 'tall' ? 'aspect-[16/10] md:aspect-auto md:flex-1 md:min-h-[16rem]' : 'aspect-[16/10]')}>
+                    <div className="overflow-hidden h-48 md:h-56 shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={t.thumbnailUrl} alt={t.business ? `The ${t.business} website` : ''} loading="lazy" className="w-full h-full object-cover object-top" />
                     </div>

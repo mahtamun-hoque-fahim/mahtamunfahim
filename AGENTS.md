@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (testimonial thumbnails): one thumbnail height for every tile size
+- Agent: Claude Edge
+- Request (Fahim, screenshot of a normal and a wide testimonial side by side): the thumbnails should end on the same line whatever the tile size, for every testimonial added.
+- Cause: each thumbnail was `aspect-[16/10]` of its tile's width, so a wide tile (two columns) had a taller image, and tall tiles stretched theirs.
+- Fix: every thumbnail is `h-48` / `md:h-56` (`object-cover object-top`), whatever the size. DESIGN_GUIDE "Testimonials bento grid".
+- Verified: `npx tsc --noEmit` clean; at 1366px the normal and wide tiles' thumbnails both span 4217 to 4441px. The dev server was on port 3001 this time (3000 taken).
+
 ### 2026-10-19 (About teaser removed): the obsolete homepage teaser fields are gone from Admin > About
 - Agent: Claude Edge
 - Request (Fahim, screenshot of Admin > About): find which fields are obsolete, then remove them.
