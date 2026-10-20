@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (problem heading on phones, centred): title and card in the middle of the screen
+- Agent: Claude Edge
+- Request (Fahim, phone screenshot): put the title and the cards in the centre.
+- Read as vertical centring. The pinned title moved from under the navbar to `top-[calc(50vh-8rem)]`, and each card got `scroll-mt-24` (reset with `md:scroll-mt-0`), so its centre snap stop centres the title and card together. DESIGN_GUIDE "Focus list".
+- Verified: on a 596px-tall pane the pair's middle is at 298 to 307px for all five cards (screen middle 298), with 25 to 41px between title and card. Still visible: the faded neighbouring cards above the title (15% opacity, as before).
+
 ### 2026-10-20 (problem heading on phones): pinned while the cards scroll
 - Agent: Claude Edge
 - Request (Fahim, phone screenshot of "You can't expect sales if…"): on phones the title stays fixed and the cards scroll.
