@@ -15,7 +15,8 @@ import Reveal from '@/components/Reveal'
 import FocusCards from '@/components/FocusCards'
 import SnapScroll from '@/components/SnapScroll'
 import RoadGlow from '@/components/RoadGlow'
-import { getTestimonials, getCachedSiteSettings } from '@/lib/db/queries'
+import { getTestimonials, getCachedSiteSettings, getPortfolioItems } from '@/lib/db/queries'
+import PortfolioGrid from '@/components/PortfolioGrid'
 import { cn } from '@/lib/utils'
 
 // Homepage copy follows a discovered funnel: 1. find the problem, 2. acknowledge
@@ -98,10 +99,11 @@ const ctaPrimary =
   'inline-flex items-center justify-center gap-2 whitespace-nowrap px-7 py-3 bg-[#2563FF] text-white text-sm font-semibold rounded-full hover:bg-[#1D4ED8] transition-[background-color,transform] duration-200 active:scale-[0.97]'
 
 export default async function HomePage() {
-  const [allPosts, testimonials, siteSettings] = await Promise.all([
+  const [allPosts, testimonials, siteSettings, featuredWork] = await Promise.all([
     getBlogPosts({ publishedOnly: true, limit: 3 }),
     getTestimonials({ publishedOnly: true }),
     getCachedSiteSettings(),
+    getPortfolioItems({ featuredOnly: true }),
   ])
 
   const recentPosts = allPosts as Pick<BlogPost, 'id' | 'title' | 'slug' | 'excerpt' | 'tags' | 'readingTime' | 'createdAt'>[]
@@ -214,6 +216,20 @@ export default async function HomePage() {
 
 
         {/* ── 3. PROOF: what clients say, then how I work ── */}
+        {/* Featured work: portfolio items marked featured in Admin > Portfolio, same
+            bento grid as /portfolio. Hidden while none is featured and published. */}
+        {featuredWork.length > 0 && (
+          <section className="max-w-6xl mx-auto px-6 py-16 snap-start scroll-mt-24">
+            <div className="flex items-end justify-between gap-6 mb-12">
+              <BlurWords as="h2" text="Work for businesses like yours." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19]" style={{ fontFamily: 'var(--font-clash)' }} />
+              <Link href="/portfolio" className="shrink-0 text-sm text-[#5B6475] hover:text-[#2563FF] transition-colors" style={{ fontFamily: 'var(--font-jakarta)' }}>
+                All work →
+              </Link>
+            </div>
+            <PortfolioGrid items={featuredWork} titleAs="h3" />
+          </section>
+        )}
+
         {/* What clients say: a bento grid of testimonials from Admin > Testimonials.
             Each tile opens with a screenshot of the client's website running to
             the tile's edges, then the quote. Hidden while none is published. */}

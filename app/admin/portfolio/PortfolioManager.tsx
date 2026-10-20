@@ -29,8 +29,8 @@ const SIZES: Array<{ value: string; label: string; hint: string }> = [
   { value: 'tall', label: 'Tall', hint: 'two tiles down' },
 ]
 
-type Draft = Pick<NewPortfolioItem, 'title' | 'slug' | 'client' | 'summary' | 'body' | 'websiteUrl' | 'size' | 'published'>
-const emptyDraft: Draft = { title: '', slug: '', client: '', summary: '', body: '', websiteUrl: '', size: 'normal', published: false }
+type Draft = Pick<NewPortfolioItem, 'title' | 'slug' | 'client' | 'summary' | 'body' | 'websiteUrl' | 'size' | 'published' | 'featured'>
+const emptyDraft: Draft = { title: '', slug: '', client: '', summary: '', body: '', websiteUrl: '', size: 'normal', published: false, featured: false }
 
 export default function PortfolioManager({ initial }: { initial: PortfolioItem[] }) {
   const [items, setItems] = useState(initial)
@@ -57,7 +57,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
 
   const openNew = () => { setDraft(emptyDraft); setEditing('new') }
   const openEdit = (p: PortfolioItem) => {
-    setDraft({ title: p.title, slug: p.slug, client: p.client, summary: p.summary, body: p.body, websiteUrl: p.websiteUrl ?? '', size: p.size, published: p.published })
+    setDraft({ title: p.title, slug: p.slug, client: p.client, summary: p.summary, body: p.body, websiteUrl: p.websiteUrl ?? '', size: p.size, published: p.published, featured: p.featured })
     setEditing(p.id)
   }
 
@@ -98,6 +98,12 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
 
   const togglePublished = (p: PortfolioItem) => run(async () => {
     const res = await updatePortfolioItemAction(p.id, { published: !p.published })
+    if (res.error) return res.error
+    replace(res.item!)
+  })
+
+  const toggleFeatured = (p: PortfolioItem) => run(async () => {
+    const res = await updatePortfolioItemAction(p.id, { featured: !p.featured })
     if (res.error) return res.error
     replace(res.item!)
   })
@@ -176,6 +182,10 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
             <input type="checkbox" checked={draft.published ?? false} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
             Published on /portfolio
           </label>
+          <label className="flex items-center gap-2 text-sm text-[#0B0F19]">
+            <input type="checkbox" checked={draft.featured ?? false} onChange={(e) => setDraft({ ...draft, featured: e.target.checked })} />
+            Featured on the homepage (shows there only while published)
+          </label>
 
           {current ? (
             <div className="grid sm:grid-cols-2 gap-6 pt-2 border-t border-[#E5E7EB]">
@@ -248,7 +258,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
               <p className="font-semibold text-[#0B0F19]">{p.title}{p.client && <span className="font-normal text-[#5B6475]"> · {p.client}</span>}</p>
               {p.summary && <p className="text-sm text-[#374151] line-clamp-2 mt-1">{p.summary}</p>}
               <p className="text-xs text-[#6B7280] mt-2 flex items-center gap-2">
-                {SIZES.find((s) => s.value === p.size)?.label ?? p.size} tile · {p.images.length} images · {p.published ? 'Published' : 'Hidden'}
+                {SIZES.find((s) => s.value === p.size)?.label ?? p.size} tile · {p.images.length} images · {p.published ? 'Published' : 'Hidden'}{p.featured && ' · Featured on the homepage'}
                 {p.published && (
                   <a href={`/portfolio/${p.slug}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-[#2563FF] hover:underline">
                     View <ExternalLink className="w-3 h-3" />
@@ -262,6 +272,7 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
             </div>
             <div className="flex flex-col gap-1 shrink-0">
               <button type="button" className={btnSecondary} onClick={() => togglePublished(p)} disabled={pending}>{p.published ? 'Hide' : 'Publish'}</button>
+              <button type="button" className={btnSecondary} onClick={() => toggleFeatured(p)} disabled={pending}>{p.featured ? 'Unfeature' : 'Feature'}</button>
               <button type="button" aria-label="Edit" className={btnSecondary} onClick={() => openEdit(p)}><Pencil className="w-4 h-4" /></button>
               <button type="button" aria-label="Delete" className={cn(btnSecondary, 'hover:text-red-600')} onClick={() => remove(p)} disabled={pending}><Trash2 className="w-4 h-4" /></button>
             </div>

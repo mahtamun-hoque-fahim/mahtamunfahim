@@ -434,7 +434,9 @@ Inside the slide-up panel (title and subtitle centred): two tall cards in a cent
 
 ### Portfolio
 
-`/portfolio`: the h1 "Work that brings businesses customers." and one lead line, then the same bento grid as the testimonials (three columns from `md`, `wide` spans two columns, `tall` two rows, rounded `#F7F8FA` tiles). Each tile is one link to the item's page: the cover photo edge to edge at one fixed height for every tile size (`h-48` / `md:h-56`, `object-cover object-top`, a slight zoom on hover, transform only), then the client in muted text, the title in the headline font, the summary, and "See the project →". With nothing published the page shows one line pointing at the free audit, and the navbar has no Portfolio link.
+`/portfolio`: the h1 "Work that brings businesses customers." and one lead line, then the same bento grid as the testimonials (three columns from `md`, `wide` spans two columns, `tall` two rows, rounded `#F7F8FA` tiles). Each tile is one link to the item's page: the cover photo edge to edge at one fixed height for every tile size (`h-48` / `md:h-56`, `object-cover object-top`, a slight zoom on hover, transform only), then the client in muted text, the title in the headline font, the summary, and "See the project →". With nothing published the page shows one line pointing at the free audit, and the navbar has no Portfolio link. The grid is one component, `components/PortfolioGrid.tsx`.
+
+Homepage: items marked featured (and published) show in "Work for businesses like yours." with an "All work →" link, in the same grid, just before "What clients say."; the section is not rendered while none is featured.
 
 `/portfolio/[slug]`: back link, client, title (h1, bold), summary as the lead, the website link; the cover photo wider than the text (`max-w-6xl`, 16:9, `rounded-3xl`); the details as markdown in the blog prose style (`.prose-dark`, `max-w-3xl`); the gallery images full width, stacked, `rounded-3xl`; then a dark `#0B0F19` card asking for the free audit. Unpublished items 404.
 

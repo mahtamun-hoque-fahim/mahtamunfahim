@@ -430,6 +430,7 @@ function cleanPortfolio(input: Partial<NewPortfolioItem>): Partial<NewPortfolioI
     out.size = input.size
   }
   if (input.published !== undefined) out.published = Boolean(input.published)
+  if (input.featured !== undefined) out.featured = Boolean(input.featured)
   if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
   return out
 }

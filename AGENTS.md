@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (featured work): featured portfolio items on the homepage
+- Agent: Claude Edge
+- Request (Fahim): portfolio items can be featured, and the featured ones show on the homepage.
+- Done: `portfolio_items.featured` (migration `0021_portfolio_featured.sql`, one additive column, default false; APPLIED by me after a backup). Admin > Portfolio: "Featured on the homepage" checkbox in the editor, a Feature/Unfeature button and a label in the list. Homepage: "Work for businesses like yours." with an "All work →" link, just before "What clients say.", showing published + featured items; not rendered while none. The grid moved into `components/PortfolioGrid.tsx`, shared with `/portfolio`. `getPortfolioItems({ featuredOnly: true })` implies published.
+- Verified: `npx tsc --noEmit` clean; with two temporary published items (one featured, then deleted) the homepage showed only the featured one. NOT verified: the admin toggle signed in.
+
 ### 2026-10-20 (About headline): two lines on bigger screens
 - Agent: Claude Edge
 - Request (Fahim, screenshot of /about wrapping its headline into four lines): show it as two lines on bigger screens.

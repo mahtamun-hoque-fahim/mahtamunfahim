@@ -399,10 +399,13 @@ export async function reorderTestimonials(orders: Array<{ id: string; order: num
 // Portfolio (/portfolio grid, /portfolio/[slug] pages, Admin > Portfolio)
 // ──────────────────────────────────────────────────────────
 
-export async function getPortfolioItems({ publishedOnly = false } = {}): Promise<PortfolioItem[]> {
+export async function getPortfolioItems({ publishedOnly = false, featuredOnly = false } = {}): Promise<PortfolioItem[]> {
   try {
-    const q = db.select().from(portfolioItems)
-    return await (publishedOnly ? q.where(eq(portfolioItems.published, true)) : q).orderBy(asc(portfolioItems.sortOrder))
+    // featuredOnly is for the homepage, so it implies published
+    const where = featuredOnly
+      ? and(eq(portfolioItems.published, true), eq(portfolioItems.featured, true))
+      : publishedOnly ? eq(portfolioItems.published, true) : undefined
+    return await db.select().from(portfolioItems).where(where).orderBy(asc(portfolioItems.sortOrder))
   } catch (error) {
     console.error('getPortfolioItems error:', error)
     return []
