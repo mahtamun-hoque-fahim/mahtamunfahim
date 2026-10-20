@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (crop preview): the dashboard shows which part of a thumbnail is visible
+- Agent: Claude Edge
+- Request (Fahim): after uploading a portfolio or testimonial thumbnail, see a preview, by tile type, of which part of it will be visible.
+- Done: new `app/admin/CropPreview.tsx`, frames with the ratio of each real box, cropping like the site (`object-cover object-top`): desktop tile for the size (352 x 224 normal and tall, 728 x 224 wide), phone tile (342 x 192), plus the popup (672 x 320) for testimonials and the project page (16:9) for portfolio covers. Admin > Testimonials: under each row with a screenshot (follows the size buttons while editing). Admin > Portfolio: under the cover in the editor. DESIGN_GUIDE "Testimonials bento grid" notes the coupled numbers.
+- Verified: `npx tsc --noEmit` clean; tile boxes measured on `/testimonials` at 1440 (352 x 224, 728 x 224, popup 672 x 320) and 390 (342 x 192); the component rendered on a temporary page (deleted) with a real screenshot, all three sizes. NOT seen inside the signed-in admin.
+
 ### 2026-10-20 (Bengali font): Hind Siliguri for Bengali text
 - Agent: Claude Edge
 - Request (Fahim): use Hind Siliguri for Bengali from now on (he will write blogs that mix English and Bengali).

@@ -455,6 +455,8 @@ Shared by the homepage and `/testimonials` (`components/TestimonialGrid.tsx`). E
 
 Homepage, in the proof part of the funnel: "What clients say." over a three-column bento grid (one column on phones) of rounded `#F7F8FA` tiles from Admin > Testimonials. Each tile opens with a screenshot of the client's website running to the tile's edges (one fixed height for every tile size, `h-48` / `md:h-56`, `object-cover object-top`, so the thumbnails in a row end on the same line whether a tile is normal, wide or tall), then the quote in the full ink at 18px and the client's name, role, business and website link. Tile size comes from the dashboard: `wide` spans two columns, `tall` two rows. Each tile reveals on scroll. The whole section is not rendered while no testimonial is published: never fill it with invented quotes.
 
+Crop preview in the dashboard (`app/admin/CropPreview.tsx`): under each uploaded testimonial screenshot and portfolio cover, small frames show what visitors see: the desktop tile for the chosen size (352 × 224 normal and tall, 728 × 224 wide, at 1440px), the phone tile (342 × 192 at 390px), and the popup (672 × 320) or the project page (16:9). Each frame has the real box's ratio and crops the same way (`object-cover object-top`). It follows the size buttons before saving. These numbers are coupled to the grids: if a tile's height, the grid gap or the container width changes, update `CropPreview`.
+
 ### Other motion
 
 | Where | Behavior |

@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, ExternalLink, ImagePlus, Loader2, Pencil, Plus,
 import type { NewPortfolioItem, PortfolioItem } from '@/lib/db/queries'
 import { MAX_AVATAR_BYTES } from '@/lib/constants'
 import { cn, slugify } from '@/lib/utils'
+import CropPreview from '../CropPreview'
 import {
   createPortfolioItemAction,
   deletePortfolioItemAction,
@@ -206,6 +207,11 @@ export default function PortfolioManager({ initial }: { initial: PortfolioItem[]
                   </label>
                   {current.coverUrl && <button type="button" className="text-[#6B7280] hover:text-red-600" onClick={() => removeImage(current)}>Remove</button>}
                 </div>
+                {current.coverUrl && (
+                  <div className="mt-3">
+                    <CropPreview src={current.coverUrl} size={draft.size} extra={[{ label: 'Project page', w: 16, h: 9 }]} />
+                  </div>
+                )}
                 <p className={hintCls}>16:9 ratio, e.g. 1920 × 1080 px (at least 1600 × 900). Shown at 16:9 at the top of the page; the grid tile shows a strip cut from the top, so keep the key part in the top half. 4 MB max. Saved as soon as it uploads.</p>
               </div>
               <div>

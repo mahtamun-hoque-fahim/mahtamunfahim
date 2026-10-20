@@ -5,6 +5,7 @@ import { ChevronDown, ChevronUp, ImagePlus, Loader2, Pencil, Plus, Trash2, X } f
 import type { NewTestimonial, Testimonial } from '@/lib/db/queries'
 import { MAX_AVATAR_BYTES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+import CropPreview from '../CropPreview'
 import {
   createTestimonialAction,
   deleteTestimonialAction,
@@ -172,7 +173,8 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
 
       <ul className="space-y-3">
         {items.map((t, i) => (
-          <li key={t.id} className="rounded-xl border border-[#E5E7EB] bg-white p-4 flex gap-4">
+          <li key={t.id} className="rounded-xl border border-[#E5E7EB] bg-white p-4">
+            <div className="flex gap-4">
             <div className="w-36 shrink-0">
               <div className="aspect-[16/10] rounded-lg overflow-hidden bg-[#F7F8FA] flex items-center justify-center">
                 {t.thumbnailUrl ? (
@@ -226,6 +228,13 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
               <button type="button" aria-label="Edit" className={btnSecondary} onClick={() => openEdit(t)}><Pencil className="w-4 h-4" /></button>
               <button type="button" aria-label="Delete" className={cn(btnSecondary, 'hover:text-red-600')} onClick={() => remove(t)} disabled={pending}><Trash2 className="w-4 h-4" /></button>
             </div>
+            </div>
+            {t.thumbnailUrl && (
+              <div className="mt-4 pt-3 border-t border-[#E5E7EB]">
+                {/* follows the tile size being edited, before it is saved */}
+                <CropPreview src={t.thumbnailUrl} size={editing === t.id ? draft.size : t.size} extra={[{ label: 'Popup', w: 672, h: 320 }]} />
+              </div>
+            )}
           </li>
         ))}
       </ul>
