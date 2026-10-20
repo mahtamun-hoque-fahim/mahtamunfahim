@@ -19,6 +19,8 @@ type BlurWordsProps = {
   stagger?: number
   /** Time each word takes to resolve, in ms (the "segment speed" knob). */
   duration?: number
+  /** One word to set in the blue italic accent (as the hero does), matched without punctuation or case. */
+  accent?: string
 }
 
 /**
@@ -36,6 +38,7 @@ export default function BlurWords({
   delay = 0,
   stagger = 70,
   duration = 800,
+  accent,
 }: BlurWordsProps) {
   const words = text.split(/\s+/).filter(Boolean)
 
@@ -50,7 +53,11 @@ export default function BlurWords({
     <span key={`${word}-${i}`}>
       {i > 0 ? ' ' : null}
       <span className="blur-word" style={{ '--i': i } as CSSProperties}>
-        {word}
+        {accent && word.replace(/[^\p{L}\p{N}']/gu, '').toLowerCase() === accent.toLowerCase() ? (
+          <em className="text-[#2563FF]">{word}</em>
+        ) : (
+          word
+        )}
       </span>
     </span>
   ))

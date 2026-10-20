@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (problem heading): bold, with "sales" in blue italic
+- Agent: Claude Edge
+- Request (Fahim, screenshot of "You can't expect sales if…"): title bold, the word "sales" blue italic.
+- Done: the heading is `font-bold`; `BlurWords` got an `accent` prop (one word, matched without punctuation or case) that renders it as `<em className="text-[#2563FF]">`, the same treatment as "sales" in the hero; used here with `accent="sales"`.
+- Verified: `npx tsc --noEmit` clean; in the dev browser the h2 computes to weight 700 and the `em` "sales" to italic `rgb(37, 99, 255)`.
+
 ### 2026-10-20 (image ratios): every admin image field says which ratio to upload
 - Agent: Claude Edge
 - Request (Fahim): include ratios in the admin panel for every image field.

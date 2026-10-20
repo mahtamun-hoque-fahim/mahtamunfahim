@@ -159,7 +159,7 @@ export default async function HomePage() {
           {/* Pinned block is one screen tall with the title centred on the
               middle of the screen, the same line the cards snap to. */}
           <div className="md:sticky md:top-0 md:self-start md:h-screen md:flex md:flex-col md:justify-center">
-            <BlurWords as="h2" text="You can't expect sales if…" className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19] leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
+            <BlurWords as="h2" text="You can't expect sales if…" accent="sales" className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0B0F19] leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
           </div>
           {/* One card in focus at a time: the one crossing the middle of the
               screen; the gaps keep the next card out of that band, and half a
