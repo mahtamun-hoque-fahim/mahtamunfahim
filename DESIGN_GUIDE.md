@@ -123,8 +123,11 @@ The navbar keeps the "mah tamun." wordmark (`components/Logo.tsx`); the mark is 
 | Body      | Inter            | `var(--font-jakarta)`   | `--font-inter`       | `font-body`    | variable (100–900) |
 | Labels    | Inter            | `var(--font-jetbrains)` | `--font-inter`       | `font-mono`    | 400–500 |
 | Code      | system monospace | `var(--font-code)`      | (none, system stack) | —              | — |
+| Bengali   | Hind Siliguri    | (automatic, second in the three stacks above) | `--font-hind-siliguri` | — | 400–700, no italic |
 
-Both fonts load through `next/font/google` in `app/layout.tsx` (self-hosted at build time, zero layout shift; the build therefore needs network access to Google Fonts). JetBrains Mono, Syne and Plus Jakarta Sans are no longer loaded.
+All three fonts load through `next/font/google` in `app/layout.tsx` (self-hosted at build time, zero layout shift; the build therefore needs network access to Google Fonts). JetBrains Mono, Syne and Instrument Serif are no longer loaded.
+
+**Bengali:** Hind Siliguri sits second in `--font-clash`, `--font-jakarta` and `--font-jetbrains`, and is loaded with the `bengali` subset only (its `@font-face` has a Bengali `unicode-range`). So in a mixed line, Latin letters render in Jakarta or Inter and Bengali letters in Hind Siliguri, with no markup needed. It is not preloaded: browsers fetch it only on pages that contain Bengali text. It has no italic, so Bengali inside `<em>` is a slanted fake italic (only weight synthesis is off); weights above 700 (`font-extrabold`) fall back to 700.
 
 **Naming quirk:** the variable names are historical. `--font-clash` (once Clash Display, then Syne) now points at Plus Jakarta Sans (Instrument Serif before 2026-10-20); `--font-jakarta` and `--font-jetbrains` both point at Inter. They are aliases in `app/globals.css` `:root`, kept so the many inline `style={{ fontFamily: 'var(--font-...)' }}` uses did not have to change. New code may keep using them. Real monospace (blog code) uses `--font-code`.
 

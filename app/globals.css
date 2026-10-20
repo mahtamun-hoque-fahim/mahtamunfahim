@@ -20,9 +20,9 @@
      --font-jakarta / --font-jetbrains are both Inter (JetBrains Mono is gone;
      labels are uppercase Inter). Bold is never faked (font-synthesis-weight
      on html): a weight a font does not ship falls back to a real one. */
-  --font-clash: var(--font-plus-jakarta), system-ui, sans-serif;
-  --font-jakarta: var(--font-inter), system-ui, sans-serif;
-  --font-jetbrains: var(--font-inter), system-ui, sans-serif;
+  --font-clash: var(--font-plus-jakarta), var(--font-hind-siliguri), system-ui, sans-serif;
+  --font-jakarta: var(--font-inter), var(--font-hind-siliguri), system-ui, sans-serif;
+  --font-jetbrains: var(--font-inter), var(--font-hind-siliguri), system-ui, sans-serif;
   --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Motion tokens (see DESIGN_GUIDE.md section 8) */

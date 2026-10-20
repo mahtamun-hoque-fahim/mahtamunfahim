@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (Bengali font): Hind Siliguri for Bengali text
+- Agent: Claude Edge
+- Request (Fahim): use Hind Siliguri for Bengali from now on (he will write blogs that mix English and Bengali).
+- Done: `app/layout.tsx` loads Hind Siliguri (`subsets: ['bengali']`, 400 to 700, `--font-hind-siliguri`, `preload: false`); `globals.css` puts it second in `--font-clash`, `--font-jakarta` and `--font-jetbrains`. Latin letters keep Jakarta / Inter, Bengali letters, digits and `।` get Hind Siliguri, per character, in the same line. Before this, Bengali fell back to whatever font the device had. DESIGN_GUIDE section 3.
+- Verified: `npx tsc --noEmit` clean; on the dev server the homepage blog card title ("৫ হাজার টাকার ওয়েবসাইট...", already in the database) computes to the new stack and Hind Siliguri 400/600/700 load; an injected mixed line also loads it. NOT seen by eye (the reveal had not run in the screenshot), not checked on a phone.
+
 ### 2026-10-20 (problem heading on phones, overlap again): cards snap by their top under the title
 - Agent: Claude Edge
 - Report (Fahim, phone screenshot and screen recording of the live site): in "You can't expect sales if…" the pinned title still covers the first card's title.

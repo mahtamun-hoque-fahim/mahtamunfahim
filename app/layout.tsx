@@ -1,7 +1,7 @@
 
 
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google'
+import { Plus_Jakarta_Sans, Inter, Hind_Siliguri } from 'next/font/google'
 import { getCachedSiteSettings } from '@/lib/db/queries'
 import './globals.css'
 
@@ -21,6 +21,17 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
+})
+
+// Bengali: Hind Siliguri, second in every font stack in globals.css, so only
+// Bengali characters use it. Not preloaded: the browser fetches it only on
+// pages that contain Bengali text (unicode-range).
+const hindSiliguri = Hind_Siliguri({
+  subsets: ['bengali'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-hind-siliguri',
+  display: 'swap',
+  preload: false,
 })
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -64,7 +75,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plusJakarta.variable} ${inter.variable}`}
+      className={`${plusJakarta.variable} ${inter.variable} ${hindSiliguri.variable}`}
     >
       {/* suppressHydrationWarning: extensions (e.g. ColorZilla) add attributes to <body> */}
       <body suppressHydrationWarning style={{ fontFamily: 'var(--font-jakarta)' }}>
