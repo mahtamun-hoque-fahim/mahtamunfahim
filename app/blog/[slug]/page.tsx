@@ -13,6 +13,8 @@ import CopyCodeInit from '@/components/CopyCodeInit'
 export const revalidate = 60
 
 async function getPost(slug: string): Promise<BlogPost | null> {
+  // the blog switch (Admin > Posts): off hides every post
+  if (!(await getCachedSiteSettings()).blogEnabled) return null
   return getBlogPostBySlug(slug)
 }
 

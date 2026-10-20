@@ -272,7 +272,7 @@ export default function AboutForm({ about }: Props) {
               className={inputClass}
               style={{ fontFamily: 'var(--font-jakarta)' }}
             />
-            <Hint>Links to the design portfolio. The arrow is added automatically.</Hint>
+            <Hint>Links to this site&apos;s portfolio (/portfolio).</Hint>
           </Field>
         </div>
       </section>

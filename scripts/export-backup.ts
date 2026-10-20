@@ -12,7 +12,7 @@ async function main() {
   // Every app table (auth tables excluded). Tables already dropped by a later
   // migration are skipped, so the script keeps working after the drops.
   const tables = [
-    'blog_posts', 'contact_messages', 'projects', 'testimonials', 'footer_links',
+    'blog_posts', 'contact_messages', 'projects', 'portfolio_items', 'testimonials', 'footer_links',
     'site_settings', 'about_content', 'skills', 'credential_timeline',
     'credential_clusters', 'credential_certs', 'credential_community', 'credential_contributions',
   ]

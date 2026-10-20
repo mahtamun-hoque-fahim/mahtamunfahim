@@ -8,6 +8,9 @@ import {
   testimonials,
   type Testimonial,
   type NewTestimonial,
+  portfolioItems,
+  type PortfolioItem,
+  type NewPortfolioItem,
   siteSettings,
   aboutContent,
   type AboutContent,
@@ -210,6 +213,7 @@ const DEFAULT_SITE_SETTINGS: SiteSettings = {
   ogDescription:
     'Aspiring AI engineer from Bangladesh. Building secure web apps, tools, and digital products in the era of agentic AI.',
   marqueeSpeed: 60,
+  blogEnabled: false,
   updatedAt: new Date(),
 }
 
@@ -339,6 +343,8 @@ export type {
   NewAboutContent,
   Testimonial,
   NewTestimonial,
+  PortfolioItem,
+  NewPortfolioItem,
 } from './schema'
 
 // ──────────────────────────────────────────────────────────
@@ -386,5 +392,59 @@ export async function deleteTestimonial(id: string): Promise<void> {
 export async function reorderTestimonials(orders: Array<{ id: string; order: number }>): Promise<void> {
   for (const { id, order } of orders) {
     await db.update(testimonials).set({ sortOrder: order, updatedAt: new Date() }).where(eq(testimonials.id, id))
+  }
+}
+
+// ──────────────────────────────────────────────────────────
+// Portfolio (/portfolio grid, /portfolio/[slug] pages, Admin > Portfolio)
+// ──────────────────────────────────────────────────────────
+
+export async function getPortfolioItems({ publishedOnly = false } = {}): Promise<PortfolioItem[]> {
+  try {
+    const q = db.select().from(portfolioItems)
+    return await (publishedOnly ? q.where(eq(portfolioItems.published, true)) : q).orderBy(asc(portfolioItems.sortOrder))
+  } catch (error) {
+    console.error('getPortfolioItems error:', error)
+    return []
+  }
+}
+
+export async function getPortfolioItemBySlug(slug: string): Promise<PortfolioItem | null> {
+  try {
+    const rows = await db.select().from(portfolioItems).where(eq(portfolioItems.slug, slug)).limit(1)
+    return rows[0] ?? null
+  } catch (error) {
+    console.error('getPortfolioItemBySlug error:', error)
+    return null
+  }
+}
+
+export async function getPortfolioItemById(id: string): Promise<PortfolioItem | null> {
+  const rows = await db.select().from(portfolioItems).where(eq(portfolioItems.id, id)).limit(1)
+  return rows[0] ?? null
+}
+
+// Throws on a database error (a duplicate slug, for one) so the action can report it.
+export async function createPortfolioItem(data: NewPortfolioItem): Promise<PortfolioItem> {
+  const rows = await db.insert(portfolioItems).values(data).returning()
+  return rows[0]
+}
+
+export async function updatePortfolioItem(id: string, data: Partial<NewPortfolioItem>): Promise<PortfolioItem | null> {
+  const rows = await db
+    .update(portfolioItems)
+    .set({ ...data, updatedAt: new Date() })
+    .where(eq(portfolioItems.id, id))
+    .returning()
+  return rows[0] ?? null
+}
+
+export async function deletePortfolioItem(id: string): Promise<void> {
+  await db.delete(portfolioItems).where(eq(portfolioItems.id, id))
+}
+
+export async function reorderPortfolioItems(orders: Array<{ id: string; order: number }>): Promise<void> {
+  for (const { id, order } of orders) {
+    await db.update(portfolioItems).set({ sortOrder: order, updatedAt: new Date() }).where(eq(portfolioItems.id, id))
   }
 }

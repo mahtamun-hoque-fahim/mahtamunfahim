@@ -4,7 +4,8 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { getBlogPosts, getBlogPostBySlug, type BlogPost } from '@/lib/db/queries'
+import { notFound } from 'next/navigation'
+import { getBlogPosts, getCachedSiteSettings, type BlogPost } from '@/lib/db/queries'
 import { formatDate } from '@/lib/utils'
 import { getCoverUrl } from '@/lib/blog-image'
 import BlurWords from '@/components/BlurWords'
@@ -26,6 +27,8 @@ async function getPosts(): Promise<BlogPost[]> {
 }
 
 export default async function BlogPage() {
+  // the blog switch (Admin > Posts): off hides the whole blog
+  if (!(await getCachedSiteSettings()).blogEnabled) notFound()
   const posts = await getPosts()
 
   return (

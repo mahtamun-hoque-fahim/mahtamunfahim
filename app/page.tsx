@@ -362,7 +362,8 @@ export default async function HomePage() {
           </Reveal>
         </section>
 
-        {/* ── Blog teaser (for search visitors) ── */}
+        {/* ── Blog teaser (for search visitors), hidden while the blog switch is off ── */}
+        {siteSettings.blogEnabled && (
         <section className="max-w-6xl mx-auto px-6 py-16 snap-start scroll-mt-24">
           <div className="flex items-center justify-between mb-12">
             <BlurWords as="h2" text="From the blog." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19]" style={{ fontFamily: 'var(--font-clash)' }} />
@@ -462,6 +463,7 @@ export default async function HomePage() {
             </div>
           )}
         </section>
+        )}
 
         {/* ── 6. THE NEXT STEP: the audit ── */}
         {/* Dark band 2 of 2: the conversion point, the last strong stop before the footer */}

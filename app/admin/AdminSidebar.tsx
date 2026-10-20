@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   ExternalLink,
   Quote,
+  BriefcaseBusiness,
   LayoutDashboard,
   LogOut,
   Mail,
@@ -19,6 +20,7 @@ import { logoutAction } from './actions'
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/posts', label: 'Posts', icon: ScrollText },
+  { href: '/admin/portfolio', label: 'Portfolio', icon: BriefcaseBusiness },
   { href: '/admin/testimonials', label: 'Testimonials', icon: Quote },
   { href: '/admin/about', label: 'About', icon: User },
   { href: '/admin/footer-links', label: 'Footer Links', icon: Link2 },

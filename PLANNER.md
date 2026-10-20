@@ -12,7 +12,7 @@
 | Project        | Mahtamun. — Personal Website                                         |
 | Purpose        | Full-stack personal portfolio with blog and an admin CMS that edits nearly every page |
 | Target user    | Design/dev clients, recruiters, personal network                     |
-| Key value      | Fully managed portfolio (testimonials, blog, About page) with self-hosted admin |
+| Key value      | Fully managed site (portfolio, testimonials, blog, About page) with self-hosted admin |
 | Status         | Operational                                                          |
 | Repo           | `https://github.com/mahtamun-hoque-fahim/mahtamunfahim`           |
 | Live (Vercel)  | `https://mahtamunhoquefahim.vercel.app`                              |
@@ -40,7 +40,8 @@
 
 ```
 app/
-├── page.tsx                     home (hero + portrait, "who I help" strip, funnel sections, testimonials, blog, CTA)
+├── page.tsx                     home (hero + portrait, "who I help" strip, funnel sections, testimonials, blog when switched on, CTA)
+├── portfolio/                   bento grid of published work; [slug]/ one page per item (cover, details, images)
 ├── about/page.tsx               header, extra block, story (+ two images), CTA
 ├── blog/
 │   ├── page.tsx                 blog listing
@@ -52,12 +53,13 @@ app/
 │   ├── layout.tsx               sidebar shell for signed-in users (carries data-admin, a hook for admin-only CSS)
 │   ├── AdminSidebar.tsx         client component, lucide icons + active route highlight
 │   ├── page.tsx                 dashboard (stat cards, recent posts, recent messages)
-│   ├── actions.ts               ALL server actions (auth, blog, settings, testimonials, about + image uploads, footer links)
+│   ├── actions.ts               ALL server actions (auth, blog + blog switch, settings, portfolio, testimonials, about + image uploads, footer links)
 │   ├── login/, forgot-password/, reset-password/
 │   ├── about/                   AboutForm.tsx (text fields + AboutImageField uploads)
 │   ├── footer-links/            FooterLinksManager.tsx
 │   ├── messages/                list + MarkReadButton
 │   ├── posts/                   list, new/, [id]/, PostEditor.tsx, DeletePostButton.tsx
+│   ├── portfolio/               PortfolioManager.tsx (CRUD, publish, tile size, order, page link, cover and gallery uploads)
 │   ├── testimonials/            TestimonialsManager.tsx (CRUD, publish, tile size, order, website screenshot upload)
 │   ├── settings/                SettingsForm.tsx (site meta, avatar, strip speed)
 ├── api/auth/[...all]/route.ts   toNextJsHandler(auth)
@@ -119,6 +121,7 @@ scripts/
 - `contact_messages`: uuid, name, email, subject, message, country, read, created_at
 - `projects`: REMOVED from the code on `discovered-funnel` (migration 0018 drops it; run only after that code is live).
 - `testimonials`: uuid, name, role, business, quote, website_url, thumbnail_url (Cloudinary, a screenshot of the client's website), size (`normal` | `wide` | `tall`, the bento tile), published, sort_order, timestamps (index on sort_order). Migration 0017, run BEFORE merging.
+- `portfolio_items`: uuid, slug (unique, the page link), title, client, summary (the tile and the page lead), body (markdown details), website_url, cover_url (Cloudinary, the grid thumbnail and the page cover), images text[] (gallery on the page, up to 20), size (`normal` | `wide` | `tall`), published (default false), sort_order, timestamps (index on sort_order). Migration 0020.
 - `skills`: REMOVED from the code on `discovered-funnel` (migration 0015 drops it; run only after that code is live). Was the homepage "What I do" items.
 - `footer_links`: id, label, url, group_label, external, sort_order, timestamps (index on sort_order)
 - `site_settings`: integer id (always `1`, single row), title, description, job_title, **avatar_url** (nullable), keywords text[], og_title, og_description, **marquee_speed** (px/s for both marquee strips, default 60), updated_at — feeds `generateMetadata()` in `app/layout.tsx`, the root layout's Person JSON-LD, and the blog post JSON-LD author block. Read through `getCachedSiteSettings()` (`unstable_cache`, 1h revalidate, tag `site-settings`); written via admin `/admin/settings`.
@@ -145,6 +148,7 @@ All Drizzle reads return camelCase fields; column mapping (snake_case in DB) han
 | 0015  | DROP `skills` table, DROP `site_settings.skills_layout` | `drizzle-kit generate` (destructive: run only after the code without Skills is live) |
 | 0016  | DROP the five `credential_*` tables | `drizzle-kit generate` (destructive: run only after the code without Credentials is live) |
 | 0017  | `testimonials` table                  | `drizzle-kit generate` (additive: run BEFORE merging) |
+| 0020  | `portfolio_items` table, `site_settings.blog_enabled` (default false) | `drizzle-kit generate` (additive: run BEFORE the code deploys; applied 2026-10-20) |
 | 0018  | DROP `projects`                       | `drizzle-kit generate` (destructive: run only after the code without Projects is live) |
 | 0019  | DROP the 9 `about_content` homepage teaser columns | `drizzle-kit generate` (destructive: run only after the code without the teaser is live) |
 | 0008  | `projects.status_badges` dropped      | `drizzle-kit generate` |
@@ -198,7 +202,7 @@ This writes directly through Better Auth (bypassing the UI), but still passes th
 
 - Fixed 240px left rail with lucide icons
 - Active route highlight via `usePathname`
-- Nav: Dashboard, Posts, Testimonials, About, Footer Links, Messages, Settings; footer (Back to site / Logout)
+- Nav: Dashboard, Posts, Portfolio, Testimonials, About, Footer Links, Messages, Settings; footer (Back to site / Logout)
 - Login/forgot/reset routes render full-bleed (no sidebar)
 - The admin layout carries `data-admin` (a hook for admin-only CSS; nothing uses it now). The admin uses the same light palette as the public site since the 2026-10 retheme
 
@@ -219,6 +223,15 @@ This writes directly through Better Auth (bypassing the UI), but still passes th
 - Save revalidates the `site-settings` cache tag and `/` immediately — public metadata otherwise refreshes on its own 1h `unstable_cache` window
 - Drives `generateMetadata()` in `app/layout.tsx`, the root layout's JSON-LD Person block, and the blog post JSON-LD author block (via `job_title`)
 - **Strip speed** (Oct 2026): a slider (10 to 200 px/s, default 60) stored in `site_settings.marquee_speed`. It drives the homepage marquee strip; the server action clamps it and revalidates `/` and `/projects`.
+
+**Portfolio (`/admin/portfolio`)**
+- Add, edit, publish/hide, reorder (up/down) and delete portfolio items: title, client, page link (made from the title when empty), summary, details (markdown), website, tile size in the /portfolio bento grid
+- Cover photo and gallery images, uploaded after the first save (`uploadPortfolioImageAction`, Cloudinary `mahtamunfahim/portfolio`; cover `portfolio-<id>-cover`, gallery `portfolio-<id>-<time>`; 4 MB each, up to 20 gallery images). Removing an image takes it off the page; the file stays in Cloudinary
+- The actions return `{ error }` instead of throwing, so production shows the real message (thrown server-action messages are masked)
+- The navbar shows Portfolio only while at least one item is published
+
+**Blog switch (top of `/admin/posts`)**
+- `site_settings.blog_enabled`, off by default. Off: `/blog` and every post 404, and the blog leaves the navbar, the footer (any footer link to `/blog`), the homepage section and the sitemap. Posts can still be written and published; they show once it is on. `setBlogEnabledAction` revalidates `site-settings` and every page
 
 **Testimonials (`/admin/testimonials`)**
 

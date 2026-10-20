@@ -11,10 +11,12 @@ import { redirect } from 'next/navigation'
 import { revalidatePath, revalidateTag } from 'next/cache'
 import { auth } from '@/lib/auth'
 import { isAuthenticated } from '@/lib/auth-utils'
+import { slugify } from '@/lib/utils'
 import {
   uploadAboutImageToCloudinary,
   uploadAvatarToCloudinary,
   uploadTestimonialImageToCloudinary,
+  uploadPortfolioImageToCloudinary,
   type AboutImageSlot,
 } from '@/lib/cloudinary'
 import {
@@ -23,6 +25,13 @@ import {
   deleteTestimonial,
   reorderTestimonials,
   type NewTestimonial,
+  createPortfolioItem,
+  updatePortfolioItem,
+  deletePortfolioItem,
+  reorderPortfolioItems,
+  getPortfolioItemById,
+  type NewPortfolioItem,
+  type PortfolioItem,
   createBlogPost,
   deleteBlogPost,
   markMessageRead,
@@ -384,4 +393,139 @@ export async function removeTestimonialImageAction(id: string) {
   const updated = await updateTestimonial(id, { thumbnailUrl: null })
   revalidateTestimonials()
   return updated
+}
+
+// ──────────────────────────────────────────────────────────
+// Portfolio (/portfolio, /portfolio/[slug]). Every action checks auth itself.
+// They return { error } instead of throwing: production builds replace thrown
+// server-action messages with a generic one, so the dashboard could not show why.
+// ──────────────────────────────────────────────────────────
+
+type PortfolioResult = { item: PortfolioItem; error?: undefined } | { item?: undefined; error: string }
+
+const MAX_PORTFOLIO_IMAGES = 20
+
+function cleanPortfolio(input: Partial<NewPortfolioItem>): Partial<NewPortfolioItem> | string {
+  const text = (v: unknown, max: number) => String(v ?? '').trim().slice(0, max)
+  const out: Partial<NewPortfolioItem> = {}
+  if (input.title !== undefined) {
+    out.title = text(input.title, 120)
+    if (!out.title) return 'Add a title.'
+  }
+  if (input.slug !== undefined || out.title) {
+    out.slug = slugify(text(input.slug, 80) || out.title || '').replace(/^-+|-+$/g, '')
+    if (!out.slug) return 'The page link needs at least one letter or number.'
+  }
+  if (input.client !== undefined) out.client = text(input.client, 80)
+  if (input.summary !== undefined) out.summary = text(input.summary, 300)
+  if (input.body !== undefined) out.body = text(input.body, 20000)
+  if (input.websiteUrl !== undefined) {
+    let url = text(input.websiteUrl, 300)
+    if (url && !/^[a-z][a-z0-9+.-]*:/i.test(url)) url = `https://${url}`
+    if (url && !/^https?:\/\//i.test(url)) return 'Website must start with http:// or https://'
+    out.websiteUrl = url || null
+  }
+  if (input.size !== undefined) {
+    if (!TESTIMONIAL_SIZES.includes(input.size as (typeof TESTIMONIAL_SIZES)[number])) return 'Unknown tile size.'
+    out.size = input.size
+  }
+  if (input.published !== undefined) out.published = Boolean(input.published)
+  if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
+  return out
+}
+
+function portfolioDbError(e: unknown): string {
+  const msg = e instanceof Error ? `${e.message} ${(e as { cause?: Error }).cause?.message ?? ''}` : String(e)
+  if (/unique|duplicate/i.test(msg)) return 'Another portfolio item already uses that page link. Change the link.'
+  console.error('portfolio action error:', e)
+  return 'Could not save. Try again.'
+}
+
+function revalidatePortfolio() {
+  // the navbar shows "Portfolio" only while something is published, so refresh every page
+  revalidatePath('/', 'layout')
+}
+
+export async function createPortfolioItemAction(payload: Partial<NewPortfolioItem>): Promise<PortfolioResult> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  const data = cleanPortfolio({ ...payload, title: payload.title ?? '' })
+  if (typeof data === 'string') return { error: data }
+  try {
+    const item = await createPortfolioItem(data as NewPortfolioItem)
+    revalidatePortfolio()
+    return { item }
+  } catch (e) {
+    return { error: portfolioDbError(e) }
+  }
+}
+
+export async function updatePortfolioItemAction(id: string, payload: Partial<NewPortfolioItem>): Promise<PortfolioResult> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  const data = cleanPortfolio(payload)
+  if (typeof data === 'string') return { error: data }
+  try {
+    const item = await updatePortfolioItem(id, data)
+    if (!item) return { error: 'That portfolio item no longer exists.' }
+    revalidatePortfolio()
+    return { item }
+  } catch (e) {
+    return { error: portfolioDbError(e) }
+  }
+}
+
+export async function deletePortfolioItemAction(id: string): Promise<{ error?: string }> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  await deletePortfolioItem(id)
+  revalidatePortfolio()
+  return {}
+}
+
+export async function reorderPortfolioItemsAction(orders: Array<{ id: string; order: number }>): Promise<{ error?: string }> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  await reorderPortfolioItems(orders)
+  revalidatePortfolio()
+  return {}
+}
+
+/** slot 'cover' replaces the cover photo; slot 'gallery' adds one image to the item's page. */
+export async function uploadPortfolioImageAction(id: string, slot: 'cover' | 'gallery', formData: FormData): Promise<PortfolioResult> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  const file = formData.get('file')
+  if (!(file instanceof File)) return { error: 'No file provided.' }
+  const current = await getPortfolioItemById(id)
+  if (!current) return { error: 'That portfolio item no longer exists.' }
+  if (slot === 'gallery' && current.images.length >= MAX_PORTFOLIO_IMAGES) return { error: `Up to ${MAX_PORTFOLIO_IMAGES} images per item.` }
+  try {
+    const publicId = slot === 'cover' ? `portfolio-${id}-cover` : `portfolio-${id}-${Date.now()}`
+    const url = await uploadPortfolioImageToCloudinary(file, publicId)
+    const item = await updatePortfolioItem(id, slot === 'cover' ? { coverUrl: url } : { images: [...current.images, url] })
+    if (!item) return { error: 'That portfolio item no longer exists.' }
+    revalidatePortfolio()
+    return { item }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Upload failed.' }
+  }
+}
+
+/** Removes the cover (url omitted) or one gallery image. The file stays in Cloudinary. */
+export async function removePortfolioImageAction(id: string, url?: string): Promise<PortfolioResult> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  const current = await getPortfolioItemById(id)
+  if (!current) return { error: 'That portfolio item no longer exists.' }
+  const item = await updatePortfolioItem(id, url ? { images: current.images.filter((u) => u !== url) } : { coverUrl: null })
+  if (!item) return { error: 'That portfolio item no longer exists.' }
+  revalidatePortfolio()
+  return { item }
+}
+
+// ──────────────────────────────────────────────────────────
+// Blog switch (Admin > Posts). Off hides the blog everywhere on the public site.
+// ──────────────────────────────────────────────────────────
+
+export async function setBlogEnabledAction(enabled: boolean): Promise<{ error?: string }> {
+  if (!(await isAuthenticated())) return { error: 'Not authenticated.' }
+  await updateSiteSettings({ blogEnabled: Boolean(enabled) })
+  revalidateTag('site-settings', 'max')
+  revalidatePath('/', 'layout')
+  return {}
 }

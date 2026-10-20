@@ -105,6 +105,11 @@ export function uploadTestimonialImageToCloudinary(file: File, testimonialId: st
   return uploadImageToCloudinary(file, 'mahtamunfahim/testimonials', `testimonial-${testimonialId}`)
 }
 
+/** Portfolio images: the cover keeps one public_id per item; each gallery image gets its own. */
+export function uploadPortfolioImageToCloudinary(file: File, publicId: string): Promise<string> {
+  return uploadImageToCloudinary(file, 'mahtamunfahim/portfolio', publicId)
+}
+
 /** Signed upload to a fixed public_id, so a re-upload overwrites instead of orphaning. */
 async function uploadImageToCloudinary(file: File, folder: string, publicId: string): Promise<string> {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME?.trim()

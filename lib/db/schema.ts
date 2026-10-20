@@ -152,6 +152,32 @@ export const testimonials = pgTable(
   })
 )
 
+// Portfolio (business case studies): a bento grid on /portfolio, one page per
+// item at /portfolio/[slug]. Hidden from the public site while unpublished.
+export const portfolioItems = pgTable(
+  'portfolio_items',
+  {
+    id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+    slug: text('slug').notNull().unique(),
+    title: text('title').notNull(),
+    client: text('client').notNull().default(''),
+    summary: text('summary').notNull().default(''), // one or two lines, on the grid tile
+    body: text('body').notNull().default(''), // markdown, the details on the item's page
+    websiteUrl: text('website_url'),
+    // Cover photo: the grid thumbnail and the top of the item's page
+    coverUrl: text('cover_url'),
+    images: text('images').array().notNull().default(sql`'{}'::text[]`), // gallery on the item's page
+    size: text('size').notNull().default('normal'), // 'normal' | 'wide' | 'tall'
+    published: boolean('published').notNull().default(false),
+    sortOrder: integer('sort_order').notNull().default(0),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => ({
+    sortIdx: index('portfolio_items_sort_idx').on(t.sortOrder),
+  })
+)
+
 
 
 // ──────────────────────────────────────────────────────────
@@ -185,6 +211,8 @@ export const siteSettings = pgTable('site_settings', {
       'Full-stack developer and AI engineer from Bangladesh. Building web apps, tools, and digital products.'
     ),
   marqueeSpeed: integer('marquee_speed').notNull().default(60), // px per second, both marquee strips
+  // Off: /blog 404s and the blog leaves the navbar, footer, homepage and sitemap. Posts stay editable.
+  blogEnabled: boolean('blog_enabled').notNull().default(false),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 })
 
@@ -240,3 +268,5 @@ export type AboutContent = typeof aboutContent.$inferSelect
 export type NewAboutContent = typeof aboutContent.$inferInsert
 export type Testimonial = typeof testimonials.$inferSelect
 export type NewTestimonial = typeof testimonials.$inferInsert
+export type PortfolioItem = typeof portfolioItems.$inferSelect
+export type NewPortfolioItem = typeof portfolioItems.$inferInsert

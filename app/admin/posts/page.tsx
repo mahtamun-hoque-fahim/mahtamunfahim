@@ -1,14 +1,15 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { isAuthenticated } from '@/lib/auth-utils'
-import { getBlogPosts, type BlogPost } from '@/lib/db/queries'
+import { getBlogPosts, getSiteSettings, type BlogPost } from '@/lib/db/queries'
 import PostsSearchList from './PostsSearchList'
+import BlogSwitch from './BlogSwitch'
 
 export default async function AdminPostsPage() {
   const authenticated = await isAuthenticated()
   if (!authenticated) redirect('/admin/login')
 
-  const posts = (await getBlogPosts()) as BlogPost[]
+  const [posts, settings] = await Promise.all([getBlogPosts() as Promise<BlogPost[]>, getSiteSettings()])
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-12">
@@ -28,6 +29,7 @@ export default async function AdminPostsPage() {
         </Link>
       </div>
 
+      <BlogSwitch initial={settings.blogEnabled} />
       <PostsSearchList posts={posts} />
     </div>
   )

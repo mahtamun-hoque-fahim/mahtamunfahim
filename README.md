@@ -72,7 +72,7 @@ In practice the generated SQL for this site's live database has been run by hand
 2. **Add before you deploy:** an additive migration (new column with a default, new table) must be applied BEFORE the code that reads it is deployed. If the code ships first, its queries fail and the data-access functions in `lib/db/queries.ts` quietly fall back to defaults or empty lists, so the live site shows missing content instead of an error.
 3. **Drop after you deploy:** remove a column only AFTER the code that stops reading it is live. Vercel previews and production share one database, so a drop breaks whatever production is still running.
 
-Tables (10): `user`, `session`, `account`, `verification` (Better Auth); `site_settings`, `about_content` (single-row settings); `blog_posts`, `contact_messages`, `testimonials`, `footer_links`. Column-level detail and the migration history are in [PLANNER.md](./PLANNER.md).
+Tables (11): `user`, `session`, `account`, `verification` (Better Auth); `site_settings`, `about_content` (single-row settings); `blog_posts`, `contact_messages`, `portfolio_items`, `testimonials`, `footer_links`. Column-level detail and the migration history are in [PLANNER.md](./PLANNER.md).
 
 ### 4. Run
 
@@ -113,6 +113,7 @@ The next request from any of their existing sessions will be rejected.
 |---------------------|------------------------------------------------------------------------------------------------|
 | `/admin/settings`   | Site title/description, job title, avatar, keywords, OG text, **strip speed** (both marquee strips) |
 | `/admin/about`      | About page header, the extra text block and the story, their two images, homepage teaser, call to action |
+| `/admin/portfolio` | Portfolio items for /portfolio: title, client, page link, summary, markdown details, cover photo, gallery images, tile size, publish, order |
 | `/admin/testimonials` | Client testimonials for the homepage bento grid (quote, client, website screenshot, tile size, publish, order) |
 | `/admin/posts`      | Blog posts (Markdown, cover image)                                                              |
 | `/admin/footer-links` | Footer links                                                                                  |
@@ -199,7 +200,7 @@ app/
 ├── admin/                  — Better Auth-protected dashboard
 │   ├── layout.tsx, actions.ts (all server actions), AdminSidebar.tsx
 │   ├── login/, forgot-password/, reset-password/
-│   └── about/, footer-links/, messages/, posts/, settings/, testimonials/
+│   └── about/, footer-links/, messages/, portfolio/, posts/ (with the blog switch), settings/, testimonials/
 └── api/auth/[...all]/      — Better Auth route handler (toNextJsHandler)
 components/                 — Navbar, Footer, Logo, HeroPortrait, MarqueeStrip,
                               Reveal, BlurWords (scroll/blur motion), FocusCards, SnapScroll, ContactForm, AuthorCard,

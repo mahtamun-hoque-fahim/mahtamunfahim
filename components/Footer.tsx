@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import Logo from '@/components/Logo'
-import { getFooterLinks } from '@/lib/db/queries'
+import { getCachedSiteSettings, getFooterLinks } from '@/lib/db/queries'
 
 export default async function Footer() {
   const year = new Date().getFullYear()
-  const links = await getFooterLinks()
+  const [allLinks, settings] = await Promise.all([getFooterLinks(), getCachedSiteSettings()])
+  // links into the blog go while the blog switch (Admin > Posts) is off
+  const links = settings.blogEnabled ? allLinks : allLinks.filter((l) => !/^\/blog(\/|$)/.test(l.url))
 
   // Bucket by groupLabel — each group renders as its own column. Order
   // follows first appearance in sortOrder, same rule the admin manager uses.

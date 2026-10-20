@@ -141,6 +141,13 @@
       "when": 1792423454626,
       "tag": "0019_remove_about_home_teaser",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1792485545997,
+      "tag": "0020_portfolio_and_blog_switch",
+      "breakpoints": true
     }
   ]
 }

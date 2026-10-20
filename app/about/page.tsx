@@ -205,16 +205,14 @@ export default async function AboutPage() {
               >
                 {about.ctaPrimaryLabel}
               </Link>
-              <a
-                href="https://mahtamundesigns.vercel.app"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/portfolio"
                 className="w-full sm:w-auto text-center px-6 py-2.5 border border-[#E5E7EB] text-[#0B0F19] text-sm rounded-full
                            hover:border-[#D1D5DB] transition-[border-color,color,transform] duration-200 active:scale-[0.97]"
                 style={{ fontFamily: 'var(--font-jakarta)' }}
               >
-                {about.ctaSecondaryLabel} ↗
-              </a>
+                {about.ctaSecondaryLabel}
+              </Link>
             </div>
           </div>
         </section>
