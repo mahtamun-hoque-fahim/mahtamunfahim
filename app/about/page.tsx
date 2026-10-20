@@ -113,9 +113,10 @@ export default async function AboutPage() {
 
         {/* ── HEADER ── */}
         <section className="max-w-6xl mx-auto px-6 pb-20">
-          <h1 className="text-[clamp(2.5rem,7vw,6rem)] font-bold leading-[0.95] tracking-tight text-[#0B0F19] mb-10" style={{ fontFamily: 'var(--font-clash)' }}>
-            <BlurWords text={about.headlineTop} mode="load" className="block" />
-            <BlurWords text={about.headlineAccent} mode="load" delay={140} className="block text-[#2563FF]" />
+          {/* From lg up each headline field stays on one line (two lines in all); the size is capped so about 32 characters fit the container */}
+          <h1 className="text-[clamp(2.5rem,7vw,6rem)] lg:text-[min(5.2vw,4.5rem)] font-bold leading-[0.95] tracking-tight text-[#0B0F19] mb-10" style={{ fontFamily: 'var(--font-clash)' }}>
+            <BlurWords text={about.headlineTop} mode="load" className="block lg:whitespace-nowrap" />
+            <BlurWords text={about.headlineAccent} mode="load" delay={140} className="block lg:whitespace-nowrap text-[#2563FF]" />
           </h1>
           <p
             className="blur-load text-[#5B6475] text-xl max-w-2xl leading-relaxed"

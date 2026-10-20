@@ -385,6 +385,10 @@ Fade + 6px blur + 8px rise. The keyframes define only `from` and use `backwards`
 
 Removed in the 2026-10 light retheme (`body::before` and `public/grain.png` deleted). It existed to dither the dark glow's banding, which a white page without a glow does not have.
 
+### About page headline
+
+Two lines from the dashboard (headline, then the blue line). From `lg` up each stays on one row (`lg:whitespace-nowrap`) at `min(5.2vw, 4.5rem)`, so the headline is exactly two lines; measured with the current copy, the longer line uses about 1064 of 1104px at 1366 and 1078px at 1920. Much longer copy in Admin > About would run past the container, so keep each line to about 32 characters. Phones and tablets keep `clamp(2.5rem, 7vw, 6rem)` and wrap.
+
 ### About page blocks
 
 Two text blocks above the call to action: the EXTRA block (heading plus text, hidden while both are empty) and the STORY block ("The honest story"). How they are arranged is a dashboard switch, `about_content.layout`, edited in Admin > About > Layout (column split 36.5% / 63.5% in every layout, no borders):

@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (About headline): two lines on bigger screens
+- Agent: Claude Edge
+- Request (Fahim, screenshot of /about wrapping its headline into four lines): show it as two lines on bigger screens.
+- Fix (`app/about/page.tsx`): from `lg` up each headline line is `whitespace-nowrap` at `min(5.2vw, 4.5rem)`. Phones keep the old size and wrap. DESIGN_GUIDE "About page headline".
+- Verified: in the browser pane the h1 is two lines at 1024, 1366 and 1920; the longer line ("your business and its customers.") measures 797/972, 1064/1104 and 1078/1104px. Copy much longer than about 32 characters per line would overflow; noted in DESIGN_GUIDE.
+
 ### 2026-10-20 (portfolio, blog switch): business portfolio back, the blog can be switched off
 - Agent: Claude Edge
 - Requests (Fahim): (1) portfolio again, business centric: a bento grid with edge-to-edge, equal thumbnails like the testimonials; each item opens its own page with a cover photo, details and images; all CRUD from the dashboard. (2) A switch to turn the blog off: off removes every trace of it from the public site (page, homepage section, navbar, footer), posts can still be written. (3) The About page's portfolio button goes to this site's portfolio, not the design portfolio.
