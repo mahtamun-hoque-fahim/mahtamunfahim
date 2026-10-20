@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (acknowledge heading): line break after "Looks nice,"
+- Agent: Claude Edge
+- Request (Fahim, screenshot of the dark "Looks nice, but does it bring customers?" panel): line break after "Looks nice,".
+- Done: the h2 holds two block `BlurWords`: "Looks nice," and "but does it bring customers?" (the second starts 140ms later, so the word cascade continues).
+- Verified: at 1366 each part is one line (48px tall); at 390 the second wraps once.
+
 ### 2026-10-20 (problem heading): bold, with "sales" in blue italic
 - Agent: Claude Edge
 - Request (Fahim, screenshot of "You can't expect sales if…"): title bold, the word "sales" blue italic.

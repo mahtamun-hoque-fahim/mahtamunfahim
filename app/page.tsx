@@ -180,7 +180,11 @@ export default async function HomePage() {
             A full-screen panel that slides up like a sheet as it enters the view (.slide-up). */}
         <Reveal as="section" data-nav-dark blurSelf={false} className="slide-up bg-[#0B0F19] mt-12 snap-start min-h-screen flex items-center rounded-t-[2.5rem]">
           <div className="w-full max-w-6xl mx-auto px-6 pt-24 pb-10">
-          <BlurWords as="h2" text="Looks nice, but does it bring customers?" className="text-3xl sm:text-4xl md:text-5xl text-white mb-6 max-w-3xl mx-auto text-center leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
+          {/* two lines on purpose: "Looks nice," then the question */}
+          <h2 className="text-3xl sm:text-4xl md:text-5xl text-white mb-6 max-w-3xl mx-auto text-center leading-tight" style={{ fontFamily: 'var(--font-clash)' }}>
+            <BlurWords text="Looks nice," className="block" />
+            <BlurWords text="but does it bring customers?" delay={140} className="block" />
+          </h2>
           <Reveal as="p" delay={120} className="text-[#A3ACBD] text-lg leading-relaxed max-w-2xl mx-auto text-center mb-10" style={{ fontFamily: 'var(--font-jakarta)' }}>
             You are busy running your business, not your website. That is normal. But every week the site stays like this, people who were ready to buy find someone else.
           </Reveal>
