@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (problem heading on phones, overlap): the pinned title no longer covers the card
+- Agent: Claude Edge
+- Report (Fahim, screen recording on a real phone, relayed by the planning session): in "You can't expect sales if…" the pinned title sat on top of the first card's title.
+- Cause: (1) the title wraps to two lines below about 420px (a 91px band), but the offsets were set for one line; (2) `top-[calc(50vh-8rem)]` used `vh`, which on phones is the viewport with the address bar hidden, while scroll snapping centres the card on the visible viewport, so the title sat lower than planned. Reproduced at 390 x 844: every card 9 to 25px under the title.
+- Fix: `top-[calc(50dvh-9.5rem)]` and `scroll-mt-40` on the cards (was `scroll-mt-24`). Kept the pinned, centred behaviour Fahim asked for earlier today instead of unpinning it as the relay suggested. Desktop unchanged (`md:` resets).
+- Verified: title-to-card gap at 390 x 844 40 to 47px (31 on the tallest card), 360 x 640 18 to 47px, 430 x 932 40 to 98px; no overlap. How I work on phones is not pinned (its text sits above the cards), so it cannot overlap. NOT verified: a real phone with the address bar moving.
+
 ### 2026-10-20 (testimonial avatars): a round avatar for every testimonial
 - Agent: Claude Edge
 - Request (Fahim, screenshot of /testimonials): every testimonial gets a round avatar, the image dropped in from the dashboard.
