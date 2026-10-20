@@ -15,3 +15,8 @@ export const MARQUEE_SPEED_DEFAULT = 60
 export const ABOUT_LAYOUTS = ['beside', 'text', 'tall'] as const
 export type AboutLayout = (typeof ABOUT_LAYOUTS)[number]
 export const ABOUT_LAYOUT_DEFAULT: AboutLayout = 'beside'
+
+// Every "free audit" button: lands on the contact form with the subject set to
+// AUDIT_SUBJECT (components/ContactForm.tsx reads ?subject=audit).
+export const AUDIT_HREF = '/contact?subject=audit#contact-form'
+export const AUDIT_SUBJECT = 'Audit request'

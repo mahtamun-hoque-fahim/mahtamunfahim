@@ -320,6 +320,10 @@ The `animate-marquee` keyframe runs `translateX(0% → -50%)` over 30s. Array mu
 
 ---
 
+### Audit buttons and the contact form
+
+Every free-audit button (homepage hero, How I work, the three offer cards, the final CTA, `/portfolio`, each project page) links to `AUDIT_HREF` (`lib/constants.ts`, `/contact?subject=audit#contact-form`). The form (`id="contact-form"`, `scroll-mt-32` for the navbar) reads `?subject=audit`, selects "Audit request" (`AUDIT_SUBJECT`, the first topic in the list) and, 500ms later, pulses the subject field twice (`.audit-pick` in `globals.css`: an accent ring and a 2% swell, 900ms each). While "Audit request" is the subject, that field is the only accent-themed field on the form: `#EFF4FF` fill, `#2563FF` border and bold blue text. A new audit button must use `AUDIT_HREF`, not `/contact`.
+
 ## 6. Global CSS Utilities
 
 Defined in `app/globals.css` under `@layer utilities`:

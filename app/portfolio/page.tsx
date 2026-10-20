@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { AUDIT_HREF } from '@/lib/constants'
 import type { CSSProperties } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -35,7 +36,7 @@ export default async function PortfolioPage() {
         {items.length === 0 ? (
           <p className="text-[#5B6475] pb-24" style={{ fontFamily: 'var(--font-jakarta)' }}>
             New work is on its way. In the meantime,{' '}
-            <Link href="/contact" className="text-[#2563FF] hover:underline">get a free website audit</Link>.
+            <Link href={AUDIT_HREF} className="text-[#2563FF] hover:underline">get a free website audit</Link>.
           </p>
         ) : (
           <div className="pb-8">

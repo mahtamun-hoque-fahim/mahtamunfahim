@@ -5,6 +5,7 @@ export const revalidate = 60
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
+import { AUDIT_HREF } from '@/lib/constants'
 import { ArrowRight, Check } from 'lucide-react'
 import type { CSSProperties } from 'react'
 import { getBlogPosts, type BlogPost } from '@/lib/db/queries'
@@ -138,7 +139,7 @@ export default async function HomePage() {
                   I help small businesses and founders find what stops their website from bringing customers, and then fix it.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 mb-4" style={{ fontFamily: 'var(--font-jakarta)' }}>
-                  <Link href="/contact" className={ctaPrimary}>Get a free website audit</Link>
+                  <Link href={AUDIT_HREF} className={ctaPrimary}>Get a free website audit</Link>
                 </div>
                 <p className="text-[#6B7280] text-sm" style={{ fontFamily: 'var(--font-jakarta)' }}>
                   30 minutes. No obligation.
@@ -268,7 +269,7 @@ export default async function HomePage() {
               It is free, there is nothing to prepare, and you keep the advice whether you work with me or not.
             </Reveal>
             <div className="flex flex-col sm:flex-row sm:items-center gap-4" style={{ fontFamily: 'var(--font-jakarta)' }}>
-              <Link href="/contact" className={ctaPrimary}>
+              <Link href={AUDIT_HREF} className={ctaPrimary}>
                 Request a free audit <span aria-hidden="true">→</span>
               </Link>
               <span className="text-[#A3ACBD] text-sm">30 minutes. No obligation.</span>
@@ -347,7 +348,7 @@ export default async function HomePage() {
                   <h3 className={cn('text-2xl font-bold mb-3', t.title)} style={{ fontFamily: 'var(--font-clash)' }}>{o.title}</h3>
                   <p className={cn('text-base leading-relaxed mb-6', t.text)}>{o.text}</p>
                   <p className={cn('text-sm mt-auto mb-6', t.title)}>{o.fit}</p>
-                  <Link href="/contact" className={cn('inline-flex self-start items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.97]', t.button)}>
+                  <Link href={AUDIT_HREF} className={cn('inline-flex self-start items-center gap-2 px-6 py-3 rounded-full text-sm font-semibold transition-[background-color,color,transform] duration-200 active:scale-[0.97]', t.button)}>
                     Start with a free audit <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
@@ -485,7 +486,7 @@ export default async function HomePage() {
               Book a free 30-minute website audit. You get the biggest problems holding your site back and what to fix first, whether you hire me or not.
             </Reveal>
             <div className="flex flex-col sm:flex-row sm:items-center gap-4" style={{ fontFamily: 'var(--font-jakarta)' }}>
-              <Link href="/contact" className={ctaPrimary}>
+              <Link href={AUDIT_HREF} className={ctaPrimary}>
                 Get a free website audit <span aria-hidden="true">→</span>
               </Link>
               <span className="text-[#A3ACBD] text-sm">30 minutes. No obligation.</span>

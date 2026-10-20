@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (audit request): audit buttons land on the form with "Audit request" picked
+- Agent: Claude Edge
+- Request (Fahim): from any audit CTA, land directly on the contact form and show with an animation that the subject is "Audit request"; only that field accent-themed. Asked whether that subject existed: it did not (Freelance project, Full-time opportunity, Collaboration, Just saying hi, Other).
+- Done: "Audit request" added as the first topic. `AUDIT_HREF` / `AUDIT_SUBJECT` in `lib/constants.ts`; the six audit buttons (homepage hero, How I work, offer cards, final CTA, `/portfolio`, project page) link to `/contact?subject=audit#contact-form`. `ContactForm` reads the query on mount, selects the subject, and pulses the field (`.audit-pick`, two accent rings) after 500ms; while it is the subject the field is `#EFF4FF` / `#2563FF` bold. The select lost its broken focus shadow (spaces in the rgba, Tailwind dropped it). Other contact links (navbar, About "Get in touch") still go to plain `/contact`. DESIGN_GUIDE "Audit buttons and the contact form".
+- Verified: `npx tsc --noEmit` clean; at 1440 x 900 a click on the homepage hero button navigated to `/contact?subject=audit#contact-form` with the form 128px from the top, subject "Audit request", fill `rgb(239, 244, 255)`, pulse class on; plain `/contact` stays at the top with no subject and the grey field. NOT seen by eye (the pane rendered too small), not checked on a phone.
+
 ### 2026-10-21 (thumbnail switch): each card's thumbnail can be hidden, shown whole when opened
 - Agent: Claude Edge
 - Request (Fahim): turn off the thumbnail on individual cards; clicking still opens the popup with the thumbnail, shown naturally; cards with the thumbnail on keep the crop preview and focus logic. Testimonials and portfolio both.

@@ -1,8 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { submitContactMessage } from '@/app/contact/actions'
+import { AUDIT_SUBJECT } from '@/lib/constants'
+import { cn } from '@/lib/utils'
 
 type FormState = 'idle' | 'loading' | 'success' | 'error'
 
@@ -10,6 +12,16 @@ export default function ContactForm() {
   const [state, setState] = useState<FormState>('idle')
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [error, setError] = useState('')
+  const [auditPicked, setAuditPicked] = useState(false)
+
+  // An audit button (AUDIT_HREF) lands here with ?subject=audit: pick the subject,
+  // then pulse it once the jump to the form has settled.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('subject') !== 'audit') return
+    setForm((prev) => ({ ...prev, subject: AUDIT_SUBJECT }))
+    const t = setTimeout(() => setAuditPicked(true), 500)
+    return () => clearTimeout(t)
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -90,7 +102,7 @@ export default function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form id="contact-form" onSubmit={handleSubmit} className="space-y-5 scroll-mt-32">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label
@@ -144,11 +156,18 @@ export default function ContactForm() {
           required
           value={form.subject}
           onChange={handleChange}
-          className="w-full bg-[#F7F8FA] border border-[#E5E7EB] rounded-lg px-4 py-3 text-sm text-[#0B0F19]
-                     focus:outline-none focus:border-[#2563FF] focus:shadow-[0_0_0_3px_rgba(37, 99, 255,0.12)] transition-[border-color,box-shadow] duration-200"
+          // the audit request is the one accent-themed field on the form
+          className={cn(
+            'w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-[#2563FF] transition-[border-color,background-color,color] duration-200',
+            form.subject === AUDIT_SUBJECT
+              ? 'bg-[#EFF4FF] border-[#2563FF] text-[#2563FF] font-semibold'
+              : 'bg-[#F7F8FA] border-[#E5E7EB] text-[#0B0F19]',
+            auditPicked && form.subject === AUDIT_SUBJECT && 'audit-pick'
+          )}
           style={{ fontFamily: 'var(--font-jakarta)' }}
         >
           <option value="">Select a topic</option>
+          <option value={AUDIT_SUBJECT}>{AUDIT_SUBJECT}</option>
           <option value="Freelance project">Freelance project</option>
           <option value="Full-time opportunity">Full-time opportunity</option>
           <option value="Collaboration">Collaboration</option>

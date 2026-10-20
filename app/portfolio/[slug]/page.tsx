@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { AUDIT_HREF } from '@/lib/constants'
 import { ArrowRight } from 'lucide-react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -91,7 +92,7 @@ export default async function PortfolioItemPage({ params }: { params: Promise<{ 
             </h2>
             <p className="text-[#A3ACBD] mb-8 max-w-xl">Start with a free 30-minute website audit. You get the problems that cost you customers, in plain words.</p>
             <Link
-              href="/contact"
+              href={AUDIT_HREF}
               className="inline-flex items-center gap-2 px-7 py-3 bg-[#2563FF] text-white text-sm font-semibold rounded-full hover:bg-[#1D4ED8] transition-[background-color,transform] duration-200 active:scale-[0.97]"
             >
               Get a free audit <ArrowRight className="w-4 h-4" />
