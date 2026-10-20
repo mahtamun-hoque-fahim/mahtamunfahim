@@ -65,10 +65,10 @@ const roadPath = steps.reduce(
 )
 
 const trustPoints = [
-  { title: 'You own everything', text: 'The domain, the code and every account are in your name, not mine.' },
-  { title: 'Clear pricing up front', text: 'A fixed price before work starts. No surprise invoices.' },
-  { title: 'You deal with me directly', text: 'No account managers or middlemen. Questions get answered by me.' },
-  { title: 'Support after launch', text: 'A website is not finished on launch day. I stay available for fixes and changes.' },
+  { title: 'You own everything', accent: 'own', text: 'The domain, the code and every account are in your name, not mine.' },
+  { title: 'Clear pricing up front', accent: 'Clear', text: 'A fixed price before work starts. No surprise invoices.' },
+  { title: 'You deal with me directly', accent: 'directly', text: 'No account managers or middlemen. Questions get answered by me.' },
+  { title: 'Support after launch', accent: 'Support', text: 'A website is not finished on launch day. I stay available for fixes and changes.' },
 ]
 
 const offers = [
@@ -276,7 +276,12 @@ export default async function HomePage() {
           <FocusCards className="md:order-1 flex flex-col gap-[18vh] md:py-[50vh]">
             {trustPoints.map((t) => (
               <div key={t.title} className="snap-center rounded-2xl bg-[#111827] p-8 md:p-10" style={{ fontFamily: 'var(--font-jakarta)' }}>
-                <h3 className="text-2xl md:text-3xl text-white mb-3" style={{ fontFamily: 'var(--font-clash)' }}>{t.title}</h3>
+                <h3 className="text-2xl md:text-3xl text-white mb-3" style={{ fontFamily: 'var(--font-clash)' }}>
+                  {/* the accent word in the dark-band blue (#2563FF is too dark to read on #111827) */}
+                  {t.title.split(' ').map((w, i) => (
+                    <span key={i}>{i > 0 && ' '}{w === t.accent ? <span className="text-[#60A5FA]">{w}</span> : w}</span>
+                  ))}
+                </h3>
                 <p className="text-[#A3ACBD] leading-relaxed">{t.text}</p>
               </div>
             ))}

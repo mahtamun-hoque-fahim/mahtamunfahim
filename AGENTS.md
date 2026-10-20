@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (trust cards): one blue word per title
+- Agent: Claude Edge
+- Request (Fahim, screenshot of the dark How I work cards): blue up the words own, Clear, directly, Support in the card titles.
+- Done: each `trustPoints` entry has an `accent` word rendered in `#60A5FA`, the dark-band blue from DESIGN_GUIDE "Dark bands" (`#2563FF` is too dark to read on the `#111827` cards). Not italic: only the colour was asked.
+- Verified: `npx tsc --noEmit` clean; the rendered homepage has all four words in `#60A5FA` spans.
+
 ### 2026-10-20 (problem heading on phones, centred): title and card in the middle of the screen
 - Agent: Claude Edge
 - Request (Fahim, phone screenshot): put the title and the cards in the centre.
