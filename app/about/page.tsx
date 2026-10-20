@@ -180,18 +180,18 @@ export default async function AboutPage() {
           </div>
         </section>
 
-        {/* ── CTA ── */}
+        {/* ── CTA ── a raised blue card (.card-lift-blue: blue-tinted shadow, lifts on hover) */}
         <section className="max-w-6xl mx-auto px-6 pb-24">
-          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between border border-[#E5E7EB] rounded-xl p-8">
+          <div className="card-lift card-lift-blue flex flex-col md:flex-row gap-8 items-start md:items-center justify-between bg-[#2563FF] rounded-3xl p-8 md:p-12">
             <div>
               <h3
-                className="text-2xl font-bold text-[#0B0F19] mb-1"
+                className="text-2xl md:text-3xl font-bold text-white mb-2"
                 style={{ fontFamily: 'var(--font-clash)' }}
               >
                 {about.ctaHeading}
               </h3>
               <p
-                className="text-[#5B6475] text-sm"
+                className="text-white text-base leading-relaxed max-w-xl"
                 style={{ fontFamily: 'var(--font-jakarta)' }}
               >
                 {about.ctaText}
@@ -200,16 +200,16 @@ export default async function AboutPage() {
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto shrink-0">
               <Link
                 href="/contact"
-                className="w-full sm:w-auto text-center px-6 py-2.5 bg-[#2563FF] text-white text-sm font-semibold rounded-full
-                           hover:bg-[#1D4ED8] transition-[background-color,transform] duration-200 active:scale-[0.97]"
+                className="w-full sm:w-auto text-center px-6 py-3 bg-white text-[#2563FF] text-sm font-semibold rounded-full
+                           hover:bg-[#EFF4FF] transition-[background-color,transform] duration-200 active:scale-[0.97]"
                 style={{ fontFamily: 'var(--font-jakarta)' }}
               >
                 {about.ctaPrimaryLabel}
               </Link>
               <Link
                 href="/portfolio"
-                className="w-full sm:w-auto text-center px-6 py-2.5 border border-[#E5E7EB] text-[#0B0F19] text-sm rounded-full
-                           hover:border-[#D1D5DB] transition-[border-color,color,transform] duration-200 active:scale-[0.97]"
+                className="w-full sm:w-auto text-center px-6 py-3 border border-white/60 text-white text-sm font-semibold rounded-full
+                           hover:border-white hover:bg-white/10 transition-[border-color,background-color,transform] duration-200 active:scale-[0.97]"
                 style={{ fontFamily: 'var(--font-jakarta)' }}
               >
                 {about.ctaSecondaryLabel}

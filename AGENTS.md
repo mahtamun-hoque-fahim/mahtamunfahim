@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (About CTA): blue, raised
+- Agent: Claude Edge
+- Request (Fahim, screenshot of the About page "Not sure where to start?" box): secondary CTA section in the blue theme, with a shadow and an elevated feel.
+- Done: the box is a `#2563FF` `.card-lift .card-lift-blue` card (`rounded-3xl`, `md:p-12`): blue-tinted shadow, lifts on hover; white heading and text; buttons swapped to white with blue text (primary) and white outline (secondary). DESIGN_GUIDE "Card lift".
+- Verified: `npx tsc --noEmit` clean; at 1366 the box computes to `rgb(37, 99, 255)` with the blue shadow and a white heading; screenshot shows it.
+
 ### 2026-10-20 (card lift): shadows and a hover lift on the offer and trust cards, bold titles
 - Agent: Claude Edge
 - Request (Fahim, screenshots of the offer cards and the dark How I work cards): shadow on the cards, realistic behaviour on hover; card titles bold.

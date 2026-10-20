@@ -75,7 +75,7 @@ Markup: `<section className="bg-[#0B0F19]">` with the usual `max-w-6xl mx-auto p
 
 ### Card lift (shadow and hover)
 
-`.card-lift` in `globals.css`: a soft two-layer shadow at rest; on hover (real pointers only, `@media (hover: hover)`) the card rises 6px and its shadow grows and spreads, and pressing settles it to 3px. 300ms, transform and box-shadow only. Variants set the shadow colour: default ink for light pages, `.card-lift-blue` (a blue-tinted shadow) for the blue offer card, `.card-lift-dark` (black) on dark bands. Used on the offer cards and the How I work trust cards, both with bold titles. Both lists already animate transform on the card element (`.offer-stack`, `.focus-cards`), so the lift sits on an inner wrapper.
+`.card-lift` in `globals.css`: a soft two-layer shadow at rest; on hover (real pointers only, `@media (hover: hover)`) the card rises 6px and its shadow grows and spreads, and pressing settles it to 3px. 300ms, transform and box-shadow only. Variants set the shadow colour: default ink for light pages, `.card-lift-blue` (a blue-tinted shadow) for the blue offer card, `.card-lift-dark` (black) on dark bands. Used on the offer cards and the How I work trust cards, both with bold titles, and on the About page call to action (a `#2563FF` card, `rounded-3xl`, white text, a white primary button with blue text and a white-outlined secondary one). Both lists already animate transform on the card element (`.offer-stack`, `.focus-cards`), so the lift sits on an inner wrapper.
 
 ### Offer cards (Ways to work together)
 
