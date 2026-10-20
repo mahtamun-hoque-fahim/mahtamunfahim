@@ -28,8 +28,8 @@ const SIZES: Array<{ value: string; label: string; hint: string }> = [
   { value: 'tall', label: 'Tall', hint: 'two tiles down' },
 ]
 
-type Draft = Pick<NewTestimonial, 'name' | 'role' | 'business' | 'quote' | 'websiteUrl' | 'size' | 'published'>
-const emptyDraft: Draft = { name: '', role: '', business: '', quote: '', websiteUrl: '', size: 'normal', published: true }
+type Draft = Pick<NewTestimonial, 'name' | 'role' | 'business' | 'quote' | 'details' | 'websiteUrl' | 'size' | 'published'>
+const emptyDraft: Draft = { name: '', role: '', business: '', quote: '', details: '', websiteUrl: '', size: 'normal', published: true }
 
 export default function TestimonialsManager({ initial }: { initial: Testimonial[] }) {
   const [items, setItems] = useState(initial)
@@ -51,7 +51,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
 
   const openNew = () => { setDraft(emptyDraft); setEditing('new') }
   const openEdit = (t: Testimonial) => {
-    setDraft({ name: t.name, role: t.role, business: t.business, quote: t.quote, websiteUrl: t.websiteUrl ?? '', size: t.size, published: t.published })
+    setDraft({ name: t.name, role: t.role, business: t.business, quote: t.quote, details: t.details, websiteUrl: t.websiteUrl ?? '', size: t.size, published: t.published })
     setEditing(t.id)
   }
 
@@ -135,6 +135,9 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
           </div>
           <label className="block"><span className={labelCls}>Quote *</span>
             <textarea className={inputCls} rows={4} maxLength={600} value={draft.quote} onChange={(e) => setDraft({ ...draft, quote: e.target.value })} /></label>
+          <label className="block"><span className={labelCls}>The story</span>
+            <textarea className={inputCls} rows={6} maxLength={4000} value={draft.details ?? ''} placeholder="What they needed, what was built, what changed for them." onChange={(e) => setDraft({ ...draft, details: e.target.value })} />
+            <span className="mt-1 block text-xs text-[#6B7280]">Shown in the popup a tile opens, under the quote. Blank line between paragraphs.</span></label>
           <label className="block"><span className={labelCls}>Their website</span>
             <input className={inputCls} value={draft.websiteUrl ?? ''} placeholder="https://" onChange={(e) => setDraft({ ...draft, websiteUrl: e.target.value })} /></label>
           <div>
@@ -150,7 +153,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
           </div>
           <label className="flex items-center gap-2 text-sm text-[#0B0F19]">
             <input type="checkbox" checked={draft.published ?? true} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
-            Published on the homepage
+            Published (homepage and /testimonials)
           </label>
           <p className="text-sm text-[#6B7280]">Save first, then add the screenshot of their website from the list below.</p>
           <div className="flex gap-2">

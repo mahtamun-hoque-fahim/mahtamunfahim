@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-20 (testimonials page and popup): testimonials get their own page, each opens a popup
+- Agent: Claude Edge
+- Request (Fahim): testimonials and portfolio stay separate, both get a dedicated page; portfolio projects have their own pages (done before), testimonials open a popup with more details; everything editable from the dashboard.
+- Done: `testimonials.details` (migration `0022_testimonial_details.sql`, additive, APPLIED by me after a backup). Admin > Testimonials: "The story" textarea (4000 characters, blank line between paragraphs). New `components/TestimonialGrid.tsx` (client): the bento grid, each tile a full-tile overlay button opening a native modal `<dialog>` with the screenshot, quote, name line, the story and the website link; used on the homepage (which gained "All testimonials →") and on the new `/testimonials` (404 while none is published). Navbar shows Testimonials while one is published (`NavbarClient` now takes a `show` map); sitemap lists `/testimonials`. Testimonial actions now revalidate every page (the navbar and `/testimonials` read them).
+- Verified: `npx tsc --noEmit` clean; `/testimonials` 200 with the three tiles; clicking a tile opens the dialog (centred: 672 x 525 at 345, 122 on 1366 x 768, after adding `m-auto`), Esc closes it; the navbar shows Home, Testimonials, About, Contact. NOT verified: the story field saved from the signed-in admin (all three current testimonials have none yet), phone width.
+
 ### 2026-10-20 (featured work): featured portfolio items on the homepage
 - Agent: Claude Edge
 - Request (Fahim): portfolio items can be featured, and the featured ones show on the homepage.

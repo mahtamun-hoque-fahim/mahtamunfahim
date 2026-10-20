@@ -327,6 +327,7 @@ function cleanTestimonial(input: Partial<NewTestimonial>): Partial<NewTestimonia
   if (input.role !== undefined) out.role = text(input.role, 80)
   if (input.business !== undefined) out.business = text(input.business, 80)
   if (input.quote !== undefined) out.quote = text(input.quote, 600)
+  if (input.details !== undefined) out.details = text(input.details, 4000)
   if (input.websiteUrl !== undefined) {
     let url = text(input.websiteUrl, 300)
     // "tradefigure.com" is how people type it; production hides thrown messages, so fix it instead of rejecting
@@ -344,8 +345,8 @@ function cleanTestimonial(input: Partial<NewTestimonial>): Partial<NewTestimonia
 }
 
 function revalidateTestimonials() {
-  revalidatePath('/admin/testimonials')
-  revalidatePath('/')
+  // the homepage, /testimonials and the navbar link on every page read them
+  revalidatePath('/', 'layout')
 }
 
 export async function createTestimonialAction(payload: NewTestimonial) {

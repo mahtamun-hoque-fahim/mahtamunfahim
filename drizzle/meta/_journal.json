@@ -155,6 +155,13 @@
       "when": 1792486576905,
       "tag": "0021_portfolio_featured",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1792487096373,
+      "tag": "0022_testimonial_details",
+      "breakpoints": true
     }
   ]
 }

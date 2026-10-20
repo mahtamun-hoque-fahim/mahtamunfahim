@@ -17,6 +17,7 @@ import SnapScroll from '@/components/SnapScroll'
 import RoadGlow from '@/components/RoadGlow'
 import { getTestimonials, getCachedSiteSettings, getPortfolioItems } from '@/lib/db/queries'
 import PortfolioGrid from '@/components/PortfolioGrid'
+import TestimonialGrid from '@/components/TestimonialGrid'
 import { cn } from '@/lib/utils'
 
 // Homepage copy follows a discovered funnel: 1. find the problem, 2. acknowledge
@@ -231,44 +232,17 @@ export default async function HomePage() {
         )}
 
         {/* What clients say: a bento grid of testimonials from Admin > Testimonials.
-            Each tile opens with a screenshot of the client's website running to
-            the tile's edges, then the quote. Hidden while none is published. */}
+            Each tile opens a popup with the details (components/TestimonialGrid.tsx).
+            Hidden while none is published. */}
         {testimonials.length > 0 && (
           <section className="max-w-6xl mx-auto px-6 py-16 snap-start scroll-mt-24">
-            <BlurWords as="h2" text="What clients say." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19] mb-12" style={{ fontFamily: 'var(--font-clash)' }} />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ fontFamily: 'var(--font-jakarta)' }}>
-              {testimonials.map((t) => (
-                <Reveal
-                  key={t.id}
-                  as="figure"
-                  className={cn(
-                    'flex flex-col rounded-3xl overflow-hidden bg-[#F7F8FA]',
-                    t.size === 'wide' && 'md:col-span-2',
-                    t.size === 'tall' && 'md:row-span-2'
-                  )}
-                >
-                  {/* one height for every tile size, so thumbnails in a row end on the same line */}
-                  {t.thumbnailUrl && (
-                    <div className="overflow-hidden h-48 md:h-56 shrink-0">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={t.thumbnailUrl} alt={t.business ? `The ${t.business} website` : ''} loading="lazy" className="w-full h-full object-cover object-top" />
-                    </div>
-                  )}
-                  <div className="p-8 flex flex-col gap-6">
-                    <blockquote className="text-lg leading-relaxed text-[#0B0F19]">“{t.quote}”</blockquote>
-                    <figcaption className="text-sm text-[#5B6475]">
-                      <span className="font-semibold text-[#0B0F19]">{t.name}</span>
-                      {[t.role, t.business].filter(Boolean).length > 0 && <>, {[t.role, t.business].filter(Boolean).join(', ')}</>}
-                      {t.websiteUrl && (
-                        <a href={t.websiteUrl} target="_blank" rel="noopener noreferrer" className="block mt-1 text-[#2563FF] hover:underline">
-                          {t.websiteUrl.replace(/^https?:\/\//, '').replace(/\/$/, '')}
-                        </a>
-                      )}
-                    </figcaption>
-                  </div>
-                </Reveal>
-              ))}
+            <div className="flex items-end justify-between gap-6 mb-12">
+              <BlurWords as="h2" text="What clients say." className="text-3xl sm:text-4xl md:text-5xl text-[#0B0F19]" style={{ fontFamily: 'var(--font-clash)' }} />
+              <Link href="/testimonials" className="shrink-0 text-sm text-[#5B6475] hover:text-[#2563FF] transition-colors" style={{ fontFamily: 'var(--font-jakarta)' }}>
+                All testimonials →
+              </Link>
             </div>
+            <TestimonialGrid items={testimonials} />
           </section>
         )}
 

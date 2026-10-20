@@ -17,8 +17,9 @@ export default async function AdminTestimonialsPage() {
           Testimonials
         </h1>
         <p className="text-sm text-[#6B7280] mt-1" style={{ fontFamily: 'var(--font-jakarta)' }}>
-          What clients say, shown on the homepage as a bento grid. The section stays hidden until at least one
-          testimonial is published. Only add real quotes from real clients.
+          What clients say, shown as a bento grid on the homepage and on /testimonials; each tile opens a popup with
+          the story. The section, the page and its navbar link stay hidden until at least one testimonial is
+          published. Only add real quotes from real clients.
         </p>
       </div>
       <TestimonialsManager initial={testimonials} />

@@ -138,6 +138,8 @@ export const testimonials = pgTable(
     role: text('role').notNull().default(''),
     business: text('business').notNull().default(''),
     quote: text('quote').notNull(),
+    // The longer story, shown in the popup a tile opens (blank line between paragraphs)
+    details: text('details').notNull().default(''),
     websiteUrl: text('website_url'),
     // Screenshot of the client's website, shown edge to edge in the tile
     thumbnailUrl: text('thumbnail_url'),

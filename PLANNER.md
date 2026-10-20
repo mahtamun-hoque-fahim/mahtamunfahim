@@ -41,6 +41,7 @@
 ```
 app/
 ├── page.tsx                     home (hero + portrait, "who I help" strip, funnel sections, featured work, testimonials, blog when switched on, CTA)
+├── testimonials/                bento grid of published testimonials, each tile opens a popup with the story
 ├── portfolio/                   bento grid of published work; [slug]/ one page per item (cover, details, images)
 ├── about/page.tsx               header, extra block, story (+ two images), CTA
 ├── blog/
@@ -120,7 +121,7 @@ scripts/
 - `blog_posts`: uuid, title, slug (unique), excerpt, content, cover_image, published, tags[], reading_time, timestamps
 - `contact_messages`: uuid, name, email, subject, message, country, read, created_at
 - `projects`: REMOVED from the code on `discovered-funnel` (migration 0018 drops it; run only after that code is live).
-- `testimonials`: uuid, name, role, business, quote, website_url, thumbnail_url (Cloudinary, a screenshot of the client's website), size (`normal` | `wide` | `tall`, the bento tile), published, sort_order, timestamps (index on sort_order). Migration 0017, run BEFORE merging.
+- `testimonials`: uuid, name, role, business, quote, details (the story in the popup, migration 0022), website_url, thumbnail_url (Cloudinary, a screenshot of the client's website), size (`normal` | `wide` | `tall`, the bento tile), published, sort_order, timestamps (index on sort_order). Migration 0017, run BEFORE merging.
 - `portfolio_items`: uuid, slug (unique, the page link), title, client, summary (the tile and the page lead), body (markdown details), website_url, cover_url (Cloudinary, the grid thumbnail and the page cover), images text[] (gallery on the page, up to 20), size (`normal` | `wide` | `tall`), published (default false), featured (default false: also on the homepage while published, migration 0021), sort_order, timestamps (index on sort_order). Migration 0020.
 - `skills`: REMOVED from the code on `discovered-funnel` (migration 0015 drops it; run only after that code is live). Was the homepage "What I do" items.
 - `footer_links`: id, label, url, group_label, external, sort_order, timestamps (index on sort_order)
@@ -148,6 +149,7 @@ All Drizzle reads return camelCase fields; column mapping (snake_case in DB) han
 | 0015  | DROP `skills` table, DROP `site_settings.skills_layout` | `drizzle-kit generate` (destructive: run only after the code without Skills is live) |
 | 0016  | DROP the five `credential_*` tables | `drizzle-kit generate` (destructive: run only after the code without Credentials is live) |
 | 0017  | `testimonials` table                  | `drizzle-kit generate` (additive: run BEFORE merging) |
+| 0022  | `testimonials.details` (default '') | `drizzle-kit generate` (additive; applied 2026-10-20) |
 | 0021  | `portfolio_items.featured` (default false) | `drizzle-kit generate` (additive; applied 2026-10-20) |
 | 0020  | `portfolio_items` table, `site_settings.blog_enabled` (default false) | `drizzle-kit generate` (additive: run BEFORE the code deploys; applied 2026-10-20) |
 | 0018  | DROP `projects`                       | `drizzle-kit generate` (destructive: run only after the code without Projects is live) |

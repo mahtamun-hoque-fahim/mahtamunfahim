@@ -9,14 +9,15 @@ import Logo from '@/components/Logo'
 const allLinks = [
   { href: '/', label: 'Home' },
   { href: '/portfolio', label: 'Portfolio' },
+  { href: '/testimonials', label: 'Testimonials' },
   { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
 ]
 
 // Rendered by components/Navbar.tsx, which decides whether Portfolio and Blog show.
-export default function NavbarClient({ showPortfolio, showBlog }: { showPortfolio: boolean; showBlog: boolean }) {
-  const navLinks = allLinks.filter((l) => (l.href !== '/portfolio' || showPortfolio) && (l.href !== '/blog' || showBlog))
+export default function NavbarClient({ show }: { show: Record<'/portfolio' | '/testimonials' | '/blog', boolean> }) {
+  const navLinks = allLinks.filter((l) => show[l.href as keyof typeof show] ?? true)
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)

@@ -442,6 +442,8 @@ Homepage: items marked featured (and published) show in "Work for businesses lik
 
 ### Testimonials bento grid
 
+Shared by the homepage and `/testimonials` (`components/TestimonialGrid.tsx`). Each tile is one button (a transparent overlay over the whole tile, labelled "Read <name>'s story", because a figure and blockquote cannot sit inside a `<button>`) that opens a native modal `<dialog>`: centred (`m-auto`, the global reset removes the browser's auto margin), at most 42rem wide, `rounded-3xl`, `#0B0F19` at 60% behind it; the screenshot at the top, the quote in the headline font, the name line, "the story" paragraphs, and "Visit <site> ↗". Esc, the close button and a click outside close it. The homepage section has an "All testimonials →" link; `/testimonials` 404s while none is published, and the navbar shows Testimonials only while one is.
+
 Homepage, in the proof part of the funnel: "What clients say." over a three-column bento grid (one column on phones) of rounded `#F7F8FA` tiles from Admin > Testimonials. Each tile opens with a screenshot of the client's website running to the tile's edges (one fixed height for every tile size, `h-48` / `md:h-56`, `object-cover object-top`, so the thumbnails in a row end on the same line whether a tile is normal, wide or tall), then the quote in the full ink at 18px and the client's name, role, business and website link. Tile size comes from the dashboard: `wide` spans two columns, `tall` two rows. Each tile reveals on scroll. The whole section is not rendered while no testimonial is published: never fill it with invented quotes.
 
 ### Other motion

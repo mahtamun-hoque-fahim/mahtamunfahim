@@ -1,0 +1,1 @@
+ALTER TABLE "testimonials" ADD COLUMN "details" text DEFAULT '' NOT NULL;
