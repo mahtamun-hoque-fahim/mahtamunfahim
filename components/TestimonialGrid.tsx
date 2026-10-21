@@ -71,7 +71,8 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
         onClose={() => setOpen(null)}
         onClick={(e) => e.target === e.currentTarget && dialog.current?.close()}
         aria-label={open ? `What ${open.name} says` : undefined}
-        className="m-auto w-[min(42rem,calc(100vw-2rem))] max-h-[calc(100vh-2rem)] rounded-3xl p-0 bg-white backdrop:bg-[#0B0F19]/60"
+        // scrollbar hidden: it broke the rounded corners; wheel, touch and keys still scroll, and the cut-off text shows there is more
+        className="m-auto w-[min(42rem,calc(100vw-2rem))] max-h-[calc(100vh-2rem)] rounded-3xl p-0 bg-white backdrop:bg-[#0B0F19]/60 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ fontFamily: 'var(--font-jakarta)' }}
       >
         {open && (

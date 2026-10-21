@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (testimonial popup scrollbar): hidden
+- Agent: Claude Edge
+- Request (Fahim, screenshot of a testimonial popup with a classic grey scrollbar and arrows): make it modern or make it go away, my decision.
+- Decision: hidden. A visible bar, even a thin one, sits on the popup's rounded right edge; the popup still scrolls by wheel, touch and keyboard, and the text cut off at the bottom shows there is more. `TestimonialGrid` dialog: `[scrollbar-width:none] [&::-webkit-scrollbar]:hidden`. DESIGN_GUIDE "Testimonials bento grid".
+- Verified: `npx tsc --noEmit` clean; at 1366 x 768 the open popup has `scrollbar-width: none`, a 0px scrollbar gutter, and still scrolls (103px to its end). NOT seen by eye in Edge.
+
 ### 2026-10-21 (testimonial editing): the edit form opens in the row you clicked
 - Agent: Claude Edge
 - Request (Fahim): editing a testimonial meant scrolling back to the top every time; make it simpler, or use a popup.
