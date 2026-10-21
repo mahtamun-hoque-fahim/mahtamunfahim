@@ -21,7 +21,8 @@ function Avatar({ t, size }: { t: Testimonial; size: string }) {
 }
 
 /* Testimonials bento grid (homepage and /testimonials): wide spans two columns,
-   tall two rows, every screenshot one height. Each tile opens a popup (a native
+   tall two rows; normal and tall screenshots share one height, wide ones show the
+   whole screenshot at 16:10. Each tile opens a popup (a native
    modal <dialog>: Esc and the close button close it, so does a click outside). */
 export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
   const [open, setOpen] = useState<Testimonial | null>(null)
@@ -41,7 +42,7 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
           >
             <figure className="flex flex-col h-full">
               {t.thumbnailUrl && t.showThumbnail && (
-                <div className="overflow-hidden h-48 md:h-56 shrink-0">
+                <div className={cn('overflow-hidden shrink-0', t.size === 'wide' ? 'aspect-[16/10]' : 'h-48 md:h-56')}>{/* wide: the screenshot whole at 16:10; normal and tall share one height so a row lines up */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={t.thumbnailUrl} alt={t.business ? `The ${t.business} website` : ''} loading="lazy" style={{ objectPosition: t.thumbnailFocus }} className="w-full h-full object-cover transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
                 </div>

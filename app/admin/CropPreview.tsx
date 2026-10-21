@@ -6,8 +6,9 @@
    point), so it shows exactly that part. Clicking the full image moves the
    focus point. If the tiles in TestimonialGrid / PortfolioGrid change size,
    change these numbers. */
-const DESKTOP_TILE: Record<string, [number, number]> = { normal: [352, 224], tall: [352, 224], wide: [728, 224] }
-const PHONE_TILE: [number, number] = [342, 192]
+// wide tiles are 16:10 of their width (728 x 455 desktop, 342 x 214 phone); the others are a fixed height
+const DESKTOP_TILE: Record<string, [number, number]> = { normal: [352, 224], tall: [352, 224], wide: [728, 455] }
+const PHONE_TILE: Record<string, [number, number]> = { normal: [342, 192], tall: [342, 192], wide: [342, 214] }
 const FRAME_H = 80
 
 export type CropFrame = { label: string; w: number; h: number }
@@ -23,7 +24,7 @@ export default function CropPreview({ src, size, focus, onFocus, extra = [] }: {
   const [dw, dh] = DESKTOP_TILE[size]
   const frames: CropFrame[] = [
     { label: `Desktop tile (${size})`, w: dw, h: dh },
-    { label: 'Phone tile', w: PHONE_TILE[0], h: PHONE_TILE[1] },
+    { label: 'Phone tile', w: PHONE_TILE[size][0], h: PHONE_TILE[size][1] },
     ...extra,
   ]
   const [fx, fy] = focus.split(' ')

@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils'
 import type { PortfolioItem } from '@/lib/db/queries'
 
 /* Portfolio bento grid (/portfolio and the homepage's featured work), same rules
-   as the testimonials: wide spans two columns, tall two rows, and every cover has
-   one height so a row's covers end on the same line. */
+   as the testimonials: wide spans two columns, tall two rows; normal and tall
+   covers share one height, wide ones show the whole cover at 16:10. */
 export default function PortfolioGrid({ items, titleAs: Title = 'h2' }: { items: PortfolioItem[]; titleAs?: 'h2' | 'h3' }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ fontFamily: 'var(--font-jakarta)' }}>
@@ -20,7 +20,7 @@ export default function PortfolioGrid({ items, titleAs: Title = 'h2' }: { items:
         >
           <Link href={`/portfolio/${p.slug}`} className="group flex flex-col h-full">
             {p.coverUrl && p.showCover && (
-              <div className="overflow-hidden h-48 md:h-56 shrink-0">
+              <div className={cn('overflow-hidden shrink-0', p.size === 'wide' ? 'aspect-[16/10]' : 'h-48 md:h-56')}>{/* wide: the cover whole at 16:10; normal and tall share one height so a row lines up */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={p.coverUrl} alt="" loading="lazy" style={{ objectPosition: p.coverFocus }} className="w-full h-full object-cover transition-transform duration-500 ease-ui-out group-hover:scale-[1.03]" />
               </div>

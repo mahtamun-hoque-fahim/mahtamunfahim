@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (wide tiles): wide cards show the whole thumbnail at 16:10 again
+- Agent: Claude Edge
+- Request (Fahim): for wider cards, use the default thumbnail view, as it was before.
+- Read as: wide tiles go back to `aspect-[16/10]` of their width (the whole 16:10 screenshot or cover), as before the 2026-10-20 one-height change; normal and tall keep `h-48` / `md:h-56` so they still line up. Both grids (`TestimonialGrid`, `PortfolioGrid`), at every width. `CropPreview` frames for wide: 728 x 455 desktop, 342 x 214 phone. DESIGN_GUIDE "Testimonials bento grid" and the portfolio paragraph.
+- Trade-off: in a row with a wide tile and a normal one, the thumbnails no longer end on the same line (455 vs 224px at 1440).
+- Verified: `npx tsc --noEmit` clean; on `/testimonials` in a 1440px frame the two wide tiles' thumbnails are 728 x 455 and the normal ones 352 x 224; at phone width wide 16:10 (333 x 208), normal 192px high. NOT verified: the portfolio grid in a browser (no items yet).
+
 ### 2026-10-21 (hero on tablets): text centred between md and lg
 - Agent: Claude Edge
 - Request (Fahim, screenshot of the hero at about 790px wide): on middle-size screens keep the text centred.
