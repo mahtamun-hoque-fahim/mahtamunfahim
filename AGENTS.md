@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (testimonial editing): the edit form opens in the row you clicked
+- Agent: Claude Edge
+- Request (Fahim): editing a testimonial meant scrolling back to the top every time; make it simpler, or use a popup.
+- Simpler than a popup: the one form (now a `form` const in `TestimonialsManager`) renders inside the row being edited, right under its text and above its image preview; "Add testimonial" still opens it at the top of the list. Nothing else changed (save, cancel, the image tools stay in the row). PLANNER admin notes.
+- Verified: `npx tsc --noEmit` clean; on a temporary page (deleted) rendering the manager with the real testimonials, clicking Edit on the third row opened one form inside that row, 288px below the row's top, prefilled with that testimonial's name; the row did not move. NOT verified: inside the signed-in admin. Admin > Portfolio still opens its editor at the top (not asked).
+
 ### 2026-10-21 (How I work on phones, follow-up): first stop is the start of the section
 - Agent: Claude Edge
 - Report (Fahim, after the previous push): it still snaps to where the cards start; it should snap to the beginning of the section.

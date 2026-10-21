@@ -242,6 +242,7 @@ This writes directly through Better Auth (bypassing the UI), but still passes th
 **Testimonials (`/admin/testimonials`)**
 
 - Add, edit, publish/hide, reorder (up/down) and delete testimonials: name, role, business, quote (600 chars), the client's website, tile size in the homepage bento grid (normal, wide = two tiles across, tall = two tiles down)
+- The edit form opens inside the row you clicked, above its image preview (a new testimonial opens at the top of the list)
 - Thumbnail: a screenshot of the client's website, uploaded after the first save (`uploadTestimonialImageAction`, Cloudinary `mahtamunfahim/testimonials/testimonial-<id>`, 4 MB, 16:10 recommended)
 - Every action checks `isAuthenticated()` itself and validates input (lengths, `http(s)` URL, allowed sizes)
 - The homepage section is hidden while no testimonial is published

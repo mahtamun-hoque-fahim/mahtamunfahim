@@ -116,6 +116,55 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
     setItems((list) => list.map((x) => (x.id === t.id ? res.item! : x)))
   })
 
+  // One form for new and edit: new opens at the top of the list, edit opens inside the row being edited
+  const form = (
+    <div className="rounded-xl border border-[#E5E7EB] bg-[#F7F8FA] p-5 space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="font-semibold text-[#0B0F19]">{editing === 'new' ? 'New testimonial' : 'Edit testimonial'}</h2>
+        <button type="button" aria-label="Close" onClick={() => setEditing(null)} className="text-[#6B7280] hover:text-[#0B0F19]">
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+      <div className="grid sm:grid-cols-3 gap-3">
+        <label><span className={labelCls}>Name *</span>
+          <input className={inputCls} value={draft.name} maxLength={80} onChange={(e) => setDraft({ ...draft, name: e.target.value })} /></label>
+        <label><span className={labelCls}>Role</span>
+          <input className={inputCls} value={draft.role ?? ''} maxLength={80} placeholder="Owner" onChange={(e) => setDraft({ ...draft, role: e.target.value })} /></label>
+        <label><span className={labelCls}>Business</span>
+          <input className={inputCls} value={draft.business ?? ''} maxLength={80} onChange={(e) => setDraft({ ...draft, business: e.target.value })} /></label>
+      </div>
+      <label className="block"><span className={labelCls}>Quote *</span>
+        <textarea className={inputCls} rows={4} maxLength={600} value={draft.quote} onChange={(e) => setDraft({ ...draft, quote: e.target.value })} /></label>
+      <label className="block"><span className={labelCls}>The story</span>
+        <textarea className={inputCls} rows={6} maxLength={4000} value={draft.details ?? ''} placeholder="What they needed, what was built, what changed for them." onChange={(e) => setDraft({ ...draft, details: e.target.value })} />
+        <span className="mt-1 block text-xs text-[#6B7280]">Shown in the popup a tile opens, under the quote. Blank line between paragraphs.</span></label>
+      <label className="block"><span className={labelCls}>Their website</span>
+        <input className={inputCls} value={draft.websiteUrl ?? ''} placeholder="https://" onChange={(e) => setDraft({ ...draft, websiteUrl: e.target.value })} /></label>
+      <div>
+        <span className={labelCls}>Tile size in the grid</span>
+        <div className="flex flex-wrap gap-2">
+          {SIZES.map((s) => (
+            <button key={s.value} type="button" aria-pressed={draft.size === s.value} onClick={() => setDraft({ ...draft, size: s.value })}
+              className={cn(btnSecondary, draft.size === s.value && 'border-[#2563FF] bg-[#EFF4FF] text-[#2563FF] hover:border-[#2563FF] hover:text-[#2563FF]')}>
+              {s.label} <span className="text-[#6B7280]">({s.hint})</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <label className="flex items-center gap-2 text-sm text-[#0B0F19]">
+        <input type="checkbox" checked={draft.published ?? true} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
+        Published (homepage and /testimonials)
+      </label>
+      {editing === 'new' && <p className="text-sm text-[#6B7280]">Save first, then add the screenshot of their website from the list below.</p>}
+      <div className="flex gap-2">
+        <button type="button" className={btnPrimary} onClick={save} disabled={pending || !draft.name.trim() || !draft.quote.trim()}>
+          {pending && <Loader2 className="w-4 h-4 animate-spin" />} Save
+        </button>
+        <button type="button" className={btnSecondary} onClick={() => setEditing(null)}>Cancel</button>
+      </div>
+    </div>
+  )
+
   return (
     <div className="space-y-4" style={{ fontFamily: 'var(--font-jakarta)' }}>
       <div className="flex items-center justify-between">
@@ -129,53 +178,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
 
       {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
 
-      {editing && (
-        <div className="rounded-xl border border-[#E5E7EB] bg-[#F7F8FA] p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-[#0B0F19]">{editing === 'new' ? 'New testimonial' : 'Edit testimonial'}</h2>
-            <button type="button" aria-label="Close" onClick={() => setEditing(null)} className="text-[#6B7280] hover:text-[#0B0F19]">
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-3">
-            <label><span className={labelCls}>Name *</span>
-              <input className={inputCls} value={draft.name} maxLength={80} onChange={(e) => setDraft({ ...draft, name: e.target.value })} /></label>
-            <label><span className={labelCls}>Role</span>
-              <input className={inputCls} value={draft.role ?? ''} maxLength={80} placeholder="Owner" onChange={(e) => setDraft({ ...draft, role: e.target.value })} /></label>
-            <label><span className={labelCls}>Business</span>
-              <input className={inputCls} value={draft.business ?? ''} maxLength={80} onChange={(e) => setDraft({ ...draft, business: e.target.value })} /></label>
-          </div>
-          <label className="block"><span className={labelCls}>Quote *</span>
-            <textarea className={inputCls} rows={4} maxLength={600} value={draft.quote} onChange={(e) => setDraft({ ...draft, quote: e.target.value })} /></label>
-          <label className="block"><span className={labelCls}>The story</span>
-            <textarea className={inputCls} rows={6} maxLength={4000} value={draft.details ?? ''} placeholder="What they needed, what was built, what changed for them." onChange={(e) => setDraft({ ...draft, details: e.target.value })} />
-            <span className="mt-1 block text-xs text-[#6B7280]">Shown in the popup a tile opens, under the quote. Blank line between paragraphs.</span></label>
-          <label className="block"><span className={labelCls}>Their website</span>
-            <input className={inputCls} value={draft.websiteUrl ?? ''} placeholder="https://" onChange={(e) => setDraft({ ...draft, websiteUrl: e.target.value })} /></label>
-          <div>
-            <span className={labelCls}>Tile size in the grid</span>
-            <div className="flex flex-wrap gap-2">
-              {SIZES.map((s) => (
-                <button key={s.value} type="button" aria-pressed={draft.size === s.value} onClick={() => setDraft({ ...draft, size: s.value })}
-                  className={cn(btnSecondary, draft.size === s.value && 'border-[#2563FF] bg-[#EFF4FF] text-[#2563FF] hover:border-[#2563FF] hover:text-[#2563FF]')}>
-                  {s.label} <span className="text-[#6B7280]">({s.hint})</span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <label className="flex items-center gap-2 text-sm text-[#0B0F19]">
-            <input type="checkbox" checked={draft.published ?? true} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
-            Published (homepage and /testimonials)
-          </label>
-          <p className="text-sm text-[#6B7280]">Save first, then add the screenshot of their website from the list below.</p>
-          <div className="flex gap-2">
-            <button type="button" className={btnPrimary} onClick={save} disabled={pending || !draft.name.trim() || !draft.quote.trim()}>
-              {pending && <Loader2 className="w-4 h-4 animate-spin" />} Save
-            </button>
-            <button type="button" className={btnSecondary} onClick={() => setEditing(null)}>Cancel</button>
-          </div>
-        </div>
-      )}
+      {editing === 'new' && form}
 
       <ul className="space-y-3">
         {items.map((t, i) => (
@@ -235,6 +238,8 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
               <button type="button" aria-label="Delete" className={cn(btnSecondary, 'hover:text-red-600')} onClick={() => remove(t)} disabled={pending}><Trash2 className="w-4 h-4" /></button>
             </div>
             </div>
+            {/* right under the row, above the image preview, so it opens where you clicked */}
+            {editing === t.id && <div className="mt-4">{form}</div>}
             {t.thumbnailUrl && (
               <div className="mt-4 pt-3 border-t border-[#E5E7EB]">
                 <label className="flex items-center gap-2 text-sm text-[#0B0F19] mb-3">
