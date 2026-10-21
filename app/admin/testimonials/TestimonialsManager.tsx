@@ -224,7 +224,8 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
                   {t.avatarUrl && <button type="button" className="mt-1 hover:text-red-600" onClick={() => removeImage(t, 'avatar')}>Remove avatar</button>}
                 </div>
               </div>
-              <p className="font-semibold text-[#0B0F19]">{t.name}{t.business && <span className="font-normal text-[#5B6475]"> · {t.business}</span>}</p>
+              <p className="font-semibold text-[#0B0F19]">{t.name}</p>
+              {(t.role || t.business) && <p className="text-sm text-[#5B6475]">{[t.role, t.business].filter(Boolean).join(', ')}</p>}
               <p className="text-sm text-[#374151] line-clamp-3 mt-1">“{t.quote}”</p>
               <p className="text-xs text-[#6B7280] mt-2">{SIZES.find((s) => s.value === t.size)?.label ?? t.size} tile · {t.published ? 'Published' : 'Hidden'}</p>
             </div>

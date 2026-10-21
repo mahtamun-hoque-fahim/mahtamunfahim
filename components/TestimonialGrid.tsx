@@ -51,8 +51,8 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
                 <figcaption className="text-sm text-[#5B6475] mt-auto flex items-center gap-3">
                   <Avatar t={t} size="w-11 h-11 text-sm" />
                   <span>
-                    <span className="font-semibold text-[#0B0F19]">{t.name}</span>
-                    {byline(t) && <>, {byline(t)}</>}
+                    <span className="block font-semibold text-[#0B0F19]">{t.name}</span>
+                    {byline(t) && <span className="block">{byline(t)}</span>}
                     <span aria-hidden="true" className="block mt-0.5 text-[#2563FF] group-hover:underline">Read the story →</span>
                   </span>
                 </figcaption>
@@ -92,8 +92,8 @@ export default function TestimonialGrid({ items }: { items: Testimonial[] }) {
               <p className="mt-6 text-sm text-[#5B6475] flex items-center gap-3">
                 <Avatar t={open} size="w-14 h-14 text-base" />
                 <span>
-                  <span className="font-semibold text-[#0B0F19]">{open.name}</span>
-                  {byline(open) && <>, {byline(open)}</>}
+                  <span className="block font-semibold text-[#0B0F19]">{open.name}</span>
+                  {byline(open) && <span className="block">{byline(open)}</span>}
                 </span>
               </p>
               {open.details && (

@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (testimonial client line): name, then "designation, company"
+- Agent: Claude Edge
+- Request (Fahim): show the client as "name" on one line and "designation, company" under it, everywhere.
+- Done: the tiles and the popup (`TestimonialGrid`) render the name and the role/business line as two block lines (was "Name, Role, Business" on one line); Admin > Testimonials rows show the name, then "role, business" (was "Name · Business", without the role). DESIGN_GUIDE "Testimonials bento grid".
+- Verified: `npx tsc --noEmit` clean; on `/testimonials` all four tiles read name / "Founder, Tradefigure" style lines and so does the popup. NOT verified: the admin rows by eye (signed in).
+
 ### 2026-10-21 (testimonial popup scrollbar): hidden
 - Agent: Claude Edge
 - Request (Fahim, screenshot of a testimonial popup with a classic grey scrollbar and arrows): make it modern or make it go away, my decision.
