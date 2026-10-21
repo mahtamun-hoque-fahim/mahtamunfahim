@@ -351,10 +351,13 @@ export type {
 // Testimonials (homepage bento grid, Admin > Testimonials)
 // ──────────────────────────────────────────────────────────
 
-export async function getTestimonials({ publishedOnly = false } = {}): Promise<Testimonial[]> {
+export async function getTestimonials({ publishedOnly = false, featuredOnly = false } = {}): Promise<Testimonial[]> {
   try {
-    const q = db.select().from(testimonials)
-    return await (publishedOnly ? q.where(eq(testimonials.published, true)) : q).orderBy(asc(testimonials.sortOrder))
+    // featuredOnly is for the homepage, so it implies published
+    const where = featuredOnly
+      ? and(eq(testimonials.published, true), eq(testimonials.featured, true))
+      : publishedOnly ? eq(testimonials.published, true) : undefined
+    return await db.select().from(testimonials).where(where).orderBy(asc(testimonials.sortOrder))
   } catch (error) {
     console.error('getTestimonials error:', error)
     return []

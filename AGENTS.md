@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (featured testimonials): the homepage shows only featured testimonials
+- Agent: Claude Edge
+- Request (Fahim): publish as many testimonials as wanted, but only featured ones on the homepage.
+- Done, mirroring portfolio's featured flag: `testimonials.featured` (migration `0026_testimonial_featured.sql`, additive, default false, APPLIED by me after a backup, before this code deploys). `getTestimonials({ featuredOnly: true })` implies published and feeds the homepage; `/testimonials`, the navbar and the sitemap still use every published one. Admin > Testimonials: "Featured on the homepage" checkbox in the form, a Feature/Unfeature button and a label in each row; the published checkbox now says "on /testimonials".
+- DATABASE, data: right after the migration I set `featured = true` on all five published testimonials, so the homepage stays the same after this deploys; unfeature any of them in the dashboard.
+- Verified: `npx tsc --noEmit` clean; with S. M. Sami temporarily unfeatured (restored after) the homepage HTML had no "S. M. Sami" while `/testimonials` still did, and Hasibul (featured) was on both. NOT verified: the buttons inside the signed-in admin.
+
 ### 2026-10-21 (wide tiles): wide cards show the whole thumbnail at 16:10 again
 - Agent: Claude Edge
 - Request (Fahim): for wider cards, use the default thumbnail view, as it was before.

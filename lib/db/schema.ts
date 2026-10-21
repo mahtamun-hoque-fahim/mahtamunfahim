@@ -151,6 +151,7 @@ export const testimonials = pgTable(
     avatarUrl: text('avatar_url'),
     size: text('size').notNull().default('normal'), // 'normal' | 'wide' | 'tall'
     published: boolean('published').notNull().default(true),
+    featured: boolean('featured').notNull().default(false), // also on the homepage (when published)
     sortOrder: integer('sort_order').notNull().default(0),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),

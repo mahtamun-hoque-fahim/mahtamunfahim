@@ -31,8 +31,8 @@ const SIZES: Array<{ value: string; label: string; hint: string }> = [
   { value: 'tall', label: 'Tall', hint: 'two tiles down' },
 ]
 
-type Draft = Pick<NewTestimonial, 'name' | 'role' | 'business' | 'quote' | 'details' | 'websiteUrl' | 'size' | 'published'>
-const emptyDraft: Draft = { name: '', role: '', business: '', quote: '', details: '', websiteUrl: '', size: 'normal', published: true }
+type Draft = Pick<NewTestimonial, 'name' | 'role' | 'business' | 'quote' | 'details' | 'websiteUrl' | 'size' | 'published' | 'featured'>
+const emptyDraft: Draft = { name: '', role: '', business: '', quote: '', details: '', websiteUrl: '', size: 'normal', published: true, featured: false }
 
 export default function TestimonialsManager({ initial }: { initial: Testimonial[] }) {
   const [items, setItems] = useState(initial)
@@ -54,7 +54,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
 
   const openNew = () => { setDraft(emptyDraft); setEditing('new') }
   const openEdit = (t: Testimonial) => {
-    setDraft({ name: t.name, role: t.role, business: t.business, quote: t.quote, details: t.details, websiteUrl: t.websiteUrl ?? '', size: t.size, published: t.published })
+    setDraft({ name: t.name, role: t.role, business: t.business, quote: t.quote, details: t.details, websiteUrl: t.websiteUrl ?? '', size: t.size, published: t.published, featured: t.featured })
     setEditing(t.id)
   }
 
@@ -85,6 +85,11 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
     setItems(next)
     run(() => reorderTestimonialsAction(next.map((t, i) => ({ id: t.id, order: i }))))
   }
+
+  const toggleFeatured = (t: Testimonial) => run(async () => {
+    const updated = await updateTestimonialAction(t.id, { featured: !t.featured })
+    if (updated) setItems(items.map((x) => (x.id === t.id ? updated : x)))
+  })
 
   const togglePublished = (t: Testimonial) => run(async () => {
     const updated = await updateTestimonialAction(t.id, { published: !t.published })
@@ -153,7 +158,11 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
       </div>
       <label className="flex items-center gap-2 text-sm text-[#0B0F19]">
         <input type="checkbox" checked={draft.published ?? true} onChange={(e) => setDraft({ ...draft, published: e.target.checked })} />
-        Published (homepage and /testimonials)
+        Published (on /testimonials)
+      </label>
+      <label className="flex items-center gap-2 text-sm text-[#0B0F19]">
+        <input type="checkbox" checked={draft.featured ?? false} onChange={(e) => setDraft({ ...draft, featured: e.target.checked })} />
+        Featured on the homepage (shows there only while published)
       </label>
       {editing === 'new' && <p className="text-sm text-[#6B7280]">Save first, then add the screenshot of their website from the list below.</p>}
       <div className="flex gap-2">
@@ -227,7 +236,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
               <p className="font-semibold text-[#0B0F19]">{t.name}</p>
               {(t.role || t.business) && <p className="text-sm text-[#5B6475]">{[t.role, t.business].filter(Boolean).join(', ')}</p>}
               <p className="text-sm text-[#374151] line-clamp-3 mt-1">“{t.quote}”</p>
-              <p className="text-xs text-[#6B7280] mt-2">{SIZES.find((s) => s.value === t.size)?.label ?? t.size} tile · {t.published ? 'Published' : 'Hidden'}</p>
+              <p className="text-xs text-[#6B7280] mt-2">{SIZES.find((s) => s.value === t.size)?.label ?? t.size} tile · {t.published ? 'Published' : 'Hidden'}{t.featured && ' · Featured on the homepage'}</p>
             </div>
             <div className="flex flex-col gap-1 shrink-0">
               <button type="button" aria-label="Move up" className={btnSecondary} disabled={i === 0 || pending} onClick={() => move(i, -1)}><ChevronUp className="w-4 h-4" /></button>
@@ -235,6 +244,7 @@ export default function TestimonialsManager({ initial }: { initial: Testimonial[
             </div>
             <div className="flex flex-col gap-1 shrink-0">
               <button type="button" className={btnSecondary} onClick={() => togglePublished(t)} disabled={pending}>{t.published ? 'Hide' : 'Publish'}</button>
+              <button type="button" className={btnSecondary} onClick={() => toggleFeatured(t)} disabled={pending}>{t.featured ? 'Unfeature' : 'Feature'}</button>
               <button type="button" aria-label="Edit" className={btnSecondary} onClick={() => openEdit(t)}><Pencil className="w-4 h-4" /></button>
               <button type="button" aria-label="Delete" className={cn(btnSecondary, 'hover:text-red-600')} onClick={() => remove(t)} disabled={pending}><Trash2 className="w-4 h-4" /></button>
             </div>

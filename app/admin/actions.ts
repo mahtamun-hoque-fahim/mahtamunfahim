@@ -351,6 +351,7 @@ function cleanTestimonial(input: Partial<NewTestimonial>): Partial<NewTestimonia
     out.thumbnailFocus = focus
   }
   if (input.showThumbnail !== undefined) out.showThumbnail = Boolean(input.showThumbnail)
+  if (input.featured !== undefined) out.featured = Boolean(input.featured)
   if (input.published !== undefined) out.published = Boolean(input.published)
   if (input.sortOrder !== undefined) out.sortOrder = Math.max(0, Math.floor(Number(input.sortOrder) || 0))
   return out

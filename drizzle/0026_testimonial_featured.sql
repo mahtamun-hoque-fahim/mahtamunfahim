@@ -1,0 +1,1 @@
+ALTER TABLE "testimonials" ADD COLUMN "featured" boolean DEFAULT false NOT NULL;

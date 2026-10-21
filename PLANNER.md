@@ -121,7 +121,7 @@ scripts/
 - `blog_posts`: uuid, title, slug (unique), excerpt, content, cover_image, published, tags[], reading_time, timestamps
 - `contact_messages`: uuid, name, email, subject, message, country, read, created_at
 - `projects`: REMOVED from the code on `discovered-funnel` (migration 0018 drops it; run only after that code is live).
-- `testimonials`: uuid, name, role, business, quote, details (the story in the popup, migration 0022), avatar_url (the client's round photo, Cloudinary `testimonial-<id>-avatar`, migration 0023), website_url, thumbnail_url (Cloudinary, a screenshot of the client's website), thumbnail_focus (its `object-position`, default `50% 50%`, migration 0024), show_thumbnail (default true; false = no image on the tile, whole in the popup, migration 0025), size (`normal` | `wide` | `tall`, the bento tile), published, sort_order, timestamps (index on sort_order). Migration 0017, run BEFORE merging.
+- `testimonials`: uuid, name, role, business, quote, details (the story in the popup, migration 0022), avatar_url (the client's round photo, Cloudinary `testimonial-<id>-avatar`, migration 0023), website_url, thumbnail_url (Cloudinary, a screenshot of the client's website), thumbnail_focus (its `object-position`, default `50% 50%`, migration 0024), show_thumbnail (default true; false = no image on the tile, whole in the popup, migration 0025), featured (default false: also on the homepage while published, migration 0026), size (`normal` | `wide` | `tall`, the bento tile), published, sort_order, timestamps (index on sort_order). Migration 0017, run BEFORE merging.
 - `portfolio_items`: uuid, slug (unique, the page link), title, client, summary (the tile and the page lead), body (markdown details), website_url, cover_url (Cloudinary, the grid thumbnail and the page cover), cover_focus (its `object-position`, default `50% 50%`, migration 0024), show_cover (default true; false = no image on the tile, whole on the page, migration 0025), images text[] (gallery on the page, up to 20), size (`normal` | `wide` | `tall`), published (default false), featured (default false: also on the homepage while published, migration 0021), sort_order, timestamps (index on sort_order). Migration 0020.
 - `skills`: REMOVED from the code on `discovered-funnel` (migration 0015 drops it; run only after that code is live). Was the homepage "What I do" items.
 - `footer_links`: id, label, url, group_label, external, sort_order, timestamps (index on sort_order)
@@ -152,6 +152,7 @@ All Drizzle reads return camelCase fields; column mapping (snake_case in DB) han
 | 0023  | `testimonials.avatar_url` | `drizzle-kit generate` (additive; applied 2026-10-20) |
 | 0024  | `testimonials.thumbnail_focus`, `portfolio_items.cover_focus` | `drizzle-kit generate` (additive; applied 2026-10-21) |
 | 0025  | `testimonials.show_thumbnail`, `portfolio_items.show_cover` | `drizzle-kit generate` (additive; applied 2026-10-21) |
+| 0026  | `testimonials.featured` | `drizzle-kit generate` (additive; applied 2026-10-21, then every published testimonial set to featured so the homepage did not change) |
 | 0022  | `testimonials.details` (default '') | `drizzle-kit generate` (additive; applied 2026-10-20) |
 | 0021  | `portfolio_items.featured` (default false) | `drizzle-kit generate` (additive; applied 2026-10-20) |
 | 0020  | `portfolio_items` table, `site_settings.blog_enabled` (default false) | `drizzle-kit generate` (additive: run BEFORE the code deploys; applied 2026-10-20) |
@@ -242,6 +243,7 @@ This writes directly through Better Auth (bypassing the UI), but still passes th
 **Testimonials (`/admin/testimonials`)**
 
 - Add, edit, publish/hide, reorder (up/down) and delete testimonials: name, role, business, quote (600 chars), the client's website, tile size in the homepage bento grid (normal, wide = two tiles across, tall = two tiles down)
+- Publish puts a testimonial on `/testimonials`; Feature (button in the row, checkbox in the form) also puts it on the homepage, only while it is published
 - The edit form opens inside the row you clicked, above its image preview (a new testimonial opens at the top of the list)
 - Thumbnail: a screenshot of the client's website, uploaded after the first save (`uploadTestimonialImageAction`, Cloudinary `mahtamunfahim/testimonials/testimonial-<id>`, 4 MB, 16:10 recommended)
 - Every action checks `isAuthenticated()` itself and validates input (lengths, `http(s)` URL, allowed sizes)

@@ -103,7 +103,7 @@ const ctaPrimary =
 export default async function HomePage() {
   const [allPosts, testimonials, siteSettings, featuredWork] = await Promise.all([
     getBlogPosts({ publishedOnly: true, limit: 3 }),
-    getTestimonials({ publishedOnly: true }),
+    getTestimonials({ featuredOnly: true }),
     getCachedSiteSettings(),
     getPortfolioItems({ featuredOnly: true }),
   ])
