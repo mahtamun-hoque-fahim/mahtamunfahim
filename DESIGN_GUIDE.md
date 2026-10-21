@@ -420,6 +420,7 @@ Two text blocks above the call to action, laid out as a wireframe (the cell bord
 
 `components/HeroPortrait.tsx`, used once in the homepage hero. The full figure at natural proportions (`public/images/fahim-hero-blue-shirt.webp`, transparent colour WebP, 446 x 954, about 35 KB, cut at the thighs; `aspect-[446/954]`), no zoom, no mask, no glow. It lives inside a `relative` wrapper around the headline and intro row.
 - **Vertical:** the bottom sits on the top border of the marquee strip (`bottom-[-4rem]`, equal to the hero container `pb-16`); the height comes from the screen, `min(100vh - 8rem, 40rem)`, not from the headline, so the headline length no longer changes the figure. **Zoom:** the box is `aspect-[452/731]` over a 452 x 969 photo with `object-cover object-top`, cropping the thighs so head and shoulders are about 1.3x larger.
+- **Tablets (768 to 1023px):** the portrait is hidden below `lg`, so the hero text (headline, intro, button, small print) is centred there (`md:max-lg:text-center`, `mx-auto`, `justify-center`) instead of leaving the right half empty. Phones and `lg` up stay left-aligned.
 - **Horizontal:** `right-[10.5%]` of the container, so he stands in the free column right of the headline, not against the edge.
 - Behind the headline (`-z-10`), hidden below `sm`. Enters with `.blur-load` (220ms delay, 1.2s, 4px blur), so the route arrival gate holds it too. Plain `<img>` with `fetchPriority="high"` (the site does not use `next/image`). To change the photo, replace the WebP and update `width`/`height`.
 

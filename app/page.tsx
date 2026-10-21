@@ -121,24 +121,25 @@ export default async function HomePage() {
           <div className="max-w-6xl mx-auto w-full pb-16 flex-1 relative flex flex-col justify-center">
             <HeroPortrait />
 
-            <div>
+            {/* tablets (md to lg): no portrait beside the text, so the text is centred */}
+            <div className="md:max-lg:text-center">
               {/* Main heading */}
               <h1
-                className="text-[clamp(2.75rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tight mb-8 max-w-[11ch] sm:max-w-[13ch] text-[#0B0F19] blur-load"
+                className="text-[clamp(2.75rem,5.5vw,5rem)] font-bold leading-[0.95] tracking-tight mb-8 max-w-[11ch] sm:max-w-[13ch] md:max-lg:mx-auto text-[#0B0F19] blur-load"
                 style={{ fontFamily: 'var(--font-clash)' }}
               >
                 Getting Visitors,<br /> But not <em className="text-[#2563FF]">sales</em>?
               </h1>
 
               {/* Sub + CTAs */}
-              <div className="max-w-md blur-load" style={{ '--reveal-delay': '340ms' } as CSSProperties}>
+              <div className="max-w-md md:max-lg:mx-auto blur-load" style={{ '--reveal-delay': '340ms' } as CSSProperties}>
                 <p
                   className="text-[#374151] text-lg leading-relaxed mb-8"
                   style={{ fontFamily: 'var(--font-jakarta)' }}
                 >
                   I help small businesses and founders find what stops their website from bringing customers, and then fix it.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-3 mb-4" style={{ fontFamily: 'var(--font-jakarta)' }}>
+                <div className="flex flex-col sm:flex-row md:max-lg:justify-center gap-3 mb-4" style={{ fontFamily: 'var(--font-jakarta)' }}>
                   <Link href={AUDIT_HREF} className={ctaPrimary}>Get a free website audit</Link>
                 </div>
                 <p className="text-[#6B7280] text-sm" style={{ fontFamily: 'var(--font-jakarta)' }}>

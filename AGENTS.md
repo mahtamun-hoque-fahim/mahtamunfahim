@@ -61,6 +61,13 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-21 (hero on tablets): text centred between md and lg
+- Agent: Claude Edge
+- Request (Fahim, screenshot of the hero at about 790px wide): on middle-size screens keep the text centred.
+- Cause: the portrait only shows from `lg` (1024px), so between 768 and 1023px the left-aligned text left the right half empty.
+- Done: the hero text block is `md:max-lg:text-center`, the h1 and intro block `md:max-lg:mx-auto`, the button row `md:max-lg:justify-center`. Phones and `lg` up unchanged. DESIGN_GUIDE "Hero portrait".
+- Verified: `npx tsc --noEmit` clean; at 800px wide the h1 (196 to 600), intro (174 to 622) and button (290 to 506) are centred on the page; at 1366 and below 768 the text is left-aligned as before.
+
 ### 2026-10-21 (testimonial client line): name, then "designation, company"
 - Agent: Claude Edge
 - Request (Fahim): show the client as "name" on one line and "designation, company" under it, everywhere.
