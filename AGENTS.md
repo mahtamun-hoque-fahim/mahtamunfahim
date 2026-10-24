@@ -61,6 +61,12 @@ npm run dev
 
 ## Session Log
 
+### 2026-10-24 (homepage on phones): no snapping, no fading, shorter steps
+- Agent: Claude Code
+- Request (from an Impeccable mobile critique, P0): turn off scroll-snap and the card dimming below `md`, and shorten the page on phones.
+- Done (phones only, `md` and up unchanged): `html.snap-zone` only snaps from `md` up and `SnapScroll`'s wheel handler stands back below `md`; the problem cards are `focus-md-only` with `gap-6`, and their title is a plain heading (no sticky white band, no `scroll-mt` offset); the step rows lose `min-h-[70vh]` (`py-6`). This reverses the phone snapping tuned on 2026-10-20/21.
+- Verified on `next dev`: at 375 x 812 page height 14,368 to 12,724px (15.7 screens), snap type none, all focus cards opacity 1 with no blur, steps 262-292px tall; at 430 x 932 12,174px; no horizontal overflow. At 1024 still `y mandatory`, cards fade to 0.15 and centre-snap, steps 538px. NOT verified: a real phone's touch scrolling; the page is still over the 10-screen target (the `min-h-screen` hero and dark panels remain).
+
 ### 2026-10-21 (featured testimonials): the homepage shows only featured testimonials
 - Agent: Claude Edge
 - Request (Fahim): publish as many testimonials as wanted, but only featured ones on the homepage.

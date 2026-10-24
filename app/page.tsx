@@ -160,19 +160,17 @@ export default async function HomePage() {
         <section className="max-w-6xl mx-auto px-6 pt-28 pb-16 grid grid-cols-1 md:grid-cols-[5fr_7fr] gap-10 md:gap-16">
           {/* Pinned block is one screen tall with the title centred on the
               middle of the screen, the same line the cards snap to. */}
-          {/* phones: pinned just above the middle of the screen on a white band; each card snaps its
-              top to 50dvh-2rem, just under the title whatever the card's height (both offsets use
-              50dvh, so the gap holds on any screen), and the cards scroll beneath */}
-          <div className="sticky top-[calc(50dvh-9.5rem)] z-10 self-start -mx-6 px-6 py-2 bg-white md:top-0 md:z-auto md:mx-0 md:px-0 md:py-0 md:bg-transparent md:h-screen md:flex md:flex-col md:justify-center">
+          {/* phones: a plain heading over a plain stack of cards, nothing pinned, faded or snapped */}
+          <div className="md:sticky md:top-0 md:self-start md:h-screen md:flex md:flex-col md:justify-center">
             <BlurWords as="h2" text="You can't expect sales if…" accent="sales" className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#0B0F19] leading-tight" style={{ fontFamily: 'var(--font-clash)' }} />
           </div>
           {/* One card in focus at a time: the one crossing the middle of the
               screen; the gaps keep the next card out of that band, and half a
               screen of padding means the title is already pinned whenever a
               card is centred, so the two always sit on the same level. */}
-          <FocusCards className="flex flex-col gap-[18vh] md:py-[50vh]">
+          <FocusCards className="focus-md-only flex flex-col gap-6 md:gap-[18vh] md:py-[50vh]">
             {problems.map((p) => (
-              <div key={p.title} className="snap-start md:snap-center scroll-mt-[calc(50dvh-2rem)] md:scroll-mt-0 rounded-2xl border border-[#E5E7EB] p-8 md:p-10">
+              <div key={p.title} className="snap-start md:snap-center rounded-2xl border border-[#E5E7EB] p-8 md:p-10">
                 <h3 className="text-2xl md:text-3xl text-[#0B0F19] mb-3" style={{ fontFamily: 'var(--font-clash)' }}>{p.title}</h3>
                 <p className="text-[#374151] leading-relaxed" style={{ fontFamily: 'var(--font-jakarta)' }}>{p.text}</p>
               </div>
@@ -315,7 +313,7 @@ export default async function HomePage() {
             <span aria-hidden="true" className="md:hidden absolute top-0 bottom-0 left-5 border-l-2 border-dashed border-[#D1D5DB]" />
             <RoadGlow d={roadPath} height={steps.length * 100} />
             {steps.map((s, i) => (
-              <li key={s.title} className="relative flex items-center min-h-[70vh] py-10 pl-16 md:pl-0">
+              <li key={s.title} className="relative flex items-center md:min-h-[70vh] py-6 md:py-10 pl-16 md:pl-0">
                 {/* the pin on the path */}
                 <span className="absolute left-5 md:left-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-[#2563FF] text-white text-sm flex items-center justify-center ring-8 ring-white">
                   {String(i + 1).padStart(2, '0')}

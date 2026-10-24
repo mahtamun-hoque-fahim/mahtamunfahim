@@ -42,8 +42,10 @@ export default function SnapScroll() {
         .sort((a, b) => a.top - b.top)
 
     let lockUntil = 0
+    // Below md nothing snaps (globals.css), so the wheel is left alone too.
+    const wide = matchMedia('(min-width: 768px)')
     const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) < 1) return
+      if (!wide.matches || Math.abs(e.deltaY) < 1) return
       // One step per gesture: trackpads send a burst of small wheel events.
       if (performance.now() < lockUntil) return e.preventDefault()
       const down = e.deltaY > 0

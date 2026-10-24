@@ -428,7 +428,7 @@ body {
 .focus-cards > * {
   transition: opacity 500ms var(--ease-out), filter 500ms var(--ease-out);
 }
-/* .focus-md-only: no fading on phones (the How I work cards are a plain stack there) */
+/* .focus-md-only: no fading on phones (both focus lists are a plain stack there) */
 @media (scripting: enabled) and (max-width: 767px) {
   .focus-cards.focus-md-only > :not([data-active='true']) { opacity: 1; filter: none; }
 }
@@ -545,9 +545,11 @@ body {
 
 /* Snap zone (set by components/SnapScroll.tsx while the homepage is mounted): every section
    is a stop (`snap-start`, light ones with `scroll-mt-24` to clear the navbar)
-   and each focus card is one (`snap-center`). */
-html.snap-zone {
-  scroll-snap-type: y mandatory;
+   and each focus card is one (`snap-center`). From md up only: phones scroll freely. */
+@media (min-width: 768px) {
+  html.snap-zone {
+    scroll-snap-type: y mandatory;
+  }
 }
 
 /* Route enter: short opacity fade, replayed by app/template.tsx on every
